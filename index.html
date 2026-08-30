@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+<<<<<<< HEAD
     html, body { margin:0; height:100%; font-family:'Poppins', system-ui, sans-serif; background:#EDEDE8; color:#16201A; -webkit-font-smoothing:antialiased; }
     * { box-sizing:border-box; }
     input, textarea, button, select { font-family:'Poppins', system-ui, sans-serif; }
@@ -75,11 +76,50 @@
             <button onClick="{{ goHome }}" style="height:48px;border:1px solid #DDE0DA;border-radius:14px;background:#FFFFFF;color:#2F3A34;font-size:14.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3F6B52">Entrar com biometria</button>
           </div>
         </div>
+=======
+    body { margin:0; font-family:'Poppins', system-ui, sans-serif; background:#EDEDE8; -webkit-font-smoothing:antialiased; }
+    * { box-sizing:border-box; }
+    input, textarea, button { font-family:'Poppins', system-ui, sans-serif; }
+    a { color:#3F6B52; text-decoration:none; }
+    a:hover { color:#2F5240; }
+    ::placeholder { color:#A3ADA5; }
+    .om-scroll::-webkit-scrollbar { width:0; height:0; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 16px;background:#EDEDE8">
+  <div style="width:100%;max-width:412px;height:min(880px, calc(100vh - 56px));background:#F7F7F4;border:9px solid #1B1D1B;border-radius:46px;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 24px 60px rgba(20,30,24,0.22)">
+
+    <div style="flex:none;height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:transparent;font-size:12.5px;font-weight:500;color:#16201A">
+      <span>9:41</span>
+      <span style="letter-spacing:2px;font-size:10px;color:#5C665E">●●●</span>
+    </div>
+
+    <!-- LOGIN -->
+    <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+      <div class="om-scroll" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;padding:0 26px 40px;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="width:56px;height:56px;border-radius:18px;background:#3F6B52;display:flex;align-items:center;justify-content:center">
+            <span style="font-size:24px;font-weight:600;color:#FFFFFF">P</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <h1 style="margin:0;font-size:27px;font-weight:600;color:#16201A;line-height:1.2;letter-spacing:-0.01em">{{ clinicName }}</h1>
+            <p style="margin:0;font-size:14.5px;color:#6E7A72;line-height:1.45">Fichas de anamnese e evolução dos seus pacientes.</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <input type="email" placeholder="E-mail" defaultValue="joyce@passoleve.com.br" style="height:52px;width:100%;border:1px solid #DDE0DA;border-radius:14px;background:#FFFFFF;padding:0 16px;font-size:15px;color:#16201A;outline:none" style-focus="border-color:#3F6B52" />
+          <input type="password" placeholder="Senha" defaultValue="••••••••" style="height:52px;width:100%;border:1px solid #DDE0DA;border-radius:14px;background:#FFFFFF;padding:0 16px;font-size:15px;color:#16201A;outline:none" style-focus="border-color:#3F6B52" />
+          <button onClick="{{ goHome }}" style="height:54px;border:none;border-radius:15px;background:#3F6B52;color:#FFFFFF;font-size:16px;font-weight:500;cursor:pointer" style-hover="background:#2F5240">Entrar</button>
+          <button onClick="{{ goHome }}" style="height:50px;border:1px solid #DDE0DA;border-radius:15px;background:#FFFFFF;color:#2F3A34;font-size:14.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3F6B52">Entrar com biometria</button>
+        </div>
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       </div>
     </sc-if>
 
     <!-- INÍCIO -->
     <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<<<<<<< HEAD
       <div class="om-scroll" style="{{ scrollStyle }}">
         <div style="{{ contentStyle }}">
           <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
@@ -158,12 +198,74 @@
               </div>
             </div>
           </div>
+=======
+      <div class="om-scroll" style="flex:1;overflow-y:auto;padding:8px 20px 20px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:13.5px;color:#6E7A72">Olá, {{ professionalName }}</span>
+            <h1 style="margin:0;font-size:25px;font-weight:600;color:#16201A;line-height:1.22;letter-spacing:-0.01em">Vamos abrir uma<br />ficha hoje?</h1>
+          </div>
+          <div style="width:42px;height:42px;flex:none;border-radius:50%;background:#EAF1EC;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#3F6B52">{{ professionalInitial }}</div>
+        </div>
+
+        <button onClick="{{ startFicha }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:18px;border:none;border-radius:20px;background:#3F6B52;cursor:pointer" style-hover="background:#2F5240">
+          <span style="width:42px;height:42px;flex:none;border-radius:13px;background:rgba(255,255,255,0.16);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:400;color:#FFFFFF;line-height:1">+</span>
+          <span style="display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:16px;font-weight:500;color:#FFFFFF">Nova ficha de anamnese</span>
+            <span style="font-size:12.5px;color:rgba(255,255,255,0.72)">10 etapas · rascunho automático</span>
+          </span>
+        </button>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <button onClick="{{ goPacientes }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:14px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px;cursor:pointer" style-hover="border-color:#3F6B52">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3F6B52" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"></path></svg>
+            <span style="font-size:12.5px;font-weight:500;color:#2F3A34;text-align:left;line-height:1.25">Pacientes</span>
+          </button>
+          <button onClick="{{ goAgenda }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:14px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px;cursor:pointer" style-hover="border-color:#3F6B52">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3F6B52" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3"></rect><path d="M8 3.5v3M16 3.5v3M3.5 10h17"></path></svg>
+            <span style="font-size:12.5px;font-weight:500;color:#2F3A34;text-align:left;line-height:1.25">Agenda</span>
+          </button>
+          <button onClick="{{ openPaciente }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:14px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px;cursor:pointer" style-hover="border-color:#3F6B52">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3F6B52" stroke-width="1.7" stroke-linecap="round"><path d="M6 3.5h8.5L19 8v12.5H6z"></path><path d="M9 12h7M9 16h5"></path></svg>
+            <span style="font-size:12.5px;font-weight:500;color:#2F3A34;text-align:left;line-height:1.25">Fichas</span>
+          </button>
+        </div>
+
+        <sc-if value="{{ hasDraft }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ resumeFicha }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:16px;background:#FFF8EC;border:1px solid #EBD9B8;border-radius:18px;cursor:pointer" style-hover="border-color:#B8792B">
+            <span style="display:flex;flex-direction:column;gap:3px">
+              <span style="font-size:13.5px;font-weight:500;color:#7A5312">Rascunho em aberto</span>
+              <span style="font-size:12.5px;color:#9A7434">{{ draftLabel }}</span>
+            </span>
+            <span style="font-size:13px;font-weight:500;color:#7A5312;flex:none">Continuar →</span>
+          </button>
+        </sc-if>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <h2 style="margin:0;font-size:15px;font-weight:600;color:#16201A">Próximos atendimentos</h2>
+            <button onClick="{{ goAgenda }}" style="border:none;background:none;padding:0;font-size:13px;font-weight:500;color:#3F6B52;cursor:pointer">Ver todos</button>
+          </div>
+          <div style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:20px;overflow:hidden">
+            <sc-for list="{{ appointments }}" as="a" hint-placeholder-count="3">
+              <button onClick="{{ a.onClick }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:15px 16px;background:#FFFFFF;border:none;border-bottom:1px solid #F0F1ED;cursor:pointer" style-hover="background:#FAFBF9">
+                <span style="font-size:14px;font-weight:600;color:#3F6B52;flex:none;width:46px">{{ a.time }}</span>
+                <span style="display:flex;flex-direction:column;gap:2px;flex:1">
+                  <span style="font-size:14.5px;font-weight:500;color:#16201A">{{ a.name }}</span>
+                  <span style="font-size:12.5px;color:#6E7A72">{{ a.service }}</span>
+                </span>
+                <span style="font-size:16px;color:#B6BEB7;flex:none">›</span>
+              </button>
+            </sc-for>
+          </div>
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         </div>
       </div>
     </sc-if>
 
     <!-- PACIENTES -->
     <sc-if value="{{ isPacientes }}" hint-placeholder-val="{{ true }}">
+<<<<<<< HEAD
       <div class="om-scroll" style="{{ scrollStyle }}">
         <div style="{{ contentStyle }}">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -190,12 +292,34 @@
               </button>
             </sc-for>
           </div>
+=======
+      <div class="om-scroll" style="flex:1;overflow-y:auto;padding:8px 20px 20px;display:flex;flex-direction:column;gap:18px">
+        <h1 style="margin:0;font-size:25px;font-weight:600;color:#16201A;letter-spacing:-0.01em">Pacientes</h1>
+        <div style="display:flex;align-items:center;gap:10px;height:50px;padding:0 16px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:15px">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6E7A72" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+          <input type="text" placeholder="Buscar por nome ou celular" value="{{ query }}" onChange="{{ onQuery }}" style="flex:1;border:none;outline:none;background:transparent;font-size:14.5px;color:#16201A" />
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ patients }}" as="p" hint-placeholder-count="4">
+            <button onClick="{{ p.onClick }}" style="display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:14px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px;cursor:pointer" style-hover="border-color:#3F6B52">
+              <span style="width:42px;height:42px;flex:none;border-radius:50%;background:#EAF1EC;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#3F6B52">{{ p.initials }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px;flex:1;min-width:0">
+                <span style="font-size:14.5px;font-weight:500;color:#16201A">{{ p.name }}</span>
+                <span style="font-size:12.5px;color:#6E7A72">{{ p.meta }}</span>
+              </span>
+              <sc-if value="{{ p.risk }}" hint-placeholder-val="{{ true }}">
+                <span style="flex:none;padding:4px 9px;border-radius:8px;background:#FBEAE7;font-size:11px;font-weight:500;color:#A83E31">Pé de risco</span>
+              </sc-if>
+            </button>
+          </sc-for>
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         </div>
       </div>
     </sc-if>
 
     <!-- AGENDA -->
     <sc-if value="{{ isAgenda }}" hint-placeholder-val="{{ true }}">
+<<<<<<< HEAD
       <div class="om-scroll" style="{{ scrollStyle }}">
         <div style="{{ contentStyle }}">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
@@ -232,11 +356,46 @@
             </div>
           </div>
         </div>
+=======
+      <div class="om-scroll" style="flex:1;overflow-y:auto;padding:8px 20px 20px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h1 style="margin:0;font-size:25px;font-weight:600;color:#16201A;letter-spacing:-0.01em">Agenda</h1>
+          <button onClick="{{ startFicha }}" style="width:42px;height:42px;border:none;border-radius:50%;background:#3F6B52;color:#FFFFFF;font-size:22px;line-height:1;cursor:pointer" style-hover="background:#2F5240">+</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:16px 14px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px">
+            <span style="font-size:16px;color:#B6BEB7">‹</span>
+            <span style="font-size:14.5px;font-weight:500;color:#16201A">Setembro 2026</span>
+            <span style="font-size:16px;color:#B6BEB7">›</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">
+            <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+              <button onClick="{{ d.onClick }}" style="{{ d.style }}">
+                <span style="font-size:11px;color:#8A948C">{{ d.dow }}</span>
+                <span style="font-size:14.5px;font-weight:500">{{ d.num }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ appointments }}" as="a" hint-placeholder-count="4">
+            <button onClick="{{ a.onClick }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:16px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px;cursor:pointer" style-hover="border-color:#3F6B52">
+              <span style="font-size:14px;font-weight:600;color:#3F6B52;flex:none;width:46px">{{ a.time }}</span>
+              <span style="display:flex;flex-direction:column;gap:2px;flex:1">
+                <span style="font-size:14.5px;font-weight:500;color:#16201A">{{ a.name }}</span>
+                <span style="font-size:12.5px;color:#6E7A72">{{ a.service }}</span>
+              </span>
+              <span style="font-size:16px;color:#B6BEB7;flex:none">›</span>
+            </button>
+          </sc-for>
+        </div>
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       </div>
     </sc-if>
 
     <!-- FICHA DO PACIENTE -->
     <sc-if value="{{ isFicha }}" hint-placeholder-val="{{ true }}">
+<<<<<<< HEAD
       <div class="om-scroll" style="{{ scrollStyle }}">
         <div style="{{ contentStyle }}">
           <button onClick="{{ goHome }}" style="align-self:flex-start;display:flex;align-items:center;gap:8px;border:none;background:none;padding:2px 0;font-size:13.5px;color:#6E7A72;cursor:pointer">← Voltar</button>
@@ -303,11 +462,78 @@
             </div>
           </sc-if>
         </div>
+=======
+      <div class="om-scroll" style="flex:1;overflow-y:auto;padding:4px 20px 20px;display:flex;flex-direction:column;gap:16px">
+        <button onClick="{{ goHome }}" style="align-self:flex-start;display:flex;align-items:center;gap:8px;border:none;background:none;padding:6px 0;font-size:13.5px;color:#6E7A72;cursor:pointer">← Voltar</button>
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="width:52px;height:52px;flex:none;border-radius:50%;background:#EAF1EC;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;color:#3F6B52">{{ patient.initials }}</span>
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <h1 style="margin:0;font-size:21px;font-weight:600;color:#16201A;letter-spacing:-0.01em">{{ patient.name }}</h1>
+            <span style="font-size:12.5px;color:#6E7A72">{{ patient.meta }}</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ tabResumo }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:15px;background:#FBEAE7;border:1px solid #F0CFC9;border-radius:18px">
+              <span style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#A83E31">Atenção</span>
+              <span style="font-size:14px;color:#7A2C22;line-height:1.45">Diabetes tipo 2 · Problemas circulatórios · Pé de risco no pé direito</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px;padding:6px 16px">
+              <sc-for list="{{ patient.rows }}" as="r" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #F0F1ED">
+                  <span style="font-size:13px;color:#6E7A72">{{ r.k }}</span>
+                  <span style="font-size:13.5px;font-weight:500;color:#16201A;text-align:right">{{ r.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px;padding:16px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px">
+              <span style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#3F6B52">Queixa principal</span>
+              <span style="font-size:14px;color:#2F3A34;line-height:1.5">Dor ao caminhar no antepé direito, com calosidade recorrente há cerca de oito meses.</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabFicha }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ sectionSummary }}" as="s" hint-placeholder-count="6">
+              <button onClick="{{ s.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:16px;cursor:pointer" style-hover="border-color:#3F6B52">
+                <span style="{{ s.dotStyle }}">{{ s.dotLabel }}</span>
+                <span style="flex:1;font-size:14px;font-weight:500;color:#16201A">{{ s.title }}</span>
+                <span style="font-size:12.5px;color:#6E7A72;flex:none">{{ s.state }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabEvolucao }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <button onClick="{{ addEvolucao }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:50px;border:none;border-radius:15px;background:#3F6B52;color:#FFFFFF;font-size:15px;font-weight:500;cursor:pointer" style-hover="background:#2F5240">+ Nova evolução</button>
+            <sc-for list="{{ evolucoes }}" as="e" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:8px;padding:16px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:18px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <span style="font-size:13.5px;font-weight:600;color:#3F6B52">{{ e.date }}</span>
+                  <span style="padding:4px 9px;border-radius:8px;background:#EAF1EC;font-size:11px;font-weight:500;color:#3F6B52">{{ e.proc }}</span>
+                </div>
+                <span style="font-size:13.5px;color:#2F3A34;line-height:1.5">{{ e.note }}</span>
+                <span style="font-size:11.5px;color:#8A948C">Assinado por {{ e.by }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       </div>
     </sc-if>
 
     <!-- CONCLUÍDA -->
     <sc-if value="{{ isDone }}" hint-placeholder-val="{{ true }}">
+<<<<<<< HEAD
       <div class="om-scroll" style="flex:1;overflow-y:auto;display:flex;align-items:center;justify-content:center;padding:32px 20px">
         <div style="{{ cardStyle }}">
           <div style="width:58px;height:58px;border-radius:50%;background:#3F6B52;display:flex;align-items:center;justify-content:center">
@@ -328,12 +554,33 @@
             <button onClick="{{ openPaciente }}" style="flex:1;min-width:180px;height:52px;border:none;border-radius:14px;background:#3F6B52;color:#FFFFFF;font-size:15.5px;font-weight:500;cursor:pointer" style-hover="background:#2F5240">Ver ficha do paciente</button>
             <button onClick="{{ goHome }}" style="flex:1;min-width:180px;height:52px;border:1px solid #DDE0DA;border-radius:14px;background:#FFFFFF;color:#2F3A34;font-size:14.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3F6B52">Voltar ao início</button>
           </div>
+=======
+      <div class="om-scroll" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:24px;padding:0 26px 30px">
+        <div style="width:60px;height:60px;border-radius:50%;background:#3F6B52;display:flex;align-items:center;justify-content:center">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h1 style="margin:0;font-size:25px;font-weight:600;color:#16201A;line-height:1.24;letter-spacing:-0.01em">Ficha concluída</h1>
+          <p style="margin:0;font-size:15px;color:#6E7A72;line-height:1.5">{{ doneSummary }}</p>
+        </div>
+        <sc-if value="{{ hasAlerts }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ alerts }}" as="al" hint-placeholder-count="2">
+              <span style="padding:7px 12px;border-radius:10px;background:#FBEAE7;font-size:12.5px;font-weight:500;color:#A83E31">{{ al }}</span>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button onClick="{{ openPaciente }}" style="height:54px;border:none;border-radius:15px;background:#3F6B52;color:#FFFFFF;font-size:16px;font-weight:500;cursor:pointer" style-hover="background:#2F5240">Ver ficha do paciente</button>
+          <button onClick="{{ goHome }}" style="height:50px;border:1px solid #DDE0DA;border-radius:15px;background:#FFFFFF;color:#2F3A34;font-size:14.5px;font-weight:500;cursor:pointer" style-hover="border-color:#3F6B52">Voltar ao início</button>
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         </div>
       </div>
     </sc-if>
 
     <!-- WIZARD -->
     <sc-if value="{{ isWizard }}" hint-placeholder-val="{{ true }}">
+<<<<<<< HEAD
       <div style="flex:none;background:#FFFFFF;border-bottom:1px solid #E7E8E3">
         <div style="{{ wizardHeadStyle }}">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;height:38px">
@@ -470,6 +717,166 @@
     <!-- TAB BAR (mobile) -->
     <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
       <div style="flex:none;display:flex;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:#FFFFFF;border-top:1px solid #E7E8E3">
+=======
+      <div style="flex:none;padding:2px 20px 14px;background:#F7F7F4;border-bottom:1px solid #E7E8E3">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;height:40px">
+          <button onClick="{{ prev }}" style="display:flex;align-items:center;gap:7px;border:none;background:none;padding:0;font-size:13.5px;color:#6E7A72;cursor:pointer">← Voltar</button>
+          <span style="font-size:13px;font-weight:500;color:#16201A">Ficha de anamnese</span>
+          <button onClick="{{ goHome }}" style="border:none;background:none;padding:0;font-size:13.5px;color:#6E7A72;cursor:pointer">Fechar</button>
+        </div>
+        <div style="display:flex;gap:3px;margin:8px 0 12px">
+          <sc-for list="{{ segments }}" as="s" hint-placeholder-count="10">
+            <span style="{{ s.style }}"></span>
+          </sc-for>
+        </div>
+        <button onClick="{{ toggleSteps }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;border:none;background:none;padding:0;cursor:pointer">
+          <span style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#3F6B52">Etapa {{ stepNum }} de {{ stepTotal }}</span>
+            <span style="font-size:19px;font-weight:600;color:#16201A;letter-spacing:-0.01em">{{ stepTitle }}</span>
+          </span>
+          <span style="font-size:12.5px;color:#3F6B52;flex:none;font-weight:500">{{ stepsToggleLabel }}</span>
+        </button>
+      </div>
+
+      <sc-if value="{{ showSteps }}" hint-placeholder-val="{{ true }}">
+        <div class="om-scroll" style="flex:1;overflow-y:auto;padding:14px 20px 20px;background:#FFFFFF;display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{ stepList }}" as="s" hint-placeholder-count="10">
+            <button onClick="{{ s.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 12px;background:#FFFFFF;border:1px solid #F0F1ED;border-radius:14px;cursor:pointer" style-hover="border-color:#3F6B52">
+              <span style="{{ s.dotStyle }}">{{ s.dotLabel }}</span>
+              <span style="flex:1;font-size:14px;color:#16201A">{{ s.title }}</span>
+              <span style="font-size:11.5px;color:#8A948C;flex:none">{{ s.count }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showFields }}" hint-placeholder-val="{{ true }}">
+        <div class="om-scroll" style="flex:1;overflow-y:auto;padding:18px 20px 24px;display:flex;flex-direction:column;gap:16px">
+          <sc-if value="{{ stepSub }}" hint-placeholder-val="{{ true }}">
+            <p style="margin:0;font-size:13.5px;color:#6E7A72;line-height:1.5">{{ stepSub }}</p>
+          </sc-if>
+
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-if value="{{ f.isSection }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+                  <span style="font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#3F6B52">{{ f.label }}</span>
+                  <span style="height:1px;flex:1;background:#E7E8E3"></span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                <label style="font-size:13px;font-weight:500;color:#4C574F">{{ f.label }}</label>
+                <input type="text" inputMode="{{ f.inputMode }}" placeholder="{{ f.placeholder }}" value="{{ f.value }}" onChange="{{ f.onChange }}" style="height:50px;width:100%;border:1px solid #DDE0DA;border-radius:13px;background:#FFFFFF;padding:0 15px;font-size:15px;color:#16201A;outline:none" style-focus="border-color:#3F6B52" />
+                <sc-if value="{{ f.hint }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size:11.5px;color:#8A948C">{{ f.hint }}</span>
+                </sc-if>
+              </sc-if>
+
+              <sc-if value="{{ f.isPicker }}" hint-placeholder-val="{{ true }}">
+                <label style="font-size:13px;font-weight:500;color:#4C574F">{{ f.label }}</label>
+                <button onClick="{{ f.onOpen }}" style="{{ f.buttonStyle }}">
+                  <span style="flex:1">{{ f.display }}</span>
+                  <span style="flex:none;font-size:11px;color:#6E7A72">▾</span>
+                </button>
+              </sc-if>
+
+              <sc-if value="{{ f.isTextarea }}" hint-placeholder-val="{{ true }}">
+                <label style="font-size:13px;font-weight:500;color:#4C574F">{{ f.label }}</label>
+                <textarea rows="4" placeholder="{{ f.placeholder }}" value="{{ f.value }}" onChange="{{ f.onChange }}" style="width:100%;border:1px solid #DDE0DA;border-radius:13px;background:#FFFFFF;padding:13px 15px;font-size:15px;color:#16201A;outline:none;resize:none;line-height:1.5" style-focus="border-color:#3F6B52"></textarea>
+              </sc-if>
+
+              <sc-if value="{{ f.isYesNo }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:15px">
+                  <span style="flex:1;font-size:14px;color:#16201A;line-height:1.35">{{ f.label }}</span>
+                  <span style="display:flex;gap:6px;flex:none">
+                    <button onClick="{{ f.onSim }}" style="{{ f.simStyle }}">Sim</button>
+                    <button onClick="{{ f.onNao }}" style="{{ f.naoStyle }}">Não</button>
+                  </span>
+                </div>
+                <sc-if value="{{ f.showSpec }}" hint-placeholder-val="{{ true }}">
+                  <input type="text" placeholder="{{ f.specLabel }}" value="{{ f.specValue }}" onChange="{{ f.onSpecChange }}" style="height:46px;width:100%;border:1px solid #C9D6CD;border-radius:13px;background:#F4F8F5;padding:0 15px;font-size:14.5px;color:#16201A;outline:none" style-focus="border-color:#3F6B52" />
+                </sc-if>
+              </sc-if>
+
+              <sc-if value="{{ f.isChips }}" hint-placeholder-val="{{ true }}">
+                <span style="font-size:13px;font-weight:500;color:#4C574F">{{ f.label }}</span>
+                <sc-if value="{{ f.hint }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size:11.5px;color:#8A948C;margin-top:-4px">{{ f.hint }}</span>
+                </sc-if>
+                <div style="display:flex;flex-wrap:wrap;gap:8px">
+                  <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="4">
+                    <button onClick="{{ o.onClick }}" style="{{ o.style }}">{{ o.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ f.isNote }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-direction:column;gap:10px;padding:16px;background:#FFFFFF;border:1px solid #E7E8E3;border-radius:16px">
+                  <sc-for list="{{ f.paragraphs }}" as="p" hint-placeholder-count="3">
+                    <span style="font-size:12.5px;color:#4C574F;line-height:1.6">{{ p }}</span>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ f.isSign }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ f.onSign }}" style="{{ f.signStyle }}">{{ f.signLabel }}</button>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="flex:none;padding:12px 20px 18px;background:#FFFFFF;border-top:1px solid #E7E8E3;display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;gap:10px">
+            <sc-if value="{{ canPrev }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ prev }}" style="flex:none;width:52px;height:52px;border:1px solid #DDE0DA;border-radius:15px;background:#FFFFFF;color:#2F3A34;font-size:17px;cursor:pointer" style-hover="border-color:#3F6B52">←</button>
+            </sc-if>
+            <button onClick="{{ next }}" style="flex:1;height:52px;border:none;border-radius:15px;background:#3F6B52;color:#FFFFFF;font-size:16px;font-weight:500;cursor:pointer" style-hover="background:#2F5240">{{ nextLabel }}</button>
+          </div>
+          <span style="text-align:center;font-size:11.5px;color:#8A948C">{{ savedLabel }}</span>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <!-- SELETOR EM FOLHA -->
+    <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;justify-content:flex-end">
+        <div onClick="{{ closePicker }}" style="position:absolute;inset:0;background:rgba(17,28,21,0.42)"></div>
+        <div style="position:relative;display:flex;flex-direction:column;max-height:78%;background:#FFFFFF;border-radius:26px 26px 0 0;padding:14px 20px 22px;box-shadow:0 -8px 40px rgba(17,28,21,0.2)">
+          <div style="align-self:center;width:38px;height:4px;border-radius:2px;background:#E1E4DE;margin-bottom:12px"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px">
+            <span style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:17px;font-weight:600;color:#16201A">{{ pickerTitle }}</span>
+              <span style="font-size:12px;color:#8A948C">{{ pickerCount }}</span>
+            </span>
+            <button onClick="{{ closePicker }}" style="flex:none;width:38px;height:38px;border:1px solid #E7E8E3;border-radius:50%;background:#FFFFFF;font-size:15px;color:#5C665E;cursor:pointer" style-hover="border-color:#3F6B52">✕</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 15px;background:#F7F7F4;border:1px solid #E7E8E3;border-radius:14px;margin-bottom:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6E7A72" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+            <input type="text" placeholder="Buscar ou digitar" value="{{ pickerQuery }}" onChange="{{ onPickerQuery }}" style="flex:1;border:none;outline:none;background:transparent;font-size:15px;color:#16201A" />
+          </div>
+          <div class="om-scroll" style="flex:1;overflow-y:auto;display:flex;flex-direction:column">
+            <sc-for list="{{ pickerOptions }}" as="o" hint-placeholder-count="6">
+              <button onClick="{{ o.onClick }}" style="{{ o.style }}">
+                <span style="flex:1">{{ o.label }}</span>
+                <span style="{{ o.markStyle }}">{{ o.markLabel }}</span>
+              </button>
+            </sc-for>
+            <sc-if value="{{ pickerEmpty }}" hint-placeholder-val="{{ true }}">
+              <span style="padding:18px 4px;font-size:13.5px;color:#8A948C">Nenhuma opção encontrada nesta lista.</span>
+            </sc-if>
+          </div>
+          <sc-if value="{{ pickerCustom }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ onPickerCustom }}" style="margin-top:12px;height:50px;border:none;border-radius:14px;background:#3F6B52;color:#FFFFFF;font-size:15px;font-weight:500;cursor:pointer" style-hover="background:#2F5240">{{ pickerCustomLabel }}</button>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- TAB BAR -->
+    <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:flex;padding:10px 16px 20px;background:#FFFFFF;border-top:1px solid #E7E8E3">
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         <button onClick="{{ goHome }}" style="{{ tabHomeStyle }}">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5L12 4l8 6.5V20H4z"></path></svg>
           <span style="font-size:11px;font-weight:500">Início</span>
@@ -486,6 +893,7 @@
     </sc-if>
 
   </div>
+<<<<<<< HEAD
 
   <!-- SELETOR -->
   <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ true }}">
@@ -527,6 +935,11 @@
 </div>]]>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;clinicName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Clínica Passo Leve&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;professionalName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Joyce&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;home&quot;,&quot;pacientes&quot;,&quot;agenda&quot;,&quot;ficha&quot;,&quot;wizard&quot;],&quot;default&quot;:&quot;login&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fluxo&quot;}}">
+=======
+</div>]]>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:940},&quot;clinicName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Clínica Passo Leve&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;professionalName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Joyce&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;home&quot;,&quot;pacientes&quot;,&quot;agenda&quot;,&quot;ficha&quot;,&quot;wizard&quot;],&quot;default&quot;:&quot;login&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fluxo&quot;}}">
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
 class Component extends DCLogic {
   constructor(p) {
     super(p);
@@ -538,12 +951,17 @@ class Component extends DCLogic {
       screen: p.startScreen || 'login',
       step: 0,
       form: draft,
+<<<<<<< HEAD
+=======
+      visited: {},
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       showSteps: false,
       picker: null,
       pickerQuery: '',
       saved: 'Rascunho salvo automaticamente',
       tab: 'Resumo',
       query: '',
+<<<<<<< HEAD
       day: 2,
       w: typeof window !== 'undefined' ? window.innerWidth : 1200
     };
@@ -552,6 +970,17 @@ class Component extends DCLogic {
 
   componentDidMount() { window.addEventListener('resize', this.onResize); }
   componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
+=======
+      day: 2
+    };
+  }
+
+  set(id, val) {
+    const form = Object.assign({}, this.state.form, { [id]: val });
+    this.setState({ form, saved: 'Rascunho salvo às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) });
+    try { localStorage.setItem('anamnese.draft.v1', JSON.stringify(form)); } catch (e) {}
+  }
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
 
   locData() {
     return {
@@ -579,6 +1008,7 @@ class Component extends DCLogic {
         TO: ['Palmas', 'Araguaína', 'Gurupi']
       },
       bairros: {
+<<<<<<< HEAD
         'Vespasiano': ['Centro', 'Morro Alto', 'Jardim Itaú', 'Nova Pampulha', 'Caieiras', 'Santa Clara', 'Vila Esportiva', 'Angicos', 'Serra Dourada', 'Bela Vista'],
         'Santa Luzia': ['Centro', 'São Benedito', 'Palmital', 'Frimisa', 'Cristina'],
         'Contagem': ['Eldorado', 'Centro', 'Industrial', 'Riacho das Pedras', 'Ressaca'],
@@ -587,17 +1017,33 @@ class Component extends DCLogic {
         'São Paulo': ['Bela Vista', 'Pinheiros', 'Vila Mariana', 'Moema', 'Tatuapé', 'Santana', 'Itaim Bibi', 'Mooca', 'Lapa'],
         'Campinas': ['Cambuí', 'Barão Geraldo', 'Taquaral', 'Centro', 'Jardim Guanabara'],
         'Rio de Janeiro': ['Copacabana', 'Botafogo', 'Tijuca', 'Ipanema', 'Barra da Tijuca', 'Méier'],
+=======
+        'São Paulo': ['Bela Vista', 'Pinheiros', 'Vila Mariana', 'Moema', 'Tatuapé', 'Santana', 'Itaim Bibi', 'Mooca', 'Lapa'],
+        'Campinas': ['Cambuí', 'Barão Geraldo', 'Taquaral', 'Centro', 'Jardim Guanabara'],
+        'Rio de Janeiro': ['Copacabana', 'Botafogo', 'Tijuca', 'Ipanema', 'Barra da Tijuca', 'Méier'],
+        'Belo Horizonte': ['Savassi', 'Funcionários', 'Pampulha', 'Centro', 'Barro Preto', 'Santa Efigênia'],
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         'Curitiba': ['Batel', 'Água Verde', 'Centro', 'Portão', 'Bigorrilho'],
         'Porto Alegre': ['Moinhos de Vento', 'Cidade Baixa', 'Centro Histórico', 'Petrópolis', 'Menino Deus'],
         'Florianópolis': ['Centro', 'Trindade', 'Lagoa da Conceição', 'Campeche'],
         'Salvador': ['Barra', 'Pituba', 'Rio Vermelho', 'Itaigara', 'Campo Grande'],
         'Goiânia': ['Setor Bueno', 'Setor Oeste', 'Setor Marista', 'Jardim Goiás'],
+<<<<<<< HEAD
         'Divinópolis': ['Centro', 'Santo Antônio', 'Niterói', 'São José']
       },
       ruas: {
         'Centro': ['Av. Prefeito Sebastião Fernandes', 'Rua Antônio Carlos', 'Rua Rio Branco'],
         'Morro Alto': ['Av. Vereador Nelson Rocha', 'Rua Salvador', 'Rua Bahia'],
         'Jardim Itaú': ['Rua Itaú', 'Rua das Palmeiras', 'Rua Ipê'],
+=======
+        'Divinópolis': ['Centro', 'Santo Antônio', 'Niterói', 'São José'],
+        'Vespasiano': ['Centro', 'Morro Alto', 'Jardim Itaú', 'Nova Pampulha', 'Caieiras', 'Santa Clara', 'Vila Esportiva', 'Angicos', 'Serra Dourada', 'Bela Vista'],
+        'Santa Luzia': ['Centro', 'São Benedito', 'Palmital', 'Frimisa', 'Cristina'],
+        'Contagem': ['Eldorado', 'Centro', 'Industrial', 'Riacho das Pedras', 'Ressaca'],
+        'Lagoa Santa': ['Centro', 'Lundcéia', 'Palmital', 'Várzea']
+      },
+      ruas: {
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         'Bela Vista': ['Rua Augusta', 'Av. Paulista', 'Rua Frei Caneca'],
         'Pinheiros': ['Rua dos Pinheiros', 'Rua Teodoro Sampaio', 'Rua Cardeal Arcoverde'],
         'Savassi': ['Rua Pernambuco', 'Rua Antônio de Albuquerque', 'Rua Alagoas'],
@@ -642,19 +1088,28 @@ class Component extends DCLogic {
     return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
   }
 
+<<<<<<< HEAD
   set(id, val) {
     const form = Object.assign({}, this.state.form, { [id]: val });
     this.setState({ form, saved: 'Rascunho salvo às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) });
     try { localStorage.setItem('anamnese.draft.v1', JSON.stringify(form)); } catch (e) {}
   }
 
+=======
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
   schema() {
     const sec = (label) => ({ kind: 'section', label });
     const t = (id, label, extra) => Object.assign({ kind: 'text', id, label }, extra || {});
     const pk = (id, label, source, extra) => Object.assign({ kind: 'picker', id, label, source }, extra || {});
+<<<<<<< HEAD
     const ta = (id, label, ph) => ({ kind: 'textarea', id, label, placeholder: ph, wide: true });
     const yn = (id, label, spec) => ({ kind: 'yesno', id, label, spec });
     const ch = (id, label, options, multi, hint) => ({ kind: 'chips', id, label, options, multi, hint, wide: options.length > 5 });
+=======
+    const ta = (id, label, ph) => ({ kind: 'textarea', id, label, placeholder: ph });
+    const yn = (id, label, spec) => ({ kind: 'yesno', id, label, spec });
+    const ch = (id, label, options, multi, hint) => ({ kind: 'chips', id, label, options, multi, hint });
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
     const marks = ['Calo/núcleo', 'Calosidade', 'Hiperqueratose', 'Verruga plantar', 'Fissuras'];
     const regions = ['Antepé', 'Médio-pé', 'Retropé / calcâneo', 'Interdigital', 'Unhas'];
     const footRegions = (side, key) => [sec('Pé ' + side)].concat(
@@ -664,8 +1119,13 @@ class Component extends DCLogic {
     const pa = ['Presente', 'Ausente'];
 
     return [
+<<<<<<< HEAD
       { title: 'Identificação', sub: 'Comece pelos dados básicos. Você pode voltar e completar depois.', fields: [
         t('nome', 'Nome completo', { placeholder: 'Ex.: Mariana Silva', wide: true }),
+=======
+      { title: 'Identificação', owner: 'podologa', sub: 'Comece pelos dados básicos. Você pode voltar e completar depois.', fields: [
+        t('nome', 'Nome completo', { placeholder: 'Ex.: Mariana Silva' }),
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         t('nasc', 'Data de nascimento', { placeholder: 'DD/MM/AAAA', mask: 'date', inputMode: 'numeric' }),
         t('cel', 'Celular', { placeholder: '(00) 00000-0000', mask: 'phone', inputMode: 'tel' }),
         pk('prof', 'Profissão', 'prof', { placeholder: 'Escolher profissão' }),
@@ -676,14 +1136,22 @@ class Component extends DCLogic {
         pk('end', 'Rua', 'rua', { placeholder: 'Escolher rua', requires: 'cidade', requiresMsg: 'Escolha a cidade primeiro' }),
         t('end_num', 'Número', { placeholder: 'Ex.: 128', inputMode: 'numeric' })
       ] },
+<<<<<<< HEAD
       { title: 'Queixa e história atual', sub: 'Registre a queixa como o paciente relatou.', fields: [
+=======
+      { title: 'Queixa e história atual', owner: 'podologa', sub: 'Registre a queixa como o paciente relatou.', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         ta('queixa', 'Queixa principal', 'O que trouxe o paciente até aqui?'),
         sec('História da doença atual'),
         t('hda1', 'Quando começou?', { placeholder: 'Ex.: há 8 meses' }),
         t('hda2', 'Sabe o motivo?', { placeholder: 'Ex.: calçado apertado' }),
         t('hda3', 'Já fez tratamento?', { placeholder: 'Ex.: pomada por 2 semanas' })
       ] },
+<<<<<<< HEAD
       { title: 'Histórico de saúde', sub: 'Toque em Sim ou Não. Deixe em branco o que não se aplica.', fields: [
+=======
+      { title: 'Histórico de saúde', owner: 'podologa', sub: 'Toque em Sim ou Não. Deixe em branco o que não se aplica.', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         yn('gestante', 'Gestante?'),
         yn('esportes', 'Pratica esportes?'),
         yn('cirurgia', 'Cirurgia em membros inferiores?', 'Especifique qual cirurgia'),
@@ -701,7 +1169,11 @@ class Component extends DCLogic {
         yn('medic', 'Faz uso de medicamentos?', 'Quais medicamentos'),
         yn('alergia', 'Possui alguma alergia?', 'Qual alergia')
       ] },
+<<<<<<< HEAD
       { title: 'Rotina e calçados', sub: '', fields: [
+=======
+      { title: 'Rotina e calçados', owner: 'podologa', sub: '', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         ch('tempo', 'Passa mais tempo', ['Sentado', 'Em pé', 'Em movimento'], false),
         ch('meia', 'Meia mais utilizada', ['Social', 'Esportiva', 'Compressão'], false),
         ch('composicao', 'Composição da meia', ['Algodão', 'Poliéster', 'Outros'], false),
@@ -710,25 +1182,41 @@ class Component extends DCLogic {
         ch('dor', 'Tolerância à dor', ['Alta', 'Média', 'Tolerável', 'Baixa'], false),
         ta('habitos_outros', 'Outras observações', 'Opcional')
       ] },
+<<<<<<< HEAD
       { title: 'Termo e autorização', sub: 'Leia o termo com o paciente e colha a assinatura.', fields: [
         { kind: 'note', wide: true, paragraphs: [
+=======
+      { title: 'Termo e autorização', owner: 'podologa', sub: 'Leia o termo com o paciente e colha a assinatura.', fields: [
+        { kind: 'note', paragraphs: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
           '1. Declaro que as informações acima são verdadeiras, que nada omiti em relação à minha saúde ou reações alérgicas e que informei todos os medicamentos que eventualmente estou utilizando, não cabendo ao profissional quaisquer responsabilidades por informações omitidas nesta entrevista.',
           '2. Declaro que estou ciente sobre os procedimentos a serem realizados e me comprometo em seguir todos os cuidados passados a fim de obter o melhor resultado no tratamento.',
           '3. Autorizo o registro fotográfico do trabalho realizado (“antes” e “depois”) para efeitos de documentação, divulgação em redes sociais, books ou qualquer material publicitário. A presente autorização é concedida gratuitamente, sem que nada a ser reclamado a título de direitos ou quaisquer outro.'
         ] },
         yn('foto', 'Autoriza registro fotográfico de antes e depois?'),
         yn('menor', 'Paciente menor de idade?', 'Nome do responsável'),
+<<<<<<< HEAD
         { kind: 'sign', id: 'assinatura', label: 'Assinatura', wide: true }
       ] },
       { title: 'Patologias dermatológicas', sub: 'Marque tudo que estiver presente.', fields: [
+=======
+        { kind: 'sign', id: 'assinatura', label: 'Assinatura' }
+      ] },
+      { title: 'Patologias dermatológicas', owner: 'podologa', sub: 'Marque tudo que estiver presente.', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         ch('patologias', 'Patologias presentes', ['Ressecamento', 'Disidrose', 'Hiperidrose', 'Bromidrose', 'Hiperqueratose', 'Exostose', 'Liquenificação', 'Onicofose', 'Onicocriptose', 'Micose plantar', 'Micose interdigital'], true),
         ch('onico', 'Onicomicose', ['On Prx Sub', 'Onc Sub Dis', 'Onc Sub Br', 'OnDisTot'], true),
         ch('granulacao', 'Granulação', ['Grau 1', 'Grau 2', 'Grau 3', 'Grau 4', 'Grau 5'], false),
         ch('lamina', 'Formato da lâmina ungueal', ['Normal', 'Involuta', 'Em telha', 'Em pinça', 'Plana', 'Hipertrófica'], false),
         ta('pat_outros', 'Outros', 'Opcional')
       ] },
+<<<<<<< HEAD
       { title: 'Inspeção por região', sub: 'Marque os achados em cada região dos pés.', fields: footRegions('direito', 'd').concat(footRegions('esquerdo', 'e')).concat([ta('insp_notas', 'Anotações da inspeção', 'Opcional')]) },
       { title: 'Exame físico e sinais vitais', sub: '', fields: [
+=======
+      { title: 'Inspeção por região', owner: 'podologa', sub: 'Marque os achados em cada região dos pés.', fields: footRegions('direito', 'd').concat(footRegions('esquerdo', 'e')).concat([ta('insp_notas', 'Anotações da inspeção', 'Opcional')]) },
+      { title: 'Exame físico e sinais vitais', owner: 'podologa', sub: '', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         t('fr', 'Frequência respiratória', { hint: 'Referência 12–20 irpm', placeholder: 'irpm' }),
         t('oxi', 'Oximetria de pulso', { hint: 'Referência 95–99%', placeholder: '%' }),
         t('pulso', 'Pulso cardíaco', { hint: 'Referência 60–100 bpm', placeholder: 'bpm' }),
@@ -742,7 +1230,11 @@ class Component extends DCLogic {
         yn('claudicacao', 'Claudicação?'),
         yn('varizes', 'Varizes?')
       ] },
+<<<<<<< HEAD
       { title: 'Avaliação de MMII', sub: 'Pulsos, edema e sensibilidade.', fields: [
+=======
+      { title: 'Avaliação de MMII', owner: 'podologa', sub: 'Pulsos, edema e sensibilidade.', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         sec('Mobilidade'),
         ch('flexao', 'Flexão plantar', pa, false),
         ch('dorsi', 'Dorsiflexão', pa, false),
@@ -767,7 +1259,11 @@ class Component extends DCLogic {
         ch('risco_d', 'Pé de risco — direito', ['Sim', 'Não'], false),
         ch('risco_e', 'Pé de risco — esquerdo', ['Sim', 'Não'], false)
       ] },
+<<<<<<< HEAD
       { title: 'Diagnóstico e conduta', sub: 'Última etapa.', fields: [
+=======
+      { title: 'Diagnóstico e conduta', owner: 'podologa', sub: 'Última etapa.', fields: [
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         ta('diagnostico', 'Diagnóstico podológico', 'Descreva o diagnóstico'),
         ta('conduta', 'Conduta', 'Procedimentos, orientações e retorno')
       ] }
@@ -797,11 +1293,16 @@ class Component extends DCLogic {
   tabStyle(on) {
     return {
       flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px',
+<<<<<<< HEAD
       padding: '8px 0', minHeight: '48px', border: 'none', background: 'none', cursor: 'pointer',
+=======
+      padding: '8px 0', border: 'none', background: 'none', cursor: 'pointer',
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       color: on ? '#3F6B52' : '#98A29A'
     };
   }
 
+<<<<<<< HEAD
   navStyle(on) {
     return {
       display: 'flex', alignItems: 'center', gap: '11px', width: '100%', minHeight: '44px',
@@ -810,21 +1311,30 @@ class Component extends DCLogic {
     };
   }
 
+=======
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
   patientsData() {
     return [
       { name: 'Mariana Silva', initials: 'MS', meta: 'Última visita 12/08 · Diabetes tipo 2', risk: true },
       { name: 'Juliana Costa', initials: 'JC', meta: 'Última visita 05/08 · Onicocriptose', risk: false },
       { name: 'Camila Ferreira', initials: 'CF', meta: 'Última visita 28/07 · Calosidade', risk: false },
       { name: 'Fernanda Lima', initials: 'FL', meta: 'Primeira avaliação agendada', risk: false },
+<<<<<<< HEAD
       { name: 'Rita Almeida', initials: 'RA', meta: 'Última visita 19/07 · Hiperqueratose', risk: true },
       { name: 'Sônia Batista', initials: 'SB', meta: 'Última visita 14/07 · Onicomicose', risk: false }
+=======
+      { name: 'Rita Almeida', initials: 'RA', meta: 'Última visita 19/07 · Hiperqueratose', risk: true }
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
     ];
   }
 
   renderVals() {
     const st = this.state;
+<<<<<<< HEAD
     const wide = st.w >= 900;
     const pad = wide ? '30px 34px' : '16px 18px 22px';
+=======
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
     const steps = this.schema();
     const cur = steps[Math.min(st.step, steps.length - 1)];
     const form = st.form;
@@ -832,6 +1342,7 @@ class Component extends DCLogic {
 
     const fields = (cur.fields || []).map((f, i) => {
       const v = form[f.id];
+<<<<<<< HEAD
       const o = {
         key: f.id || 'f' + i,
         wrapStyle: {
@@ -839,6 +1350,9 @@ class Component extends DCLogic {
           gridColumn: wide && !f.wide && f.kind !== 'section' ? 'auto' : '1 / -1'
         }
       };
+=======
+      const o = { key: f.id || 'f' + i };
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       if (f.kind === 'section') return Object.assign(o, { isSection: true, label: f.label });
       if (f.kind === 'note') return Object.assign(o, { isNote: true, paragraphs: f.paragraphs });
       if (f.kind === 'sign') {
@@ -846,7 +1360,11 @@ class Component extends DCLogic {
         return Object.assign(o, {
           isSign: true, signLabel: signed ? '✓ Assinado digitalmente' : 'Toque para assinar',
           signStyle: {
+<<<<<<< HEAD
             width: '100%', minHeight: '84px', borderRadius: '15px', cursor: 'pointer', fontSize: '14.5px', fontWeight: 500,
+=======
+            width: '100%', minHeight: '84px', borderRadius: '16px', cursor: 'pointer', fontSize: '14.5px', fontWeight: 500,
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
             background: signed ? '#EAF1EC' : '#FFFFFF', color: signed ? '#3F6B52' : '#6E7A72',
             border: signed ? '1px solid #3F6B52' : '1.5px dashed #C6CFC8'
           },
@@ -870,12 +1388,20 @@ class Component extends DCLogic {
         return Object.assign(o, {
           isPicker: true, label: f.label,
           display: blocked ? f.requiresMsg : (v || f.placeholder),
+<<<<<<< HEAD
+=======
+          hint: blocked ? null : f.hint,
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
           buttonStyle: {
             display: 'flex', alignItems: 'center', gap: '10px', width: '100%', height: '50px',
             padding: '0 15px', borderRadius: '13px', textAlign: 'left', fontSize: '15px',
             background: blocked ? '#F2F3EF' : '#FFFFFF',
             border: '1px solid ' + (blocked ? '#E7E8E3' : v ? '#3F6B52' : '#DDE0DA'),
+<<<<<<< HEAD
             color: v && !blocked ? '#16201A' : blocked ? '#A9B1AA' : '#A3ADA5',
+=======
+            color: v ? '#16201A' : blocked ? '#A9B1AA' : '#A3ADA5',
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
             cursor: blocked ? 'default' : 'pointer'
           },
           onOpen: blocked ? () => {} : () => this.setState({ picker: { id: f.id, label: f.label, source: f.source, clears: f.clears || [] }, pickerQuery: '' })
@@ -912,6 +1438,7 @@ class Component extends DCLogic {
 
     const segments = steps.map((s, i) => ({
       key: i,
+<<<<<<< HEAD
       style: { flex: 1, height: '4px', borderRadius: '2px', background: i <= st.step ? '#3F6B52' : '#DFE3DE' }
     }));
 
@@ -933,6 +1460,26 @@ class Component extends DCLogic {
         border: '1px solid ' + (i === st.step ? '#3F6B52' : 'transparent'),
         background: i === st.step ? '#FFFFFF' : 'transparent',
         color: '#16201A'
+=======
+      style: {
+        flex: 1, height: '4px', borderRadius: '2px',
+        background: i < st.step ? '#3F6B52' : i === st.step ? '#3F6B52' : '#DFE3DE',
+        opacity: i <= st.step ? 1 : 1
+      }
+    }));
+
+    const stepList = steps.map((s, i) => ({
+      key: i, title: s.title,
+      owner: s.owner === 'paciente' ? 'Paciente' : 'Podóloga',
+      dotLabel: i < st.step ? '✓' : String(i + 1),
+      count: (s.fields || []).filter((f) => f.id).length + ' campos',
+      dotStyle: {
+        width: '26px', height: '26px', flex: 'none', borderRadius: '50%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '12px', fontWeight: 600,
+        background: i < st.step ? '#3F6B52' : i === st.step ? '#EAF1EC' : '#F2F3EF',
+        color: i < st.step ? '#FFFFFF' : i === st.step ? '#3F6B52' : '#98A29A'
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       },
       onClick: () => this.setState({ step: i, showSteps: false })
     }));
@@ -943,22 +1490,35 @@ class Component extends DCLogic {
     if (form.risco_d === 'Sim' || form.risco_e === 'Sim') alerts.push('Pé de risco');
     if (form.alergia === 'S') alerts.push('Alergia');
 
+<<<<<<< HEAD
     const openPatient = () => this.setState({ screen: 'ficha', tab: 'Resumo' });
     const allPatients = this.patientsData();
     const patients = allPatients.filter((p) => p.name.toLowerCase().indexOf(st.query.toLowerCase()) > -1)
       .map((p) => Object.assign({ key: p.name, onClick: openPatient }, p));
+=======
+    const patients = this.patientsData().filter((p) => p.name.toLowerCase().indexOf(st.query.toLowerCase()) > -1)
+      .map((p) => Object.assign({ key: p.name, onClick: () => this.setState({ screen: 'ficha', tab: 'Resumo' }) }, p));
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
 
     const appts = [
       { time: '10:00', name: 'Mariana Silva', service: 'Podologia geral' },
       { time: '11:00', name: 'Juliana Costa', service: 'Tratamento de unha' },
       { time: '14:00', name: 'Camila Ferreira', service: 'Calosidade' },
       { time: '15:00', name: 'Fernanda Lima', service: 'Primeira avaliação' }
+<<<<<<< HEAD
     ].map((a) => Object.assign({ key: a.time, onClick: openPatient }, a));
 
     const dows = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
     const nums = [31, 1, 2, 3, 4, 5, 6];
     const days = dows.map((d, i) => ({
       key: d, dow: d, num: String(nums[i]).padStart(2, '0'),
+=======
+    ].map((a) => Object.assign({ key: a.time, onClick: () => this.setState({ screen: 'ficha', tab: 'Resumo' }) }, a));
+
+    const dows = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+    const days = dows.map((d, i) => ({
+      key: d, dow: d, num: String(31 + i).length > 2 ? String(i - 1) : String(31 + i),
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       style: {
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
         padding: '9px 0', minHeight: '54px', border: 'none', cursor: 'pointer',
@@ -967,11 +1527,19 @@ class Component extends DCLogic {
       },
       onClick: () => this.setState({ day: i })
     }));
+<<<<<<< HEAD
+=======
+    days.forEach((d, i) => { d.num = String([31, 1, 2, 3, 4, 5, 6][i]).padStart(2, '0'); });
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
 
     const tabs = ['Resumo', 'Ficha', 'Evolução'].map((label) => ({
       key: label, label,
       style: {
+<<<<<<< HEAD
         flex: 1, minHeight: '44px', borderRadius: '12px', cursor: 'pointer', fontSize: '13.5px', fontWeight: 500,
+=======
+        flex: 1, minHeight: '42px', borderRadius: '12px', cursor: 'pointer', fontSize: '13.5px', fontWeight: 500,
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         background: st.tab === label ? '#3F6B52' : '#FFFFFF',
         color: st.tab === label ? '#FFFFFF' : '#5C665E',
         border: st.tab === label ? '1px solid #3F6B52' : '1px solid #DDE0DA'
@@ -983,7 +1551,15 @@ class Component extends DCLogic {
       key: i, title: s.title,
       state: i < 7 ? 'Completa' : 'Pendente',
       dotLabel: i < 7 ? '✓' : String(i + 1),
+<<<<<<< HEAD
       dotStyle: dot(i < 7, false),
+=======
+      dotStyle: {
+        width: '26px', height: '26px', flex: 'none', borderRadius: '50%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 600,
+        background: i < 7 ? '#3F6B52' : '#F2F3EF', color: i < 7 ? '#FFFFFF' : '#98A29A'
+      },
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       onClick: () => this.setState({ screen: 'wizard', step: i, showSteps: false })
     }));
 
@@ -1012,6 +1588,7 @@ class Component extends DCLogic {
         pickerCustom: !!q && !exact,
         pickerCustomLabel: 'Usar “' + st.pickerQuery.trim() + '”',
         onPickerCustom: () => choose(st.pickerQuery.trim()),
+<<<<<<< HEAD
         pickerWrapStyle: {
           position: 'fixed', inset: 0, zIndex: 40, display: 'flex',
           alignItems: wide ? 'center' : 'flex-end', justifyContent: 'center', padding: wide ? '24px' : '0'
@@ -1033,6 +1610,20 @@ class Component extends DCLogic {
           markLabel: form[pk.id] === opt ? '✓' : '',
           style: {
             display: 'flex', alignItems: 'center', gap: '12px', width: '100%', minHeight: '50px',
+=======
+        pickerOptions: list.map((opt) => ({
+          key: opt, label: opt,
+          selected: form[pk.id] === opt,
+          markStyle: {
+            width: '20px', height: '20px', flex: 'none', borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700,
+            background: form[pk.id] === opt ? '#3F6B52' : 'transparent',
+            color: '#FFFFFF'
+          },
+          markLabel: form[pk.id] === opt ? '✓' : '',
+          style: {
+            display: 'flex', alignItems: 'center', gap: '12px', width: '100%', minHeight: '52px',
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
             padding: '0 4px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer',
             fontSize: '15.5px', borderBottom: '1px solid #F0F1ED',
             color: form[pk.id] === opt ? '#3F6B52' : '#16201A',
@@ -1045,13 +1636,17 @@ class Component extends DCLogic {
 
     const isLast = st.step === steps.length - 1;
     const draftName = form.nome || 'Paciente sem nome';
+<<<<<<< HEAD
     const filled = Object.keys(form).filter((k) => form[k] && k !== 'estado' && k !== 'cidade').length;
+=======
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
 
     return Object.assign({}, pickerVals, {
       clinicName: this.props.clinicName || 'Clínica Passo Leve',
       professionalName: this.props.professionalName || 'Joyce',
       professionalInitial: (this.props.professionalName || 'Joyce').slice(0, 1).toUpperCase(),
 
+<<<<<<< HEAD
       isDesktop: wide, isMobile: !wide,
       appStyle: { display: 'flex', minHeight: '100vh', height: '100vh', background: '#EDEDE8' },
       paneStyle: { flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: '#F7F7F4', overflow: 'hidden' },
@@ -1068,6 +1663,8 @@ class Component extends DCLogic {
       tabAgendaStyle: this.tabStyle(st.screen === 'agenda'),
       tabPacientesStyle: this.tabStyle(st.screen === 'pacientes'),
 
+=======
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       isLogin: st.screen === 'login',
       isHome: st.screen === 'home',
       isPacientes: st.screen === 'pacientes',
@@ -1075,9 +1672,16 @@ class Component extends DCLogic {
       isFicha: st.screen === 'ficha',
       isWizard: st.screen === 'wizard',
       isDone: st.screen === 'done',
+<<<<<<< HEAD
 
       goHome: go('home'), goPacientes: go('pacientes'), goAgenda: go('agenda'),
       openPaciente: openPatient,
+=======
+      showTabs: ['home', 'pacientes', 'agenda'].indexOf(st.screen) > -1,
+
+      goHome: go('home'), goPacientes: go('pacientes'), goAgenda: go('agenda'),
+      openPaciente: () => this.setState({ screen: 'ficha', tab: 'Resumo' }),
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       startFicha: () => {
         const seed = { estado: 'MG', cidade: 'Vespasiano' };
         try { localStorage.setItem('anamnese.draft.v1', JSON.stringify(seed)); } catch (e) {}
@@ -1085,6 +1689,7 @@ class Component extends DCLogic {
       },
       resumeFicha: () => this.setState({ screen: 'wizard', showSteps: false }),
 
+<<<<<<< HEAD
       hasDraft: filled > 0 && st.screen === 'home',
       draftLabel: draftName + ' · etapa ' + (st.step + 1) + ' de ' + steps.length,
 
@@ -1107,6 +1712,18 @@ class Component extends DCLogic {
       patient: {
         name: form.nome || 'Mariana Silva',
         initials: (form.nome || 'Mariana Silva').split(' ').filter((x) => x).slice(0, 2).map((w) => w[0]).join('').toUpperCase(),
+=======
+      hasDraft: Object.keys(form).length > 0 && st.screen === 'home',
+      draftLabel: draftName + ' · etapa ' + (st.step + 1) + ' de ' + steps.length,
+
+      appointments: appts, patients, days, tabs, sectionSummary,
+      query: st.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+
+      patient: {
+        name: form.nome || 'Mariana Silva',
+        initials: (form.nome || 'Mariana Silva').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase(),
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
         meta: '42 anos · Prontuário 0148 · (11) 98842-1190',
         rows: [
           { key: 'a', k: 'Nascimento', v: form.nasc || '14/03/1984' },
@@ -1125,6 +1742,7 @@ class Component extends DCLogic {
       addEvolucao: () => this.setState({ screen: 'wizard', step: 9, showSteps: false }),
 
       fields, segments, stepList,
+<<<<<<< HEAD
       showRail: wide || st.showSteps,
       showFields: wide || !st.showSteps,
       wizardHeadStyle: { width: '100%', maxWidth: '1120px', margin: '0 auto', padding: wide ? '14px 34px 18px' : '10px 18px 14px' },
@@ -1140,6 +1758,9 @@ class Component extends DCLogic {
       wizardFootStyle: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px', width: '100%', maxWidth: '820px', margin: '0 auto', padding: wide ? '14px 34px' : '12px 18px calc(12px + env(safe-area-inset-bottom))' },
       nextStyle: { minWidth: wide ? '190px' : '150px', flex: wide ? 'none' : 1, height: '50px', border: 'none', borderRadius: '14px', background: '#3F6B52', color: '#FFFFFF', fontSize: '15.5px', fontWeight: 500, cursor: 'pointer' },
       stepTitleStyle: { fontSize: wide ? '22px' : '19px', fontWeight: 600, letterSpacing: '-0.01em' },
+=======
+      showSteps: st.showSteps, showFields: !st.showSteps,
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
       stepNum: st.step + 1, stepTotal: steps.length,
       stepTitle: cur.title, stepSub: cur.sub || null,
       stepsToggleLabel: st.showSteps ? 'Ocultar etapas' : 'Ver etapas',
@@ -1157,7 +1778,15 @@ class Component extends DCLogic {
       savedLabel: st.saved,
 
       alerts, hasAlerts: alerts.length > 0,
+<<<<<<< HEAD
       doneSummary: 'Ficha de ' + draftName + ' salva com as 10 etapas. A evolução das sessões já pode ser registrada.'
+=======
+      doneSummary: 'Ficha de ' + draftName + ' salva com as 10 etapas. A evolução das sessões já pode ser registrada.',
+
+      tabHomeStyle: this.tabStyle(st.screen === 'home'),
+      tabAgendaStyle: this.tabStyle(st.screen === 'agenda'),
+      tabPacientesStyle: this.tabStyle(st.screen === 'pacientes')
+>>>>>>> fdfbec6233673cac21d978377138a13d56eca107
     });
   }
 }

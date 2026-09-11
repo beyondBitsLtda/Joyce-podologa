@@ -1,0 +1,256 @@
+/* =============================================================================
+   Estrutura: casca do app, sidebar, barra inferior, áreas de conteúdo
+   =============================================================================
+   O protótipo decidia desktop x mobile em JavaScript, medindo window.innerWidth
+   e re-renderizando a cada resize. Aqui isso é media query: menos estado, e o
+   layout se ajusta ao girar o aparelho sem passar por JS.
+   ========================================================================== */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh; /* barra de endereço do mobile não corta o rodapé */
+  height: 100dvh;
+  background: var(--fundo-app);
+}
+
+.painel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--fundo-painel);
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  width: 100%;
+  max-width: var(--largura-conteudo);
+  margin: 0 auto;
+}
+
+.area-rolavel {
+  flex: 1;
+  padding: var(--esp-4) 18px var(--esp-5);
+}
+
+.area-centralizada {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+/* --- Sidebar (desktop) ---------------------------------------------------- */
+
+.sidebar {
+  display: none; /* ativada na media query de desktop */
+  flex: none;
+  flex-direction: column;
+  gap: 26px;
+  width: var(--largura-sidebar);
+  padding: 26px 18px;
+  background: var(--superficie);
+  border-right: 1px solid var(--borda);
+}
+
+.sidebar__marca {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+}
+
+.sidebar__logo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--superficie);
+  background: var(--verde);
+  border-radius: var(--raio-md);
+}
+
+.sidebar__nome {
+  font-size: var(--texto-base);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.sidebar__rodape {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  margin-top: auto;
+  background: var(--fundo-painel);
+  border-radius: var(--raio-md);
+}
+
+.nav-item {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  width: 100%;
+  min-height: var(--alvo-toque);
+  padding: 0 var(--esp-3);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto-suave);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--raio-md);
+  transition: background var(--transicao);
+}
+
+.nav-item:hover {
+  background: var(--superficie-2);
+}
+
+.nav-item[aria-current='page'] {
+  color: var(--verde);
+  background: var(--verde-claro);
+}
+
+/* --- Barra inferior (mobile) ---------------------------------------------- */
+
+.tabbar {
+  display: flex;
+  flex: none;
+  padding: var(--esp-2) var(--esp-3) calc(var(--esp-2) + env(safe-area-inset-bottom));
+  background: var(--superficie);
+  border-top: 1px solid var(--borda);
+}
+
+.tabbar__item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  min-height: 48px;
+  padding: var(--esp-2) 0;
+  font-size: var(--texto-xs);
+  font-weight: 500;
+  color: var(--texto-desabilitado);
+  background: none;
+  border: none;
+}
+
+.tabbar__item[aria-current='page'] {
+  color: var(--verde);
+}
+
+/* --- Cabeçalho de página -------------------------------------------------- */
+
+.cabecalho-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saudacao {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.saudacao__linha {
+  font-size: var(--texto-md);
+  color: var(--texto-secundario);
+}
+
+/* --- Grades reaproveitadas ------------------------------------------------ */
+
+.grade-cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--esp-3);
+}
+
+.grade-pacientes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--esp-3);
+}
+
+.grade-colunas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--esp-4);
+  align-items: start;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.coluna__titulo {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+/* =============================================================================
+   Desktop
+   ========================================================================== */
+
+@media (width >= 900px) {
+  .sidebar {
+    display: flex;
+  }
+
+  .tabbar {
+    display: none;
+  }
+
+  .area-rolavel {
+    padding: var(--esp-6) 34px;
+  }
+
+  .conteudo {
+    gap: var(--esp-5);
+  }
+
+  h1 {
+    font-size: var(--texto-3xl);
+  }
+
+  /* Só no desktop aparece a segunda coluna do formulário do wizard. */
+  .campos {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--esp-4) 20px;
+  }
+}
+
+/* Some com elementos exclusivos de um dos layouts sem precisar de JS. */
+@media (width < 900px) {
+  .so-desktop {
+    display: none !important;
+  }
+}
+
+@media (width >= 900px) {
+  .so-mobile {
+    display: none !important;
+  }
+}

@@ -1,0 +1,126 @@
+/* =============================================================================
+   Reset e elementos base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--fonte);
+  font-size: var(--texto-base);
+  color: var(--texto);
+  background: var(--fundo-app);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  min-height: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--texto-2xl);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+h2 {
+  font-size: var(--texto-lg);
+  font-weight: 600;
+}
+
+a {
+  color: var(--verde);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--verde-escuro);
+}
+
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::placeholder {
+  color: var(--placeholder);
+}
+
+/* Foco visível em tudo que recebe teclado. A regra padrão do navegador some em
+   vários controles customizados deste app. */
+:focus-visible {
+  outline: 2px solid var(--verde);
+  outline-offset: 2px;
+}
+
+/* Mas não no clique de mouse, que fica ruidoso numa tela cheia de chips. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Barra de rolagem discreta nas áreas roláveis do app. */
+.rolagem {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d6dad4 transparent;
+}
+
+.rolagem::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.rolagem::-webkit-scrollbar-thumb {
+  background: #d6dad4;
+  border-radius: var(--esp-1);
+}
+
+/* Visível para leitor de tela, invisível na tela. */
+.apenas-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

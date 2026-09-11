@@ -1,0 +1,25 @@
+# Cabeçalhos de segurança aplicados pelo Cloudflare Pages.
+# Referência: docs/LGPD-SEGURANCA.md
+
+/*
+  # Impede que o site seja embutido em iframe de terceiros (clickjacking).
+  X-Frame-Options: DENY
+  # Bloqueia MIME sniffing.
+  X-Content-Type-Options: nosniff
+  # Não vaza a URL do prontuário para sites externos.
+  Referrer-Policy: no-referrer
+  # Só HTTPS, por 2 anos.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  # Desliga APIs de dispositivo que o app não usa.
+  Permissions-Policy: geolocation=(), microphone=(), payment=(), usb=()
+  # CSP: troque https://*.supabase.co pela URL exata do seu projeto
+  # (ex.: https://abcdefgh.supabase.co) antes de ir para produção.
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+
+# Assets com hash no nome podem ficar em cache para sempre.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# O HTML nunca: senão o usuário fica preso numa versão antiga do app.
+/index.html
+  Cache-Control: no-cache

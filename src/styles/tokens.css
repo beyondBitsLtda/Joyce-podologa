@@ -1,0 +1,109 @@
+/* =============================================================================
+   Design tokens
+   =============================================================================
+   Extraídos das inline styles do protótipo (prototype/index.html). Esta é a
+   identidade visual já validada do produto da clínica — verde clínico sobre
+   neutros quentes.
+
+   Qualquer cor usada na interface precisa estar aqui. Hex solto dentro de um
+   componente é como a paleta se desfaz ao longo do tempo.
+   ========================================================================== */
+
+:root {
+  /* --- Marca --------------------------------------------------------------- */
+  --verde: #3f6b52;
+  --verde-escuro: #2f5240;
+  --verde-claro: #eaf1ec;
+  --verde-borda: #c9d6cd;
+  --verde-fundo-sutil: #f4f8f5;
+
+  /* --- Superfícies --------------------------------------------------------- */
+  --fundo-app: #ededE8;
+  --fundo-painel: #f7f7f4;
+  --superficie: #ffffff;
+  --superficie-2: #f2f3ef;
+
+  /* --- Texto --------------------------------------------------------------- */
+  --texto: #16201a;
+  --texto-forte: #2f3a34;
+  --texto-medio: #4c574f;
+  --texto-suave: #5c665e;
+  --texto-secundario: #6e7a72;
+  --texto-apagado: #8a948c;
+  --texto-desabilitado: #98a29a;
+  --placeholder: #a3ada5;
+  --icone-apagado: #b6beb7;
+
+  /* --- Linhas -------------------------------------------------------------- */
+  --borda: #e7e8e3;
+  --borda-campo: #dde0da;
+  --divisoria: #f0f1ed;
+  --trilha: #dfe3de;
+  --tracejado: #c6cfc8;
+
+  /* --- Estado: atenção / risco clínico ------------------------------------- */
+  --alerta-fundo: #fbeae7;
+  --alerta-borda: #f0cfc9;
+  --alerta-texto: #a83e31;
+  --alerta-texto-forte: #7a2c22;
+
+  /* --- Estado: rascunho pendente ------------------------------------------- */
+  --aviso-fundo: #fff8ec;
+  --aviso-borda: #ebd9b8;
+  --aviso-texto: #7a5312;
+  --aviso-texto-suave: #9a7434;
+  --aviso-realce: #b8792b;
+
+  /* --- Tipografia ---------------------------------------------------------- */
+  --fonte: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --texto-xs: 11px;
+  --texto-sm: 12.5px;
+  --texto-md: 13.5px;
+  --texto-base: 14.5px;
+  --texto-lg: 15.5px;
+  --texto-xl: 19px;
+  --texto-2xl: 23px;
+  --texto-3xl: 27px;
+
+  /* --- Espaçamento --------------------------------------------------------- */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 22px;
+  --esp-6: 30px;
+
+  /* --- Raios --------------------------------------------------------------- */
+  --raio-sm: 8px;
+  --raio-md: 12px;
+  --raio-lg: 14px;
+  --raio-xl: 16px;
+  --raio-2xl: 20px;
+  --raio-pill: 999px;
+
+  /* --- Elevação ------------------------------------------------------------ */
+  --sombra-sheet: 0 18px 50px rgb(17 28 21 / 24%);
+  --sombra-card: 0 2px 10px rgb(17 28 21 / 5%);
+  --overlay: rgb(17 28 21 / 42%);
+
+  /* --- Medidas ------------------------------------------------------------- */
+  --largura-sidebar: 236px;
+  --largura-trilha: 250px;
+  --largura-conteudo: 1120px;
+  --largura-formulario: 820px;
+  --largura-cartao: 420px;
+
+  /* Altura mínima de alvo de toque. O app é usado de pé, com luva, olhando
+     para o pé do paciente — alvo pequeno aqui custa erro de digitação. */
+  --alvo-toque: 44px;
+
+  --transicao: 140ms ease;
+}
+
+/* O app é desenhado para o claro. Declarar explicitamente evita que o
+   navegador aplique inversão automática e quebre o contraste das etiquetas
+   clínicas. */
+:root {
+  color-scheme: light;
+}

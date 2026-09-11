@@ -1,0 +1,8 @@
+/* Ponto de entrada dos estilos. A ordem importa: tokens antes de tudo, e
+   views por último, para que o específico vença o genérico sem !important. */
+
+@import './tokens.css';
+@import './base.css';
+@import './layout.css';
+@import './components.css';
+@import './views.css';

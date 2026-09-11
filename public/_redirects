@@ -1,0 +1,3 @@
+# SPA fallback — qualquer rota cai no index.html e o router do app resolve.
+# Sem isso, abrir /pacientes direto (ou dar F5) devolve 404 no Cloudflare Pages.
+/*    /index.html   200

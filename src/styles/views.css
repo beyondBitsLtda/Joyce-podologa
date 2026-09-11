@@ -1,0 +1,646 @@
+/* =============================================================================
+   Estilos específicos de tela
+   ========================================================================== */
+
+/* --- Login ---------------------------------------------------------------- */
+
+.login__marca {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.login__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--superficie);
+  background: var(--verde);
+  border-radius: var(--raio-xl);
+}
+
+.login__texto {
+  font-size: var(--texto-base);
+  line-height: 1.5;
+  color: var(--texto-secundario);
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+@media (width >= 900px) {
+  .cartao-login {
+    padding: 32px;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-2xl);
+  }
+}
+
+/* --- Início --------------------------------------------------------------- */
+
+.acao-destaque {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: center;
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+  background: var(--verde);
+  border: none;
+  border-radius: 18px;
+}
+
+.acao-destaque:hover {
+  background: var(--verde-escuro);
+}
+
+.acao-destaque__icone {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--superficie);
+  background: rgb(255 255 255 / 16%);
+  border-radius: var(--raio-md);
+}
+
+.acao-destaque__texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.acao-destaque__titulo {
+  font-size: var(--texto-xl);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--superficie);
+}
+
+.acao-destaque__sub {
+  font-size: var(--texto-sm);
+  color: rgb(255 255 255 / 72%);
+}
+
+.rascunho-aberto {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--esp-4) 18px;
+  text-align: left;
+}
+
+.rascunho-aberto:hover {
+  border-color: var(--aviso-realce);
+}
+
+.rascunho-aberto__titulo {
+  font-size: var(--texto-md);
+  font-weight: 500;
+  color: var(--aviso-texto);
+}
+
+.rascunho-aberto__meta {
+  font-size: var(--texto-sm);
+  color: var(--aviso-texto-suave);
+}
+
+.rascunho-aberto__acao {
+  flex: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--aviso-texto);
+}
+
+/* --- Agenda --------------------------------------------------------------- */
+
+.calendario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-3);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+}
+
+.calendario__mes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--esp-1);
+  font-size: var(--texto-base);
+  font-weight: 500;
+}
+
+.calendario__nav {
+  min-height: auto;
+  padding: var(--esp-2);
+  font-size: var(--texto-xl);
+  color: var(--icone-apagado);
+  background: none;
+  border: none;
+}
+
+.calendario__semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendario__dia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  align-items: center;
+  min-height: 54px;
+  padding: 9px 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--raio-md);
+}
+
+.calendario__dia[aria-pressed='true'] {
+  color: var(--verde);
+  background: var(--verde-claro);
+}
+
+.calendario__dow {
+  font-size: var(--texto-xs);
+  color: var(--texto-apagado);
+}
+
+.calendario__num {
+  font-size: var(--texto-base);
+  font-weight: 500;
+}
+
+.calendario__dia--ocupado .calendario__num::after {
+  display: block;
+  width: 4px;
+  height: 4px;
+  margin: 3px auto 0;
+  content: '';
+  background: var(--verde);
+  border-radius: 50%;
+}
+
+/* --- Ficha do paciente ---------------------------------------------------- */
+
+.ficha__topo {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.abas {
+  display: flex;
+  gap: var(--esp-2);
+  max-width: 420px;
+}
+
+.aba {
+  flex: 1;
+  min-height: var(--alvo-toque);
+  font-size: var(--texto-md);
+  font-weight: 500;
+  color: var(--texto-suave);
+  background: var(--superficie);
+  border: 1px solid var(--borda-campo);
+  border-radius: var(--raio-md);
+}
+
+.aba[aria-selected='true'] {
+  color: var(--superficie);
+  background: var(--verde);
+  border-color: var(--verde);
+}
+
+.dados {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 18px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-xl);
+}
+
+.dados__linha {
+  display: flex;
+  gap: var(--esp-4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--esp-3) 0;
+  border-bottom: 1px solid var(--divisoria);
+}
+
+.dados__linha:last-child {
+  border-bottom: none;
+}
+
+.dados__chave {
+  font-size: 13px;
+  color: var(--texto-secundario);
+}
+
+.dados__valor {
+  font-size: var(--texto-md);
+  font-weight: 500;
+  text-align: right;
+}
+
+.evolucao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-4) 18px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-xl);
+}
+
+.evolucao__cabecalho {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.evolucao__data {
+  font-size: var(--texto-md);
+  font-weight: 600;
+  color: var(--verde);
+}
+
+.evolucao__texto {
+  font-size: var(--texto-md);
+  line-height: 1.55;
+  color: var(--texto-forte);
+}
+
+.evolucao__assinatura {
+  font-size: 11.5px;
+  color: var(--texto-apagado);
+}
+
+.evolucao--retificacao {
+  border-left: 3px solid var(--aviso-realce);
+}
+
+/* --- Wizard --------------------------------------------------------------- */
+
+.wizard {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.wizard__topo {
+  flex: none;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda);
+}
+
+.wizard__topo-interno {
+  width: 100%;
+  max-width: var(--largura-conteudo);
+  padding: 10px 18px var(--esp-3);
+  margin: 0 auto;
+}
+
+.wizard__barra-acoes {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+}
+
+.wizard__nome {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.wizard__segmentos {
+  display: flex;
+  gap: 3px;
+  margin: 6px 0 var(--esp-3);
+}
+
+.wizard__segmento {
+  flex: 1;
+  height: var(--esp-1);
+  background: var(--trilha);
+  border-radius: 2px;
+}
+
+.wizard__segmento--feito {
+  background: var(--verde);
+}
+
+.wizard__titulo-etapa {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.wizard__etapa-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.wizard__etapa-num {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--verde);
+}
+
+.wizard__etapa-titulo {
+  font-size: var(--texto-xl);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.wizard__corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--largura-conteudo);
+  min-height: 0;
+  margin: 0 auto;
+}
+
+/* Trilha lateral de etapas */
+.trilha {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--esp-1);
+  width: 100%;
+  padding: var(--esp-3) var(--esp-3) 18px;
+  overflow-y: auto;
+}
+
+.trilha__item {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  width: 100%;
+  min-height: 48px;
+  padding: var(--esp-2) 11px;
+  color: var(--texto);
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--raio-md);
+}
+
+.trilha__item[aria-current='step'] {
+  background: var(--superficie);
+  border-color: var(--verde);
+}
+
+.trilha__titulo {
+  flex: 1;
+  font-size: var(--texto-md);
+  line-height: 1.3;
+}
+
+.trilha__contador {
+  flex: none;
+  font-size: var(--texto-xs);
+  color: var(--texto-desabilitado);
+}
+
+.marcador {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto-desabilitado);
+  background: var(--superficie-2);
+  border-radius: 50%;
+}
+
+.marcador--atual {
+  color: var(--verde);
+  background: var(--verde-claro);
+}
+
+.marcador--feito {
+  color: var(--superficie);
+  background: var(--verde);
+}
+
+/* Área do formulário */
+.wizard__form-area {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  max-width: var(--largura-formulario);
+}
+
+.formulario__sub {
+  font-size: var(--texto-md);
+  line-height: 1.5;
+  color: var(--texto-secundario);
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--esp-3);
+  align-items: start;
+}
+
+/* Termo de responsabilidade */
+.termo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--esp-4) 18px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: 15px;
+}
+
+.termo p {
+  font-size: var(--texto-sm);
+  line-height: 1.65;
+  color: var(--texto-medio);
+}
+
+/* Assinatura */
+.assinatura {
+  width: 100%;
+  min-height: 84px;
+  font-size: var(--texto-base);
+  font-weight: 500;
+  color: var(--texto-secundario);
+  background: var(--superficie);
+  border: 1.5px dashed var(--tracejado);
+  border-radius: 15px;
+}
+
+.assinatura--assinada {
+  color: var(--verde);
+  background: var(--verde-claro);
+  border: 1px solid var(--verde);
+}
+
+/* Rodapé do wizard */
+.wizard__rodape {
+  flex: none;
+  background: var(--superficie);
+  border-top: 1px solid var(--borda);
+}
+
+.wizard__rodape-interno {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--largura-formulario);
+  padding: var(--esp-3) 18px calc(var(--esp-3) + env(safe-area-inset-bottom));
+  margin: 0 auto;
+}
+
+.wizard__salvo {
+  font-size: 11.5px;
+  color: var(--texto-apagado);
+}
+
+.wizard__navegacao {
+  display: flex;
+  flex: none;
+  gap: 10px;
+}
+
+.wizard__voltar {
+  flex: none;
+  width: 52px;
+  min-height: 50px;
+  padding: 0;
+  font-size: 17px;
+}
+
+.wizard__avancar {
+  flex: 1;
+  min-width: 150px;
+  min-height: 50px;
+}
+
+@media (width >= 900px) {
+  .wizard__topo-interno {
+    padding: var(--esp-3) 34px 18px;
+  }
+
+  .wizard__corpo {
+    flex-direction: row;
+  }
+
+  .trilha {
+    width: var(--largura-trilha);
+    padding: var(--esp-5) var(--esp-3) var(--esp-5) 26px;
+    border-right: 1px solid var(--borda);
+  }
+
+  .wizard__etapa-titulo {
+    font-size: var(--texto-2xl);
+  }
+
+  .wizard__rodape-interno {
+    padding: var(--esp-3) 34px;
+  }
+
+  .wizard__avancar {
+    flex: none;
+    min-width: 190px;
+  }
+}
+
+/* No mobile a trilha é um painel que abre sobre o formulário. */
+@media (width < 900px) {
+  .wizard[data-mostrar='etapas'] .wizard__form-area {
+    display: none;
+  }
+
+  .wizard:not([data-mostrar='etapas']) .trilha {
+    display: none;
+  }
+}
+
+/* --- Conclusão ------------------------------------------------------------ */
+
+.conclusao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  width: 100%;
+  max-width: var(--largura-cartao);
+}
+
+.conclusao__selo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  background: var(--verde);
+  border-radius: 50%;
+}
+
+.conclusao__texto {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--texto-secundario);
+}
+
+.conclusao__alertas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+.conclusao__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.conclusao__acoes .btn {
+  flex: 1;
+  min-width: 180px;
+}

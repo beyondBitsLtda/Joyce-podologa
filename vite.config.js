@@ -15,7 +15,11 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    // Source map publicado é o código-fonte inteiro legível por qualquer um.
+    // Não há segredo no bundle (o RLS é quem protege os dados), mas também não
+    // há razão para entregar o mapa da aplicação junto. Para depurar um erro de
+    // produção, gere localmente com: npx vite build --sourcemap
+    sourcemap: false,
     target: 'es2020',
     rollupOptions: {
       output: {

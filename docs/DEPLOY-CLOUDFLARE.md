@@ -1,8 +1,8 @@
-# Deploy — Cloudflare Pages + Supabase
+# Deploy — Cloudflare Workers + Supabase
 
-O front é estático (HTML + JS + CSS) e vai para o Cloudflare Pages. O back-end
-inteiro — banco, autenticação e arquivos — é o Supabase. Não há servidor de
-aplicação para manter.
+O front é estático (HTML + JS + CSS) e vai para o Cloudflare Workers como Static
+Assets. O back-end inteiro — banco, autenticação e arquivos — é o Supabase. Não
+há servidor de aplicação para manter.
 
 ---
 
@@ -62,37 +62,65 @@ update public.profiles set role = 'podologa' where id = '<uuid>';
 
 ---
 
-## 2. Cloudflare Pages
+## 2. Cloudflare Workers
 
-### Conectar o repositório
+O Cloudflare unificou Pages e Workers. Projetos novos entram pelo fluxo de
+**Workers com Static Assets**: o Worker não roda código nenhum, apenas serve os
+arquivos de `dist/`. A configuração está em
+[`wrangler.jsonc`](../wrangler.jsonc) — sem esse arquivo, `npx wrangler deploy`
+falha.
 
-**Workers & Pages → Create → Pages → Connect to Git**.
+### Tela "Set up your application"
 
-| Configuração | Valor |
+| Campo | Valor |
 |---|---|
-| Framework preset | `None` |
+| Project name | `joyce-podologa` |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
-| Node version | `20` (variável `NODE_VERSION`) |
+| Deploy command | `npx wrangler deploy` |
+| Builds for non-production branches | marcado (gera preview por branch) |
+| Protect with Cloudflare Access | deixar desmarcado |
+
+> `name` em `wrangler.jsonc` precisa bater com o **Project name**. Se mudar um,
+> mude o outro.
+
+O Cloudflare roda `npm install` sozinho antes do build.
 
 ### Variáveis de ambiente
 
-Em **Settings → Environment variables**, para *Production* e *Preview*:
+Em **Advanced settings** durante o setup, ou depois em
+**Settings → Build → Variables and Secrets**:
 
 ```
 VITE_SUPABASE_URL        https://xxxx.supabase.co
 VITE_SUPABASE_ANON_KEY   eyJhbGciOi...
 VITE_CLINIC_NAME         Clínica Passo Leve
-NODE_VERSION             20
 ```
 
-São embutidas no bundle **durante o build** — mudar o valor exige um novo deploy.
+**Precisam ser variáveis de _build_, não de runtime.** O Vite as embute no
+bundle durante `npm run build`; o Worker não executa código e nunca as leria em
+tempo de execução. Definidas no lugar errado, o app sobe e falha no navegador
+com *"Variável de ambiente VITE_SUPABASE_URL não definida"*.
+
+Mudar o valor exige um novo build — não basta salvar a variável.
+
+### Roteamento de SPA
+
+Resolvido por `not_found_handling: "single-page-application"` em
+`wrangler.jsonc`: qualquer caminho sem arquivo correspondente recebe o
+`index.html`, e o router do app assume.
+
+É o equivalente ao `/* /index.html 200` do `_redirects` do Pages — que **não**
+funciona no Workers, porque reescrita com status 200 é recurso exclusivo do
+Pages. Por isso esse arquivo não existe mais no projeto.
+
+O `public/_headers` continua valendo: o Vite o copia para `dist/` e o Workers
+aplica os cabeçalhos.
 
 ### Deploy manual (alternativa)
 
 ```bash
-npm run build
-npx wrangler pages deploy dist --project-name passo-leve
+npx wrangler login
+npm run deploy          # build + wrangler deploy
 ```
 
 ---
@@ -136,7 +164,7 @@ Sem isso o link de redefinição de senha aponta para o lugar errado.
 
 **Custom domains → Set up a custom domain**. Se o DNS já está na Cloudflare, o
 registro é criado sozinho; caso contrário, aponte um `CNAME` para
-`<projeto>.pages.dev`.
+`<projeto>.<subdominio>.workers.dev`.
 
 O HTTPS é automático. Como `_headers` manda `Strict-Transport-Security` com
 `preload`, confirme que o domínio deve ficar permanentemente em HTTPS antes de
@@ -149,7 +177,7 @@ publicar — a diretiva é difícil de reverter.
 - [ ] Migrations aplicadas; todas as tabelas com RLS habilitado
 - [ ] Auto-cadastro desligado
 - [ ] Usuário admin criado e papel conferido em `profiles`
-- [ ] Variáveis configuradas no Pages (Production **e** Preview)
+- [ ] Variáveis de **build** configuradas (Settings → Build → Variables and Secrets)
 - [ ] `connect-src` do CSP com o host exato do Supabase
 - [ ] Site URL e Redirect URLs do Supabase apontando para o domínio real
 - [ ] Bucket `prontuario` privado (Storage → deve estar como *Private*)
@@ -163,7 +191,7 @@ publicar — a diretiva é difícil de reverter.
 
 | Item | Plano gratuito | Quando apertar |
 |---|---|---|
-| Cloudflare Pages | 500 builds/mês, banda ilimitada | Dificilmente |
+| Cloudflare Workers | 100 mil requisições/dia, assets estáticos sem custo | Dificilmente |
 | Supabase Free | 500 MB de banco, 1 GB de arquivos | As **fotos** enchem primeiro |
 | Supabase Pro | US$ 25/mês — 8 GB de banco, 100 GB de arquivos, PITR | Quando as fotos passarem de 1 GB, ou assim que houver dado real de paciente: o Free **pausa** projetos ociosos |
 

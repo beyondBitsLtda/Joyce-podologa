@@ -11,7 +11,7 @@ que é a fonte de todos os campos do formulário.
 |---|---|
 | **Front-end** | JavaScript (módulos ES) + Vite — sem framework |
 | **Banco / Auth / Storage** | Supabase (PostgreSQL com RLS) |
-| **Hospedagem** | Cloudflare Pages |
+| **Hospedagem** | Cloudflare Workers (Static Assets) |
 | **Modelo** | Clínica única (uma clínica, vários usuários) |
 
 ---
@@ -51,7 +51,7 @@ automaticamente; os seguintes entram como `secretaria` e precisam ser promovidos
 | `npm run lint` | ESLint |
 | `npm run db:reset` | Recria o banco local e aplica migrations + seed |
 | `npm run db:push` | Aplica as migrations no projeto remoto |
-| `npm run deploy` | Build + publica no Cloudflare Pages |
+| `npm run deploy` | Build + publica no Cloudflare Workers |
 
 ---
 
@@ -59,8 +59,8 @@ automaticamente; os seguintes entram como `secretaria` e precisam ser promovidos
 
 ```
 ├── index.html                 Entrada do Vite
+├── wrangler.jsonc             Cloudflare Workers: assets + rota de SPA
 ├── public/
-│   ├── _redirects             Fallback de SPA (Cloudflare Pages)
 │   └── _headers               CSP e cabeçalhos de segurança
 │
 ├── src/
@@ -175,5 +175,5 @@ configuração (usuários e serviços) e relatórios.
 
 - [Arquitetura](docs/ARQUITETURA.md) — decisões e por quê
 - [Modelo de dados](docs/MODELO-DE-DADOS.md) — tabelas, relações e RLS
-- [Deploy](docs/DEPLOY-CLOUDFLARE.md) — Cloudflare Pages + Supabase
+- [Deploy](docs/DEPLOY-CLOUDFLARE.md) — Cloudflare Workers + Supabase
 - [LGPD e segurança](docs/LGPD-SEGURANCA.md) — dado de saúde é dado sensível

@@ -1,5 +1,9 @@
-# Cabeçalhos de segurança aplicados pelo Cloudflare Pages.
+# Cabeçalhos de segurança. O Vite copia este arquivo para dist/ e o Cloudflare
+# Workers (Static Assets) o aplica às respostas.
 # Referência: docs/LGPD-SEGURANCA.md
+#
+# A rota de SPA NÃO fica aqui: quem resolve é not_found_handling em
+# wrangler.jsonc. Reescrita "200" do _redirects é recurso do Pages, não do Workers.
 
 /*
   # Impede que o site seja embutido em iframe de terceiros (clickjacking).

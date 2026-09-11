@@ -1,0 +1,46 @@
+{
+  // =========================================================================
+  // Cloudflare Workers — site estático (Static Assets)
+  // =========================================================================
+  // O app é 100% estático: o back-end inteiro é o Supabase. Por isso não há
+  // campo "main" — este Worker não executa código, apenas serve os arquivos
+  // de dist/.
+  //
+  // Deploy: npx wrangler deploy
+  // =========================================================================
+
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Precisa ser igual ao "Project name" no painel do Cloudflare.
+  "name": "joyce-podologa",
+
+  "compatibility_date": "2025-03-01",
+
+  "assets": {
+    "directory": "./dist",
+
+    // O roteador do app usa History API (/pacientes/123, sem "#"). Sem isto,
+    // abrir esse endereço direto — ou dar F5 nele — devolveria 404, porque não
+    // existe um arquivo dist/pacientes/123.html. Com "single-page-application"
+    // o Cloudflare entrega o index.html e o router resolve a rota.
+    //
+    // É o equivalente, no Workers, ao "/* /index.html 200" do _redirects do
+    // Pages — que aqui não funciona, porque reescrita com status 200 é recurso
+    // exclusivo do Pages. Por isso esse arquivo não existe neste projeto.
+    "not_found_handling": "single-page-application"
+  },
+
+  // Métricas de erro e desempenho no painel do Cloudflare.
+  "observability": {
+    "enabled": true
+  }
+
+  // Variáveis de ambiente NÃO entram aqui.
+  //
+  // VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY são lidas pelo Vite durante o
+  // BUILD e embutidas no bundle. Precisam estar em
+  // Settings → Build → Variables and Secrets no painel do Cloudflare.
+  //
+  // Colocá-las em "vars" aqui não funcionaria: "vars" chega ao runtime do
+  // Worker, e este Worker não roda código — só serve arquivos já compilados.
+}

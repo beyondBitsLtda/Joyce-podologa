@@ -16,9 +16,11 @@
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   # Desliga APIs de dispositivo que o app não usa.
   Permissions-Policy: geolocation=(), microphone=(), payment=(), usb=()
-  # CSP: troque https://*.supabase.co pela URL exata do seu projeto
-  # (ex.: https://abcdefgh.supabase.co) antes de ir para produção.
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  # CSP travado no host exato do projeto Supabase — não use curinga
+  # (https://*.supabase.co), que autorizaria qualquer projeto Supabase do mundo.
+  # Ao trocar de projeto, atualize as duas ocorrências abaixo (img-src e
+  # connect-src) e refaça o build: o CSP é servido junto com os arquivos.
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://fkxnbnmaluinoakxukjy.supabase.co; connect-src 'self' https://fkxnbnmaluinoakxukjy.supabase.co wss://fkxnbnmaluinoakxukjy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
 
 # Assets com hash no nome podem ficar em cache para sempre.
 /assets/*

@@ -1,4 +1,4 @@
-# Passo Leve — Prontuário de Podologia
+# Joyce Freitas Podologia — Prontuário Digital
 
 Sistema de prontuário para clínica de podologia: ficha de anamnese em 10 etapas,
 agenda e evolução clínica.

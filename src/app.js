@@ -161,7 +161,7 @@ export async function iniciarApp(raiz) {
       montar(cascaEl, sidebar({ rotaAtual: caminho, perfil, navegar, novaFicha }), conteudoEl);
     }
 
-    document.title = `${tituloDaRota(casada.padrao)} · Passo Leve`;
+    document.title = `${tituloDaRota(casada.padrao)} · Joyce Freitas Podologia`;
   }
 
   // ---------------------------------------------------------------------------

@@ -15,11 +15,11 @@ export const supabase = createClient(config.supabase.url, config.supabase.anonKe
     // Este app não usa magic link nem OAuth com retorno pela URL; desligar
     // evita que o SDK fique inspecionando a barra de endereços.
     detectSessionInUrl: false,
-    storageKey: 'passo-leve.auth',
+    storageKey: 'joyce-podologa.auth',
   },
   db: { schema: 'public' },
   global: {
-    headers: { 'x-application-name': 'passo-leve' },
+    headers: { 'x-application-name': 'joyce-podologa' },
   },
 });
 

@@ -24,7 +24,7 @@ export const config = {
   },
 
   clinica: {
-    nome: import.meta.env.VITE_CLINIC_NAME || 'Clínica Passo Leve',
+    nome: import.meta.env.VITE_CLINIC_NAME || 'Joyce Freitas Podologia',
   },
 
   /** Chave do rascunho no localStorage. Versionada para poder invalidar. */

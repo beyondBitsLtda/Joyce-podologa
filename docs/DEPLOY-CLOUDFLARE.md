@@ -93,7 +93,7 @@ Em **Advanced settings** durante o setup, ou depois em
 ```
 VITE_SUPABASE_URL        https://xxxx.supabase.co
 VITE_SUPABASE_ANON_KEY   eyJhbGciOi...
-VITE_CLINIC_NAME         Clínica Passo Leve
+VITE_CLINIC_NAME         Joyce Freitas Podologia
 ```
 
 **Precisam ser variáveis de _build_, não de runtime.** O Vite as embute no
@@ -125,21 +125,21 @@ npm run deploy          # build + wrangler deploy
 
 ---
 
-## 3. Ajustar o CSP
+## 3. O CSP
 
-[`public/_headers`](../public/_headers) traz um placeholder:
-
-```
-connect-src 'self' https://*.supabase.co wss://*.supabase.co;
-```
-
-Troque pelo host exato do projeto antes de ir para produção:
+[`public/_headers`](../public/_headers) já está travado no host do projeto
+atual, em `img-src` e `connect-src`:
 
 ```
-connect-src 'self' https://abcdefgh.supabase.co wss://abcdefgh.supabase.co;
+connect-src 'self' https://<ref>.supabase.co wss://<ref>.supabase.co;
 ```
 
-O curinga aceita qualquer projeto Supabase; o host exato aceita só o seu.
+**Ao trocar de projeto Supabase, atualize as duas ocorrências e refaça o
+build** — o CSP é servido junto com os arquivos estáticos, então salvar o
+arquivo sem publicar não muda nada.
+
+Nunca volte para o curinga `https://*.supabase.co`: ele autorizaria o app a
+conversar com qualquer projeto Supabase existente, não só com o seu.
 
 Se depois integrar IBGE ou ViaCEP (ver
 [ARQUITETURA.md](ARQUITETURA.md#limitações-conhecidas)), esses hosts também

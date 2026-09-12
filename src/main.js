@@ -12,7 +12,7 @@ import { iniciarApp } from './app.js';
 const raiz = document.getElementById('app');
 
 iniciarApp(raiz).catch((erro) => {
-  console.error('[passo-leve] falha ao iniciar:', erro);
+  console.error('[joyce-podologa] falha ao iniciar:', erro);
 
   raiz.removeAttribute('aria-busy');
   raiz.textContent = '';

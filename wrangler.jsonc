@@ -14,6 +14,11 @@
   // Precisa ser igual ao "Project name" no painel do Cloudflare.
   "name": "joyce-podologa",
 
+  // A conta do login tem mais de uma Account; sem fixar aqui, o wrangler
+  // aborta com "More than one account available" e pediria escolha
+  // interativa. Não é credencial — é só o identificador da conta.
+  "account_id": "6a7aa099d84b609bda2026bcdd879bca",
+
   "compatibility_date": "2025-03-01",
 
   "assets": {

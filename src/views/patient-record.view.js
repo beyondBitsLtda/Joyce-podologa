@@ -56,9 +56,31 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarT
       h('span', { class: 'avatar avatar--g' }, paciente.initials || iniciais(paciente.full_name)),
       h(
         'div',
-        { style: { display: 'flex', flexDirection: 'column', gap: '3px' } },
+        { style: { display: 'flex', flexDirection: 'column', gap: '3px', flex: '1', minWidth: '0' } },
         h('h1', null, paciente.full_name),
         h('span', { class: 'lista__meta' }, meta)
+      ),
+      h(
+        'div',
+        { style: { display: 'flex', gap: 'var(--esp-2)', flexWrap: 'wrap' } },
+        h(
+          'button',
+          {
+            type: 'button',
+            class: 'btn btn--secundario',
+            onclick: () => navegar(`/pacientes/${pacienteId}/editar`),
+          },
+          'Editar cadastro'
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            class: 'btn btn--secundario',
+            onclick: () => navegar(`/agenda/novo?paciente=${pacienteId}`),
+          },
+          'Agendar'
+        )
       )
     );
   }

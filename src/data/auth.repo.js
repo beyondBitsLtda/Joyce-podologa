@@ -41,6 +41,21 @@ export async function perfilAtual() {
   return data?.active ? data : null;
 }
 
+/**
+ * Quem pode receber um agendamento: perfis ativos com acesso clínico.
+ * A secretaria marca consulta, mas não é quem atende.
+ */
+export async function listarProfissionais() {
+  return desembrulhar(
+    await supabase
+      .from('profiles')
+      .select('id, full_name, role, council_id')
+      .eq('active', true)
+      .in('role', ['admin', 'podologa'])
+      .order('full_name')
+  );
+}
+
 export async function enviarRecuperacaoDeSenha(email) {
   const { error } = await supabase.auth.resetPasswordForEmail(String(email).trim().toLowerCase(), {
     redirectTo: `${window.location.origin}/redefinir-senha`,

@@ -13,9 +13,15 @@ const MESES = [
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
 ];
 
-export function viewAgenda({ navegar, novaFicha, podeVerProntuario }) {
-  // Semana exibida e dia selecionado.
-  let referencia = new Date();
+export function viewAgenda({ query, navegar, novaFicha, podeVerProntuario }) {
+  // Semana exibida e dia selecionado. O ?dia= faz a tela abrir no dia certo
+  // depois de salvar um agendamento — sem ele, voltaria sempre para hoje e a
+  // pessoa não veria o que acabou de marcar.
+  const diaPedido = query?.get('dia');
+  // 'AAAA-MM-DD' + T12:00 evita que o fuso jogue a data para o dia anterior.
+  let referencia = /^\d{4}-\d{2}-\d{2}$/.test(diaPedido ?? '')
+    ? new Date(`${diaPedido}T12:00:00`)
+    : new Date();
   let selecionado = chaveDoDia(referencia);
   /** Quantidade de atendimentos por dia, para o ponto abaixo do número. */
   let ocupacao = {};
@@ -142,19 +148,29 @@ export function viewAgenda({ navegar, novaFicha, podeVerProntuario }) {
         'div',
         { class: 'cabecalho-pagina' },
         h('h1', null, 'Agenda'),
-        podeVerProntuario
-          ? h(
-              'button',
-              {
-                type: 'button',
-                class: 'btn btn--primario',
-                'aria-label': 'Nova ficha',
-                onclick: novaFicha,
-              },
-              h('span', { class: 'so-desktop' }, '+ Nova ficha'),
-              h('span', { class: 'so-mobile' }, '+')
-            )
-          : null
+        h(
+          'div',
+          { style: { display: 'flex', gap: 'var(--esp-2)', flexWrap: 'wrap' } },
+          h(
+            'button',
+            {
+              type: 'button',
+              class: 'btn btn--primario',
+              'aria-label': 'Novo agendamento',
+              // Leva o dia aberto na agenda, para não ter que reescolher a data.
+              onclick: () => navegar(`/agenda/novo?dia=${selecionado}`),
+            },
+            h('span', { class: 'so-desktop' }, '+ Novo agendamento'),
+            h('span', { class: 'so-mobile' }, '+')
+          ),
+          podeVerProntuario
+            ? h(
+                'button',
+                { type: 'button', class: 'btn btn--secundario so-desktop', onclick: novaFicha },
+                '+ Nova ficha'
+              )
+            : null
+        )
       ),
 
       h(

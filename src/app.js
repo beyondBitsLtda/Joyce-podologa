@@ -16,6 +16,8 @@ import { viewAgenda } from './views/agenda.view.js';
 import { viewFichaPaciente } from './views/patient-record.view.js';
 import { viewWizard } from './views/wizard.view.js';
 import { viewConcluida } from './views/done.view.js';
+import { viewFormPaciente } from './views/patient-form.view.js';
+import { viewFormAgendamento } from './views/appointment-form.view.js';
 
 /** Rotas acessíveis sem sessão. */
 const PUBLICAS = ['/login'];
@@ -30,12 +32,18 @@ export async function iniciarApp(raiz) {
   const toastHost = h('div');
   const cascaEl = h('div', { class: 'app' });
 
+  // O roteador casa na ordem de declaração. As rotas literais vêm antes das
+  // paramétricas: senão /pacientes/novo seria capturada por /pacientes/:id
+  // como um paciente de id "novo".
   const router = criarRouter({
     '/': () => null, // redireciona em aoMudar
     '/login': viewLogin,
     '/inicio': viewHome,
     '/agenda': viewAgenda,
+    '/agenda/novo': viewFormAgendamento,
     '/pacientes': viewPacientes,
+    '/pacientes/novo': viewFormPaciente,
+    '/pacientes/:id/editar': viewFormPaciente,
     '/pacientes/:id': viewFichaPaciente,
     '/ficha/nova': viewWizard,
     '/ficha/:id': viewWizard,
@@ -214,7 +222,10 @@ function tituloDaRota(padrao) {
       '/login': 'Entrar',
       '/inicio': 'Início',
       '/agenda': 'Agenda',
+      '/agenda/novo': 'Novo agendamento',
       '/pacientes': 'Pacientes',
+      '/pacientes/novo': 'Novo paciente',
+      '/pacientes/:id/editar': 'Editar cadastro',
       '/pacientes/:id': 'Ficha do paciente',
       '/ficha/nova': 'Nova ficha',
       '/ficha/:id': 'Ficha de anamnese',

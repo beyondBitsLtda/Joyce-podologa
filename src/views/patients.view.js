@@ -76,13 +76,23 @@ export function viewPacientes({ navegar, novaFicha, podeVerProntuario }) {
         'div',
         { class: 'cabecalho-pagina' },
         h('h1', null, 'Pacientes'),
-        podeVerProntuario
-          ? h(
-              'button',
-              { type: 'button', class: 'btn btn--primario so-desktop', onclick: novaFicha },
-              '+ Nova ficha'
-            )
-          : null
+        h(
+          'div',
+          { style: { display: 'flex', gap: 'var(--esp-2)', flexWrap: 'wrap' } },
+          // Cadastrar paciente é trabalho da recepção: não exige acesso clínico.
+          h(
+            'button',
+            { type: 'button', class: 'btn btn--primario', onclick: () => navegar('/pacientes/novo') },
+            '+ Novo paciente'
+          ),
+          podeVerProntuario
+            ? h(
+                'button',
+                { type: 'button', class: 'btn btn--secundario so-desktop', onclick: novaFicha },
+                '+ Nova ficha'
+              )
+            : null
+        )
       ),
 
       h(

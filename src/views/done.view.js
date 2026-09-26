@@ -8,6 +8,7 @@
 import { h, montar } from '../lib/dom.js';
 import { iconeCheck } from '../components/icons.js';
 import { alertasClinicos } from '../domain/anamnese.rules.js';
+import { rastrearRisco, GRAUS } from '../domain/risco.rules.js';
 import * as anamnesesRepo from '../data/anamneses.repo.js';
 import * as pacientesRepo from '../data/patients.repo.js';
 import { esqueletoLista, blocoErro } from './partials.js';
@@ -22,7 +23,9 @@ export function viewConcluida({ params, navegar }) {
       const ficha = await anamnesesRepo.buscarPorId(params.id);
       const paciente = await pacientesRepo.buscarPorId(ficha.patient_id);
 
-      const alertas = alertasClinicos(ficha.answers || {});
+      const respostas = ficha.answers || {};
+      const alertas = alertasClinicos(respostas);
+      const risco = rastrearRisco(respostas);
 
       montar(
         corpo,
@@ -44,6 +47,31 @@ export function viewConcluida({ params, navegar }) {
               'div',
               { class: 'conclusao__alertas' },
               ...alertas.map((a) => h('span', { class: 'etiqueta etiqueta--risco' }, a))
+            )
+          : null,
+
+        // Resultado do rastreio: o momento de falar sobre ele é agora, com o
+        // paciente ainda na cadeira, não quando alguém reabrir a ficha.
+        risco.avaliavel
+          ? h(
+              'div',
+              { class: ['rastreio', `rastreio--${GRAUS[risco.grauMaximo].cor}`] },
+              h(
+                'div',
+                { class: 'rastreio__cabecalho' },
+                h('span', { class: 'rastreio__titulo' }, 'Rastreio de pé de risco'),
+                h(
+                  'span',
+                  { class: `rastreio__selo rastreio__selo--${GRAUS[risco.grauMaximo].cor}` },
+                  GRAUS[risco.grauMaximo].rotulo
+                )
+              ),
+              h(
+                'span',
+                { class: 'rastreio__texto' },
+                `Pé direito grau ${risco.direito.grau} · pé esquerdo grau ${risco.esquerdo.grau}. ` +
+                  `${GRAUS[risco.grauMaximo].retorno}.`
+              )
             )
           : null,
 

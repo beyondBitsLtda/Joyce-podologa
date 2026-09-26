@@ -485,6 +485,145 @@
   align-items: start;
 }
 
+/* Rastreio de pé de risco ---------------------------------------------------
+   A cor acompanha a gravidade: neutro em grau 0, âmbar em grau 1, vermelho de
+   grau 2 em diante. A borda lateral grossa é o que dá para reconhecer de
+   relance, sem ler. */
+
+.rastreio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--esp-4) 18px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--icone-apagado);
+  border-radius: 15px;
+}
+
+.rastreio--normal {
+  border-left-color: var(--verde);
+}
+
+.rastreio--atencao {
+  background: var(--aviso-fundo);
+  border-color: var(--aviso-borda);
+  border-left-color: var(--aviso-realce);
+}
+
+.rastreio--alto {
+  background: var(--alerta-fundo);
+  border-color: var(--alerta-borda);
+  border-left-color: var(--alerta-texto);
+}
+
+.rastreio--vazio {
+  background: var(--superficie-2);
+  border-style: dashed;
+  border-left-style: solid;
+}
+
+.rastreio__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rastreio__titulo {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+}
+
+.rastreio__selo {
+  padding: var(--esp-1) 10px;
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  border-radius: var(--raio-sm);
+}
+
+.rastreio__selo--normal {
+  color: var(--verde);
+  background: var(--verde-claro);
+}
+
+.rastreio__selo--atencao {
+  color: var(--aviso-texto);
+  background: #f6e7c8;
+}
+
+.rastreio__selo--alto {
+  color: var(--superficie);
+  background: var(--alerta-texto);
+}
+
+.rastreio__texto {
+  font-size: var(--texto-md);
+  line-height: 1.5;
+  color: var(--texto-forte);
+}
+
+.rastreio__pes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--esp-3);
+}
+
+.rastreio__pe {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--esp-3);
+  background: rgb(255 255 255 / 55%);
+  border-radius: var(--raio-md);
+}
+
+.rastreio__pe-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  align-items: center;
+  font-size: var(--texto-md);
+  font-weight: 600;
+}
+
+.rastreio__motivos {
+  margin: 0;
+  padding-left: 18px;
+  font-size: var(--texto-sm);
+  line-height: 1.55;
+  color: var(--texto-medio);
+}
+
+.rastreio__divergencia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  padding: 10px var(--esp-3);
+  font-size: var(--texto-sm);
+  line-height: 1.45;
+  color: var(--aviso-texto);
+  background: var(--aviso-fundo);
+  border: 1px solid var(--aviso-borda);
+  border-radius: var(--raio-md);
+}
+
+.rastreio__nota {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--texto-apagado);
+}
+
+@media (width >= 900px) {
+  .rastreio__pes {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* Termo de responsabilidade */
 .termo {
   display: flex;

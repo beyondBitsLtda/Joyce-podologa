@@ -6,6 +6,7 @@ import { h, montar } from '../lib/dom.js';
 import { iniciais, dataCompleta, isoParaDataBr, mascaraTelefone } from '../lib/format.js';
 import { ETAPAS } from '../domain/anamnese.schema.js';
 import { progressoPorEtapa, detalhesDeAlerta } from '../domain/anamnese.rules.js';
+import { rastrearRisco, GRAUS } from '../domain/risco.rules.js';
 import * as pacientes from '../data/patients.repo.js';
 import * as anamneses from '../data/anamneses.repo.js';
 import * as evolucoes from '../data/evolutions.repo.js';
@@ -153,6 +154,28 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarT
       h(
         'div',
         { class: 'grade-colunas' },
+
+        // Rastreio primeiro: é o que muda a conduta da sessão de hoje.
+        (() => {
+          const risco = rastrearRisco(respostas);
+          if (!risco.avaliavel) return null;
+          const g = GRAUS[risco.grauMaximo];
+          return h(
+            'div',
+            { class: ['rastreio', `rastreio--${g.cor}`] },
+            h(
+              'div',
+              { class: 'rastreio__cabecalho' },
+              h('span', { class: 'rastreio__titulo' }, 'Pé de risco'),
+              h('span', { class: `rastreio__selo rastreio__selo--${g.cor}` }, g.rotulo)
+            ),
+            h(
+              'span',
+              { class: 'rastreio__texto' },
+              `Direito grau ${risco.direito.grau} · esquerdo grau ${risco.esquerdo.grau}. ${g.retorno}.`
+            )
+          );
+        })(),
 
         alertas.length > 0
           ? h(

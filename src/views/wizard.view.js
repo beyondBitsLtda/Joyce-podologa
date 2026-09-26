@@ -22,9 +22,11 @@ import {
 import {
   progressoPorEtapa,
   separarFormulario,
+  montarFormulario,
   validarConclusao,
 } from '../domain/anamnese.rules.js';
 import { opcoesDe } from '../domain/localidades.js';
+import { rastrearRisco, camposCalculados, GRAUS } from '../domain/risco.rules.js';
 import { renderCampo } from '../components/fields.js';
 import { criarSeletor } from '../components/picker.js';
 import { marcador } from './partials.js';
@@ -53,6 +55,7 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
   const trilhaEl = h('nav', { class: 'trilha', 'aria-label': 'Etapas da ficha' });
   const camposEl = h('div', { class: 'campos' });
   const subEl = h('p', { class: 'formulario__sub' });
+  const riscoEl = h('div');
   const salvoEl = h('span', { class: 'wizard__salvo' }, 'Rascunho salvo automaticamente');
   const avancarEl = h('button', { type: 'button', class: 'btn btn--primario wizard__avancar' });
   const voltarEl = h('button', {
@@ -105,7 +108,7 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
         h(
           'div',
           { class: 'rolagem area-rolavel' },
-          h('div', { class: 'formulario' }, subEl, camposEl)
+          h('div', { class: 'formulario' }, subEl, riscoEl, camposEl)
         ),
         h(
           'footer',
@@ -144,7 +147,9 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
   async function sincronizar() {
     if (sincronizando) return;
 
-    const { paciente, answers } = separarFormulario(form);
+    // O grau do rastreio entra em `answers` para virar coluna consultável
+    // (risk_grade_* em public.anamneses).
+    const { paciente, answers } = separarFormulario({ ...form, ...camposCalculados(form) });
     const nomeValido = (paciente.full_name || '').trim().length >= 3;
 
     sincronizando = true;
@@ -278,7 +283,7 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
 
       if (!anamneseId) throw new Error('Não foi possível salvar a ficha no servidor.');
 
-      await anamnesesRepo.concluir(anamneseId, form, pacienteId);
+      await anamnesesRepo.concluir(anamneseId, { ...form, ...camposCalculados(form) }, pacienteId);
       rascunhoLocal.limpar();
 
       navegar(`/ficha/${anamneseId}/concluida`, { substituir: true });
@@ -338,6 +343,123 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
     subEl.hidden = !atual.sub;
 
     montar(camposEl, ...atual.fields.map((campo) => renderCampo(campo, ctx)));
+    desenharRisco();
+  }
+
+  /**
+   * Painel do rastreio de pé de risco.
+   *
+   * Aparece a partir da etapa de exame físico, assim que houver qualquer
+   * achado para avaliar, e se atualiza a cada resposta. O objetivo é a
+   * profissional ver o risco subir **enquanto** examina — não descobrir no
+   * fim, quando já guardou o estesiômetro.
+   *
+   * O resultado é sugestão: quem decide e assina é ela. Por isso o painel
+   * mostra os motivos que levaram ao grau, em vez de só o número.
+   */
+  function desenharRisco() {
+    const atual = ETAPAS[etapa];
+    const relevante = ['exame_fisico', 'mmii', 'diagnostico', 'inspecao'].includes(atual.id);
+
+    if (!relevante) {
+      limpar(riscoEl);
+      return;
+    }
+
+    const r = rastrearRisco(form);
+
+    if (!r.avaliavel) {
+      montar(
+        riscoEl,
+        h(
+          'div',
+          { class: 'rastreio rastreio--vazio' },
+          h('span', { class: 'rastreio__titulo' }, 'Rastreio de pé de risco'),
+          h(
+            'span',
+            { class: 'rastreio__texto' },
+            'Preencha pulsos, enchimento capilar e sensibilidade para o rastreio começar.'
+          )
+        )
+      );
+      return;
+    }
+
+    const g = GRAUS[r.grauMaximo];
+
+    const porPe = (pe, nome) =>
+      h(
+        'div',
+        { class: 'rastreio__pe' },
+        h(
+          'span',
+          { class: 'rastreio__pe-titulo' },
+          `Pé ${nome} — grau ${pe.grau}`,
+          h('span', { class: `rastreio__selo rastreio__selo--${GRAUS[pe.grau].cor}` }, GRAUS[pe.grau].rotulo)
+        ),
+        pe.motivos.length > 0
+          ? h('ul', { class: 'rastreio__motivos' }, ...pe.motivos.map((m) => h('li', null, m)))
+          : h('span', { class: 'rastreio__texto' }, 'Nenhum achado de risco registrado.')
+      );
+
+    montar(
+      riscoEl,
+      h(
+        'div',
+        { class: ['rastreio', `rastreio--${g.cor}`], role: 'status' },
+
+        h(
+          'div',
+          { class: 'rastreio__cabecalho' },
+          h('span', { class: 'rastreio__titulo' }, 'Rastreio de pé de risco'),
+          h('span', { class: `rastreio__selo rastreio__selo--${g.cor}` }, g.rotulo)
+        ),
+
+        h(
+          'span',
+          { class: 'rastreio__texto' },
+          r.diabetes && r.grauMaximo > 0
+            ? `${g.retorno}. Diabetes agrava o quadro — reforce a orientação de autocuidado.`
+            : `${g.retorno}.`
+        ),
+
+        h('div', { class: 'rastreio__pes' }, porPe(r.direito, 'direito'), porPe(r.esquerdo, 'esquerdo')),
+
+        // Divergência entre o que foi marcado e o que o rastreio aponta. Não é
+        // erro — pode ser julgamento clínico —, mas não deve passar batido.
+        r.divergencia.length > 0
+          ? h(
+              'div',
+              { class: 'rastreio__divergencia' },
+              ...r.divergencia.map((d) => h('span', null, d))
+            )
+          : null,
+
+        // Atalho para registrar a sugestão, quando ainda não foi marcada.
+        !form.risco_d && !form.risco_e && r.grauMaximo >= 1
+          ? h(
+              'button',
+              {
+                type: 'button',
+                class: 'btn btn--secundario',
+                style: { alignSelf: 'flex-start' },
+                onclick: () => {
+                  form = { ...form, ...r.sugestao };
+                  salvar();
+                  desenharCampos();
+                },
+              },
+              'Registrar o rastreio na ficha'
+            )
+          : null,
+
+        h(
+          'span',
+          { class: 'rastreio__nota' },
+          'Apoio ao rastreio (IWGDF). Não substitui a avaliação da profissional.'
+        )
+      )
+    );
   }
 
   function desenharRodape() {
@@ -398,7 +520,17 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
       } catch (erro) {
         mostrarToast(erro.message, 'erro');
       }
-    } else if (local && !pacienteId) {
+    } else if (pacienteId) {
+      // Ficha nova para paciente já cadastrado (veio de "Nova ficha" na tela
+      // do paciente). Sem isto, a etapa 1 abriria em branco para alguém que
+      // já tem cadastro, e a profissional redigitaria tudo.
+      try {
+        const cadastro = await pacientesRepo.buscarCadastro(pacienteId);
+        form = montarFormulario(cadastro, {});
+      } catch (erro) {
+        mostrarToast(erro.message, 'erro');
+      }
+    } else if (local) {
       // Retomando um rascunho que nunca chegou ao servidor.
       form = local.form || {};
       anamneseId = local.anamneseId;

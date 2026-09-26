@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   CAMPOS_PACIENTE,
+  camposVisiveis,
   paraLinha,
   paraFormulario,
   validarPaciente,
@@ -151,4 +152,66 @@ test('campos opcionais em branco não geram erro', () => {
     validarPaciente({ nome: 'Mariana Silva', cpf: '', email: '', cep: '', cel: '' }),
     []
   );
+});
+
+// -----------------------------------------------------------------------------
+// Menor de idade derivado da data de nascimento
+// -----------------------------------------------------------------------------
+
+test('a data de nascimento manda sobre a marcação manual', () => {
+  // O bug: paciente nascido em 1999 marcado como menor porque alguém tocou
+  // "Sim" por engano, e nada no sistema contradizia.
+  const linha = paraLinha({ nome: 'Carlos Souza', nasc: '22/04/1999', menor: 'S' });
+
+  assert.equal(linha.is_minor, false, 'adulto continua adulto mesmo com o campo marcado');
+  assert.equal(linha.guardian_name, null);
+});
+
+test('menor de verdade é reconhecido pela data', () => {
+  const anoMenor = new Date().getFullYear() - 10;
+  const linha = paraLinha({
+    nome: 'Pedro Lima',
+    nasc: `05/05/${anoMenor}`,
+    menor: 'N',
+    menor_spec: 'Joana Lima',
+  });
+
+  assert.equal(linha.is_minor, true, 'a data vence o "Não" marcado à mão');
+  assert.equal(linha.guardian_name, 'Joana Lima');
+});
+
+test('sem data de nascimento, vale a marcação manual', () => {
+  assert.equal(paraLinha({ nome: 'Ana Souza', menor: 'S' }).is_minor, true);
+  assert.equal(paraLinha({ nome: 'Ana Souza', menor: 'N' }).is_minor, false);
+});
+
+test('adulto pela data não precisa de responsável', () => {
+  assert.deepEqual(validarPaciente({ nome: 'Carlos Souza', nasc: '22/04/1999', menor: 'S' }), []);
+});
+
+test('menor pela data exige responsável mesmo sem marcar nada', () => {
+  const anoMenor = new Date().getFullYear() - 10;
+  const erros = validarPaciente({ nome: 'Pedro Lima', nasc: `05/05/${anoMenor}` });
+  assert.ok(erros.some((e) => e.includes('responsável')));
+});
+
+// -----------------------------------------------------------------------------
+// Campos condicionais
+// -----------------------------------------------------------------------------
+
+test('a pergunta "é menor?" some quando há data de nascimento', () => {
+  const comData = camposVisiveis(CAMPOS_PACIENTE, { nasc: '22/04/1999' }).map((c) => c.id);
+  const semData = camposVisiveis(CAMPOS_PACIENTE, {}).map((c) => c.id);
+
+  assert.ok(!comData.includes('menor'), 'a idade já responde');
+  assert.ok(semData.includes('menor'), 'sem data, a pergunta é necessária');
+});
+
+test('o campo do responsável aparece só quando a data indica menor', () => {
+  const anoMenor = new Date().getFullYear() - 10;
+  const menor = camposVisiveis(CAMPOS_PACIENTE, { nasc: `05/05/${anoMenor}` }).map((c) => c.id);
+  const adulto = camposVisiveis(CAMPOS_PACIENTE, { nasc: '22/04/1999' }).map((c) => c.id);
+
+  assert.ok(menor.includes('menor_spec'));
+  assert.ok(!adulto.includes('menor_spec'));
 });

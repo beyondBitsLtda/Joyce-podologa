@@ -11,7 +11,22 @@
  * exatamente essas chaves.
  */
 
-import { dataBrParaISO, isoParaDataBr, soDigitos, mascaraTelefone, mascaraCpf, mascaraCep } from '../lib/format.js';
+import {
+  dataBrParaISO,
+  isoParaDataBr,
+  soDigitos,
+  mascaraTelefone,
+  mascaraCpf,
+  mascaraCep,
+  ehMenorDeIdade,
+} from '../lib/format.js';
+
+// Reexportado para o formulário de paciente usar o mesmo mecanismo de
+// visibilidade condicional do wizard, sem duplicar a regra.
+export { camposVisiveis } from './anamnese.schema.js';
+
+/** Menor de idade segundo a data digitada; null quando não há data válida. */
+const menorPelaData = (form) => ehMenorDeIdade(dataBrParaISO(form?.nasc));
 
 const secao = (label) => ({ kind: 'section', label });
 const texto = (id, label, extra = {}) => ({ kind: 'text', id, label, ...extra });
@@ -52,7 +67,16 @@ export const CAMPOS_PACIENTE = [
   texto('complemento', 'Complemento', { placeholder: 'Apto, bloco — opcional' }),
 
   secao('Outros'),
-  simNao('menor', 'Paciente menor de idade?', 'Nome do responsável'),
+  // Com data de nascimento preenchida, a idade responde sozinha — perguntar
+  // de novo só cria a chance de as duas respostas se contradizerem.
+  { ...simNao('menor', 'Paciente menor de idade?', 'Nome do responsável'),
+    quando: (form) => menorPelaData(form) === null },
+
+  // Quando a data já diz que é menor, resta só coletar o responsável.
+  { kind: 'text', id: 'menor_spec', label: 'Nome do responsável',
+    placeholder: 'Obrigatório para menor de idade',
+    quando: (form) => menorPelaData(form) === true },
+
   simNao('foto', 'Autoriza registro fotográfico?'),
   { kind: 'textarea', id: 'obs', label: 'Observações', placeholder: 'Opcional', wide: true },
 ];
@@ -98,8 +122,10 @@ export function paraLinha(form = {}) {
   if (linha.state) linha.state = linha.state.toUpperCase();
   if (linha.email) linha.email = linha.email.toLowerCase();
 
-  linha.is_minor = form.menor === 'S';
-  linha.guardian_name = form.menor === 'S' ? form.menor_spec?.trim() || null : null;
+  // A data de nascimento manda. O campo manual só decide quando não há data.
+  const derivado = ehMenorDeIdade(linha.birth_date);
+  linha.is_minor = derivado === null ? form.menor === 'S' : derivado;
+  linha.guardian_name = linha.is_minor ? form.menor_spec?.trim() || null : null;
   linha.photo_consent = form.foto === 'S';
 
   return linha;
@@ -160,7 +186,8 @@ export function validarPaciente(form = {}) {
     erros.push('E-mail inválido.');
   }
 
-  if (form.menor === 'S' && !String(form.menor_spec ?? '').trim()) {
+  const menor = menorPelaData(form) ?? form.menor === 'S';
+  if (menor && !String(form.menor_spec ?? '').trim()) {
     erros.push('Paciente menor de idade: informe o nome do responsável.');
   }
 

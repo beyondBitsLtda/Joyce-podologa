@@ -16,6 +16,8 @@ export default [
         URLSearchParams: 'readonly',
         Node: 'readonly',
         HTMLElement: 'readonly',
+        fetch: 'readonly',
+        AbortSignal: 'readonly',
       },
     },
     rules: {

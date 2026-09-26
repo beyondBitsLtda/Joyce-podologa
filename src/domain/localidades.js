@@ -86,16 +86,19 @@ export function opcoesDe(source, form = {}) {
     case 'cidade':
       return form.estado ? L.cidades[form.estado] || [] : [];
 
+    // Só bairros da cidade escolhida. Antes havia um fallback genérico
+    // (`bairrosPadrao`) que oferecia "Centro", "Jardim América" etc. para
+    // qualquer cidade — sugerindo bairros que podem não existir ali. Lista
+    // vazia é mais honesta: o seletor então oferece "Usar «o que foi
+    // digitado»", e o endereço sai correto em vez de plausível.
     case 'bairro':
-      return form.cidade ? L.bairros[form.cidade] || L.bairrosPadrao : [];
+      return form.cidade ? L.bairros[form.cidade] || [] : [];
 
-    case 'rua': {
-      if (!form.cidade) return [];
-      // Ruas do bairro primeiro; depois os logradouros genéricos que ainda não
-      // apareceram, para a lista nunca ficar vazia num bairro desconhecido.
-      const doBairro = L.ruas[form.bairro] || [];
-      return doBairro.concat(L.ruasPadrao.filter((r) => !doBairro.includes(r)));
-    }
+    // Idem para ruas: só as do bairro escolhido. Concatenar logradouros
+    // genéricos fazia o seletor oferecer "Av. Brasil" num bairro que não tem
+    // Av. Brasil.
+    case 'rua':
+      return form.bairro ? L.ruas[form.bairro] || [] : [];
 
     default:
       return [];

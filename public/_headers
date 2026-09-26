@@ -20,7 +20,7 @@
   # (https://*.supabase.co), que autorizaria qualquer projeto Supabase do mundo.
   # Ao trocar de projeto, atualize as duas ocorrências abaixo (img-src e
   # connect-src) e refaça o build: o CSP é servido junto com os arquivos.
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://fkxnbnmaluinoakxukjy.supabase.co; connect-src 'self' https://fkxnbnmaluinoakxukjy.supabase.co wss://fkxnbnmaluinoakxukjy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://fkxnbnmaluinoakxukjy.supabase.co; connect-src 'self' https://fkxnbnmaluinoakxukjy.supabase.co wss://fkxnbnmaluinoakxukjy.supabase.co https://viacep.com.br; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
 
 # Assets com hash no nome podem ficar em cache para sempre.
 /assets/*

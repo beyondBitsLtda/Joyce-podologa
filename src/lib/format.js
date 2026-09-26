@@ -105,6 +105,17 @@ export function idade(nascimentoISO) {
   return anos >= 0 ? anos : null;
 }
 
+/**
+ * Menor de 18 anos, a partir da data de nascimento em ISO.
+ *
+ * @returns {boolean|null} null quando não há data — aí não dá para saber, e
+ *   "não sei" é diferente de "não é menor".
+ */
+export function ehMenorDeIdade(nascimentoISO) {
+  const anos = idade(nascimentoISO);
+  return anos === null ? null : anos < 18;
+}
+
 const FUSO = 'America/Sao_Paulo';
 
 /** Data curta: '12/08' */

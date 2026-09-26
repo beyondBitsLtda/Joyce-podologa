@@ -52,7 +52,7 @@ const textoLongo = (id, label, placeholder) => ({
 
 const simNao = (id, label, spec) => ({ kind: 'yesno', id, label, spec });
 
-const chips = (id, label, options, multi = false, hint) => ({
+const chips = (id, label, options, multi = false, hint, extra = {}) => ({
   kind: 'chips',
   id,
   label,
@@ -61,6 +61,7 @@ const chips = (id, label, options, multi = false, hint) => ({
   hint,
   // Listas longas ficam ilegíveis espremidas em meia largura.
   wide: options.length > 5,
+  ...extra,
 });
 
 const nota = (paragraphs) => ({ kind: 'note', wide: true, paragraphs });
@@ -175,7 +176,11 @@ export const ETAPAS = [
       simNao('esportes', 'Pratica esportes?'),
       simNao('cirurgia', 'Cirurgia em membros inferiores?', 'Especifique qual cirurgia'),
       simNao('diabetes', 'Diabetes?'),
-      chips('diabetes_tipo', 'Tipo de diabetes', ['Tipo 1', 'Tipo 2']),
+      // Perguntar o tipo a quem respondeu "Não" para diabetes é ruído — e
+      // uma resposta marcada ali por engano contradiz a anterior.
+      chips('diabetes_tipo', 'Tipo de diabetes', ['Tipo 1', 'Tipo 2'], false, undefined, {
+        quando: (form) => form.diabetes === 'S',
+      }),
       simNao('pressao', 'Hipo ou hipertensão arterial?'),
       simNao('circ', 'Problemas circulatórios?'),
       simNao('cardio', 'Cardiopatia?'),
@@ -361,6 +366,24 @@ export const ETAPAS = [
 // -----------------------------------------------------------------------------
 
 export const TOTAL_ETAPAS = ETAPAS.length;
+
+/**
+ * Filtra os campos que devem aparecer, dado o estado atual do formulário.
+ *
+ * Um campo com `quando: (form) => boolean` só é exibido quando a função
+ * devolve verdadeiro. É o que evita perguntar o tipo de diabetes a quem
+ * respondeu que não tem — pergunta que, além de ruído, abre espaço para uma
+ * resposta que contradiz a anterior.
+ *
+ * Campos escondidos também não contam no progresso da etapa: senão a etapa
+ * nunca ficaria "completa" para quem respondeu "Não".
+ *
+ * @param {object[]} campos
+ * @param {Record<string, any>} form
+ */
+export function camposVisiveis(campos, form = {}) {
+  return campos.filter((campo) => typeof campo.quando !== 'function' || campo.quando(form));
+}
 
 /** Todos os campos que têm resposta (exclui section e note). */
 export const CAMPOS = ETAPAS.flatMap((e) => e.fields).filter((f) => f.id);

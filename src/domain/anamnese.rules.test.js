@@ -21,7 +21,7 @@ import {
   percentualPreenchido,
 } from './anamnese.rules.js';
 
-import { ETAPAS, CAMPOS, CAMPOS_POR_ID, TOTAL_ETAPAS } from './anamnese.schema.js';
+import { ETAPAS, CAMPOS, CAMPOS_POR_ID, TOTAL_ETAPAS, camposVisiveis } from './anamnese.schema.js';
 
 // -----------------------------------------------------------------------------
 // Schema
@@ -217,4 +217,43 @@ test('menor de idade exige responsável', () => {
     menor: 'S',
   });
   assert.ok(erros.some((e) => e.includes('responsável')));
+});
+
+// -----------------------------------------------------------------------------
+// Campos condicionais
+// -----------------------------------------------------------------------------
+
+test('o tipo de diabetes só aparece para quem tem diabetes', () => {
+  const etapa = ETAPAS.find((e) => e.id === 'historico');
+
+  const comDiabetes = camposVisiveis(etapa.fields, { diabetes: 'S' }).map((c) => c.id);
+  const semDiabetes = camposVisiveis(etapa.fields, { diabetes: 'N' }).map((c) => c.id);
+  const semResposta = camposVisiveis(etapa.fields, {}).map((c) => c.id);
+
+  assert.ok(comDiabetes.includes('diabetes_tipo'));
+  assert.ok(!semDiabetes.includes('diabetes_tipo'), 'não perguntar o tipo a quem disse que não tem');
+  assert.ok(!semResposta.includes('diabetes_tipo'), 'nem antes de responder');
+});
+
+test('campo escondido não conta no progresso da etapa', () => {
+  // Senão a etapa nunca ficaria completa para quem respondeu "Não".
+  const semDiabetes = progressoPorEtapa({ diabetes: 'N' })[2];
+  const comDiabetes = progressoPorEtapa({ diabetes: 'S' })[2];
+
+  assert.equal(comDiabetes.total, semDiabetes.total + 1);
+});
+
+// -----------------------------------------------------------------------------
+// Menor de idade pela data
+// -----------------------------------------------------------------------------
+
+test('no wizard, a data de nascimento também manda', () => {
+  const { paciente } = separarFormulario({
+    nome: 'Carlos Souza',
+    nasc: '22/04/1999',
+    menor: 'S',
+  });
+
+  assert.equal(paciente.is_minor, false);
+  assert.equal(paciente.guardian_name, null);
 });

@@ -18,6 +18,7 @@ import {
   ETAPAS,
   TOTAL_ETAPAS,
   contarCampos,
+  camposVisiveis,
 } from '../domain/anamnese.schema.js';
 import {
   progressoPorEtapa,
@@ -342,7 +343,10 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
     subEl.textContent = atual.sub || '';
     subEl.hidden = !atual.sub;
 
-    montar(camposEl, ...atual.fields.map((campo) => renderCampo(campo, ctx)));
+    montar(
+      camposEl,
+      ...camposVisiveis(atual.fields, form).map((campo) => renderCampo(campo, ctx))
+    );
     desenharRisco();
   }
 

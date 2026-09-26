@@ -15,10 +15,13 @@ import { criarSeletor } from '../components/picker.js';
 import { opcoesDe } from '../domain/localidades.js';
 import {
   CAMPOS_PACIENTE,
+  camposVisiveis,
   paraLinha,
   paraFormulario,
   validarPaciente,
 } from '../domain/paciente.schema.js';
+import { buscarPorCep, paraCamposDoFormulario } from '../data/cep.repo.js';
+import { soDigitos } from '../lib/format.js';
 import * as pacientes from '../data/patients.repo.js';
 import { esqueletoLista, blocoErro } from './partials.js';
 
@@ -29,6 +32,7 @@ export function viewFormPaciente({ params, navegar, mostrarToast }) {
   let form = {};
   let seletorAberto = null;
   let salvando = false;
+  let buscandoCep = false;
 
   const camposEl = h('div', { class: 'campos' });
   const erroEl = h('div', { hidden: true });
@@ -53,6 +57,38 @@ export function viewFormPaciente({ params, navegar, mostrarToast }) {
   /** Muda sem redesenhar — digitação perderia o foco do input a cada tecla. */
   function aoDigitar(id, valor) {
     form = { ...form, [id]: valor };
+
+    // CEP completo: busca o endereço e preenche. É o que garante que a rua
+    // pertence de fato ao bairro — nossas tabelas de localidade são parciais
+    // por natureza, e o CEP é a fonte correta.
+    if (id === 'cep' && soDigitos(valor).length === 8) preencherPorCep(valor);
+
+    // A data de nascimento decide se o bloco de menor de idade aparece, então
+    // aqui o redesenho é necessário mesmo durante a digitação. Só dispara com
+    // a data completa, para não piscar a cada dígito.
+    if (id === 'nasc' && soDigitos(valor).length === 8) desenharCampos();
+  }
+
+  async function preencherPorCep(cep) {
+    if (buscandoCep) return;
+    buscandoCep = true;
+
+    try {
+      const endereco = await buscarPorCep(cep);
+
+      if (!endereco) {
+        mostrarToast('CEP não encontrado. Preencha o endereço manualmente.', 'erro');
+        return;
+      }
+
+      form = { ...form, ...paraCamposDoFormulario(endereco) };
+      desenharCampos();
+      mostrarToast('Endereço preenchido pelo CEP.');
+    } catch (erro) {
+      mostrarToast(erro.message, 'erro');
+    } finally {
+      buscandoCep = false;
+    }
   }
 
   function aoAbrirSeletor(campo) {
@@ -89,7 +125,10 @@ export function viewFormPaciente({ params, navegar, mostrarToast }) {
 
   function desenharCampos() {
     const ctx = { form, aoMudar, aoDigitar, aoAbrirSeletor };
-    montar(camposEl, ...CAMPOS_PACIENTE.map((campo) => renderCampo(campo, ctx)));
+    montar(
+      camposEl,
+      ...camposVisiveis(CAMPOS_PACIENTE, form).map((campo) => renderCampo(campo, ctx))
+    );
   }
 
   // ---------------------------------------------------------------------------

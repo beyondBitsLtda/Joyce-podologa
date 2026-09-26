@@ -11,8 +11,9 @@ import {
   IDS_DO_PACIENTE,
   PARA_PACIENTE,
   TOTAL_ETAPAS,
+  camposVisiveis,
 } from './anamnese.schema.js';
-import { dataBrParaISO, soDigitos } from '../lib/format.js';
+import { dataBrParaISO, soDigitos, ehMenorDeIdade } from '../lib/format.js';
 
 // -----------------------------------------------------------------------------
 // Alertas clínicos
@@ -112,7 +113,14 @@ export function separarFormulario(form = {}) {
   if (form.foto === 'S' || form.foto === 'N') {
     paciente.photo_consent = form.foto === 'S';
   }
-  if (form.menor === 'S') {
+  // Menor de idade vem da data de nascimento quando ela existe. O campo
+  // manual só decide na ausência dela — antes, um toque errado marcava como
+  // menor alguém nascido em 1999, e nada no sistema contradizia.
+  const derivado = ehMenorDeIdade(paciente.birth_date);
+  if (derivado !== null) {
+    paciente.is_minor = derivado;
+    paciente.guardian_name = derivado ? form.menor_spec?.trim() || null : null;
+  } else if (form.menor === 'S') {
     paciente.is_minor = true;
     if (form.menor_spec) paciente.guardian_name = form.menor_spec;
   } else if (form.menor === 'N') {
@@ -149,7 +157,9 @@ export function montarFormulario(paciente = {}, answers = {}) {
  */
 export function progressoPorEtapa(form = {}) {
   return ETAPAS.map((etapa) => {
-    const campos = etapa.fields.filter((f) => f.id);
+    // Campo escondido por condição não conta: senão a etapa nunca ficaria
+    // completa para quem respondeu "Não" à pergunta que o revela.
+    const campos = camposVisiveis(etapa.fields, form).filter((f) => f.id);
     const respondidos = campos.filter((f) => temResposta(form[f.id])).length;
 
     return {

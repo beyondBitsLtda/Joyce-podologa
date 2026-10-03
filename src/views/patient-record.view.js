@@ -399,13 +399,34 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, ehAdmin,
 
     return h(
       'div',
-      { class: ['evolucao', e.amends_id && 'evolucao--retificacao'] },
+      {
+        class: ['evolucao', 'evolucao--clicavel', e.amends_id && 'evolucao--retificacao'],
+        role: 'button',
+        tabindex: '0',
+        onclick: (ev) => {
+          // Clique num link da galeria (abrir foto) não deve navegar para o
+          // detalhe: são duas intenções diferentes no mesmo cartão.
+          if (ev.target.closest('a, button')) return;
+          navegar(`/pacientes/${pacienteId}/evolucao/${e.id}`);
+        },
+        onkeydown: (ev) => {
+          if (ev.key === 'Enter' || ev.key === ' ') {
+            ev.preventDefault();
+            navegar(`/pacientes/${pacienteId}/evolucao/${e.id}`);
+          }
+        },
+      },
       h(
         'div',
         { class: 'evolucao__cabecalho' },
         h('span', { class: 'evolucao__data' }, dataCompleta(e.performed_at)),
         h('span', { class: 'etiqueta etiqueta--neutra' }, procedimento)
       ),
+
+      // Rascunho precisa se distinguir: na lista, parece um registro pronto.
+      !e.signed_at
+        ? h('span', { class: 'etiqueta etiqueta--risco' }, 'Rascunho — não assinado')
+        : null,
       e.amends_id
         ? h('span', { class: 'campo__dica' }, 'Retificação de registro anterior')
         : null,

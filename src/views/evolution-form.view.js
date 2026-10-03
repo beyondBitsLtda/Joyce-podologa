@@ -32,6 +32,8 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
   let paciente = null;
   let listaServicos = [];
   let evolucao = null; // existe a partir do primeiro "Salvar"
+  /** Quando preenchido, esta evolução retifica outra já assinada. */
+  let retificaId = query.get('retifica') || null;
   let listaAnexos = [];
   let seletorAberto = false;
   let salvando = false;
@@ -319,8 +321,12 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         evolucao = await evolucoes.criar({
           patientId: pacienteId,
           professionalId: perfil.id,
+          amendsId: retificaId,
           ...dados,
         });
+        // Uma vez criada, deixa de ser "nova retificação" e vira o registro
+        // corrente — salvar de novo não deve criar outra.
+        retificaId = null;
         mostrarToast('Evolução salva. Agora você pode anexar fotos e exames.');
       }
 
@@ -361,6 +367,26 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
     }
   }
 
+  /** Linha do banco → estado do formulário. */
+  function paraFormulario(linha) {
+    const quando = new Date(linha.performed_at);
+    const doisDigitos = (n) => String(n).padStart(2, '0');
+
+    return {
+      servicoId: linha.service_id || '',
+      procedimentoLivre: linha.procedure_label || '',
+      data: `${quando.getFullYear()}-${doisDigitos(quando.getMonth() + 1)}-${doisDigitos(quando.getDate())}`,
+      hora: `${doisDigitos(quando.getHours())}:${doisDigitos(quando.getMinutes())}`,
+      notas: linha.notes || '',
+      fr: linha.respiratory_rate ?? '',
+      oxi: linha.oxygen_saturation ?? '',
+      pulso: linha.heart_rate ?? '',
+      temp: linha.temperature_c ?? '',
+      pressao: linha.blood_pressure || '',
+      glicemia: linha.glycemia_mgdl ?? '',
+    };
+  }
+
   // ---------------------------------------------------------------------------
   // Carregamento
   // ---------------------------------------------------------------------------
@@ -375,7 +401,31 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       ]);
 
       pacientes.registrarAcesso(pacienteId, 'evolucao');
+
+      // Retomar um rascunho salvo sem assinar. Sem isto, ele ficava órfão:
+      // nenhum caminho levava de volta a ele.
+      const editarId = query.get('editar');
+      if (editarId) {
+        evolucao = await evolucoes.buscarPorId(editarId);
+        form = { ...form, ...paraFormulario(evolucao) };
+        assinarEl.hidden = false;
+        salvarEl.textContent = 'Salvar alterações';
+      }
+
+      // Retificação: copia o procedimento do original e começa com o texto em
+      // branco, porque o que se escreve é a correção, não uma cópia do erro.
+      if (retificaId) {
+        const original = await evolucoes.buscarPorId(retificaId);
+        form = {
+          ...form,
+          servicoId: original.service_id || '',
+          procedimentoLivre: original.procedure_label || '',
+        };
+      }
+
       desenharCampos();
+      desenharAnexos();
+      if (evolucao) await recarregarAnexos();
     } catch (erro) {
       montar(camposEl, blocoErro(erro.message, carregar));
     }
@@ -401,7 +451,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         '← Voltar'
       ),
 
-      h('h1', null, 'Nova evolução'),
+      h('h1', null, query.get('retifica') ? 'Retificação de evolução' : 'Nova evolução'),
       h(
         'p',
         { class: 'formulario__sub' },

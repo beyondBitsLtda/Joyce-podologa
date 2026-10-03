@@ -302,6 +302,19 @@
   border-left: 3px solid var(--aviso-realce);
 }
 
+.evolucao--clicavel {
+  cursor: pointer;
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao);
+}
+
+.evolucao--clicavel:hover,
+.evolucao--clicavel:focus-visible {
+  border-color: var(--verde);
+  box-shadow: var(--sombra-card);
+}
+
 /* --- Wizard --------------------------------------------------------------- */
 
 .wizard {

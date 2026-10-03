@@ -131,7 +131,17 @@ export async function iniciarApp(raiz) {
     // Guarda de rota. A proteção real está no RLS do Postgres — isto aqui é
     // só para a pessoa não ver uma tela quebrada.
     if (!publica && !perfil) {
-      perfil = await auth.perfilAtual();
+      try {
+        perfil = await auth.perfilAtual();
+      } catch (erro) {
+        // Servidor fora do ar durante a navegação: avisa e manda para o login,
+        // onde a mensagem de erro tem onde aparecer. Sem o catch, a troca de
+        // rota rejeitava em silêncio e a tela ficava no estado anterior.
+        mostrarToast(erro.message, 'erro');
+        navegar('/login', { substituir: true });
+        return;
+      }
+
       if (!perfil) {
         navegar('/login', { substituir: true });
         return;

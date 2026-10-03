@@ -87,6 +87,35 @@ export function mensagemDeErro(erro) {
 }
 
 /**
+ * Limita quanto tempo uma operação pode demorar.
+ *
+ * Existe por causa de uma falha real: com o projeto Supabase pausado, o host
+ * some do DNS e o SDK fica retentando o refresh do token indefinidamente. O
+ * app travava no boot e mostrava tela branca, sem dizer nada — o pior tipo de
+ * falha, porque parece defeito do sistema quando é indisponibilidade do
+ * servidor.
+ *
+ * @template T
+ * @param {Promise<T>} promessa
+ * @param {number} ms
+ * @param {string} mensagem
+ * @returns {Promise<T>}
+ */
+export function comTimeout(promessa, ms, mensagem) {
+  return Promise.race([
+    promessa,
+    new Promise((_, rejeitar) =>
+      setTimeout(() => rejeitar(new Error(mensagem)), ms)
+    ),
+  ]);
+}
+
+/** Mensagem única para servidor fora do ar, usada no boot e no login. */
+export const SEM_SERVIDOR =
+  'Não foi possível conectar ao servidor de dados. ' +
+  'Verifique sua internet — se o problema persistir, o projeto Supabase pode estar pausado por inatividade.';
+
+/**
  * Desembrulha `{ data, error }` levantando erro já traduzido.
  * Evita repetir o mesmo `if (error) throw` em todo repositório.
  */

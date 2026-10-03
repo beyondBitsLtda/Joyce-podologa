@@ -2,7 +2,7 @@
  * Autenticação e perfil do usuário logado.
  */
 
-import { supabase, desembrulhar } from '../lib/supabase.js';
+import { supabase, desembrulhar, comTimeout, SEM_SERVIDOR } from '../lib/supabase.js';
 
 export async function entrar(email, senha) {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -18,7 +18,10 @@ export async function sair() {
 }
 
 export async function sessaoAtual() {
-  const { data } = await supabase.auth.getSession();
+  // Timeout curto: com o host fora do DNS, getSession fica retentando o
+  // refresh do token e nunca resolve. Melhor falhar em 8 s com mensagem clara
+  // que deixar a tela branca para sempre.
+  const { data } = await comTimeout(supabase.auth.getSession(), 8000, SEM_SERVIDOR);
   return data.session ?? null;
 }
 
@@ -31,11 +34,15 @@ export async function perfilAtual() {
   const sessao = await sessaoAtual();
   if (!sessao) return null;
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('id, full_name, role, council_id, avatar_url, active')
-    .eq('id', sessao.user.id)
-    .maybeSingle();
+  const { data, error } = await comTimeout(
+    supabase
+      .from('profiles')
+      .select('id, full_name, role, council_id, avatar_url, active')
+      .eq('id', sessao.user.id)
+      .maybeSingle(),
+    8000,
+    SEM_SERVIDOR
+  );
 
   if (error) return null;
   return data?.active ? data : null;

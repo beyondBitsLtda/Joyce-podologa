@@ -71,21 +71,16 @@ begin
     v_servico,
     now() - interval '2 hours',
 
-    'Paciente retorna para manutenção, referindo melhora da dor ao caminhar desde a última sessão. '
-    'À inspeção, hiperqueratose difusa no antepé bilateral, mais acentuada sob a cabeça do 2º e 3º '
-    'metatarso à direita, compatível com sobrecarga plantar. Pele ressecada em região de calcâneo, '
-    'com fissuras superficiais à direita, sem sinais flogísticos e sem solução de continuidade profunda. '
-    'Unhas dos hálux com espessamento moderado, sem sinais de onicocriptose. '
-    E'\n\n'
-    'Conduta: desbaste mecânico da hiperqueratose do antepé bilateral e regularização das bordas das '
-    'fissuras do calcâneo direito. Corte e lixamento das unhas. Aplicação de hidratante com ureia a 10%. '
-    E'\n\n'
-    'Orientações: hidratação diária dos pés com ureia, evitando a região interdigital; inspeção diária '
-    'da planta dos pés, com auxílio de espelho; uso de calçado fechado com câmara anterior ampla e '
-    'meia de algodão sem costura. Orientada a procurar atendimento imediatamente caso note lesão, '
-    'mudança de coloração ou aumento de temperatura local. '
-    E'\n\n'
-    'Retorno em 30 dias para reavaliação.',
+    -- Dollar quoting: as quebras de linha são literais, e não é preciso
+    -- escapar aspas nem o sinal de %. Misturar 'texto' com E'\n' em
+    -- concatenação implícita o Postgres recusa.
+    $evolucao$Paciente retorna para manutenção, referindo melhora da dor ao caminhar desde a última sessão. À inspeção, hiperqueratose difusa no antepé bilateral, mais acentuada sob a cabeça do 2º e 3º metatarso à direita, compatível com sobrecarga plantar. Pele ressecada em região de calcâneo, com fissuras superficiais à direita, sem sinais flogísticos e sem solução de continuidade profunda. Unhas dos hálux com espessamento moderado, sem sinais de onicocriptose.
+
+Conduta: desbaste mecânico da hiperqueratose do antepé bilateral e regularização das bordas das fissuras do calcâneo direito. Corte e lixamento das unhas. Aplicação de hidratante com ureia a 10%.
+
+Orientações: hidratação diária dos pés com ureia, evitando a região interdigital; inspeção diária da planta dos pés, com auxílio de espelho; uso de calçado fechado com câmara anterior ampla e meia de algodão sem costura. Orientada a procurar atendimento imediatamente caso note lesão, mudança de coloração ou aumento de temperatura local.
+
+Retorno em 30 dias para reavaliação.$evolucao$,
 
     16,      -- frequência respiratória (irpm)
     97,      -- oximetria (%)

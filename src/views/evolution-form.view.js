@@ -14,6 +14,7 @@
 import { h, montar, limpar } from '../lib/dom.js';
 import { dataCompleta, hora } from '../lib/format.js';
 import { botaoDeEnvio, criarGaleria } from '../components/attachments.js';
+import { abrirTermoDeImagem, avisoSemAutorizacao } from '../components/consent.js';
 import { criarSeletor } from '../components/picker.js';
 import * as evolucoes from '../data/evolutions.repo.js';
 import * as anexos from '../data/attachments.repo.js';
@@ -192,6 +193,20 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
   // Anexos
   // ---------------------------------------------------------------------------
 
+  function colherAutorizacao() {
+    abrirTermoDeImagem({
+      host: seletorHost,
+      patientId: pacienteId,
+      nomeDoPaciente: paciente?.full_name ?? '',
+      aoAvisar: mostrarToast,
+      aoAutorizar: async () => {
+        paciente = await pacientes.buscarPorId(pacienteId);
+        desenharAnexos();
+        await recarregarAnexos();
+      },
+    });
+  }
+
   async function recarregarAnexos() {
     try {
       const todos = await anexos.listarDoPaciente(pacienteId);
@@ -231,13 +246,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         h('span', { class: 'secao-campo__linha' })
       ),
 
-      !autorizado
-        ? h(
-            'div',
-            { class: 'erro', role: 'status' },
-            'Este paciente não autorizou registro fotográfico. Exames e documentos podem ser anexados normalmente; as fotos ficam bloqueadas até a autorização ser colhida no termo.'
-          )
-        : null,
+      !autorizado ? avisoSemAutorizacao({ aoColher: colherAutorizacao }) : null,
 
       h(
         'div',

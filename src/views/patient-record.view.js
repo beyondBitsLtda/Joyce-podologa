@@ -12,6 +12,7 @@ import * as anamneses from '../data/anamneses.repo.js';
 import * as evolucoes from '../data/evolutions.repo.js';
 import * as anexosRepo from '../data/attachments.repo.js';
 import { botaoDeEnvio, criarGaleria } from '../components/attachments.js';
+import { abrirTermoDeImagem, avisoSemAutorizacao } from '../components/consent.js';
 import { esqueletoLista, blocoVazio, blocoErro, marcador } from './partials.js';
 
 const ABAS = ['Resumo', 'Ficha', 'Evolução', 'Arquivos'];
@@ -26,6 +27,7 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, ehAdmin,
   const topoEl = h('div', { class: 'ficha__topo' }, ...esqueletoLista(1, 54));
   const abasEl = h('div', { class: 'abas', role: 'tablist' });
   const corpoEl = h('div', { class: 'coluna' }, ...esqueletoLista(3, 90));
+  const termoHost = h('div');
 
   carregar();
 
@@ -345,11 +347,19 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, ehAdmin,
         { class: 'coluna' },
 
         !autorizado
-          ? h(
-              'div',
-              { class: 'erro', role: 'status' },
-              'Sem autorização de imagem registrada. Exames e documentos podem ser anexados; as fotos ficam bloqueadas até o termo ser colhido na ficha de anamnese.'
-            )
+          ? avisoSemAutorizacao({
+              aoColher: () =>
+                abrirTermoDeImagem({
+                  host: termoHost,
+                  patientId: pacienteId,
+                  nomeDoPaciente: paciente?.full_name ?? '',
+                  aoAvisar: mostrarToast,
+                  aoAutorizar: async () => {
+                    paciente = await pacientes.buscarPorId(pacienteId);
+                    await desenharArquivos();
+                  },
+                }),
+            })
           : null,
 
         h(
@@ -476,7 +486,8 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, ehAdmin,
       ),
       topoEl,
       abasEl,
-      corpoEl
+      corpoEl,
+      termoHost
     )
   );
 }

@@ -238,17 +238,19 @@ function chips(campo, { form, aoMudar }) {
 
 // -----------------------------------------------------------------------------
 
-function assinatura(campo, { form, aoMudar }) {
+function assinatura(campo, { form, aoAssinar }) {
   const assinado = Boolean(form[campo.id]);
 
+  // A captura em si é da view: ela tem o id da ficha e acesso ao Storage.
+  // Aqui fica só o alvo de toque.
   return h(
     'button',
     {
       type: 'button',
       class: ['assinatura', assinado && 'assinatura--assinada'],
-      onclick: () => aoMudar(campo.id, assinado ? '' : 'assinado'),
+      onclick: () => aoAssinar?.(campo),
     },
-    assinado ? '✓ Assinado digitalmente' : 'Toque para assinar'
+    assinado ? '✓ Assinado — toque para assinar de novo' : 'Toque para assinar'
   );
 }
 

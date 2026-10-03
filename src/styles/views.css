@@ -742,6 +742,126 @@
   }
 }
 
+/* --- Assinatura em canvas -------------------------------------------------- */
+
+.assinatura-pad__area {
+  /* touch-action: none é o que impede a tela de rolar enquanto o dedo
+     desenha — sem isso, assinar no celular move a página. */
+  touch-action: none;
+  background: var(--superficie);
+  border: 1px solid var(--borda-campo);
+  border-radius: var(--raio-md);
+}
+
+.assinatura-pad__canvas {
+  display: block;
+  width: 100%;
+  height: 190px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.assinatura-pad__linha {
+  display: block;
+  margin: 6px 0 var(--esp-3);
+  font-size: var(--texto-sm);
+  text-align: center;
+  color: var(--texto-apagado);
+}
+
+.assinatura-pad__acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.assinatura-pad__acoes .btn {
+  flex: 1;
+}
+
+.assinatura-registrada {
+  padding: var(--esp-3);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-md);
+}
+
+.assinatura-registrada__img {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+
+/* --- Anexos e galeria ------------------------------------------------------ */
+
+.anexos__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--esp-3);
+}
+
+.galeria__vazia {
+  grid-column: 1 / -1;
+  padding: var(--esp-4) 0;
+  font-size: var(--texto-md);
+  color: var(--texto-apagado);
+}
+
+.galeria__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  overflow: hidden;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-md);
+}
+
+.galeria__img {
+  display: block;
+  width: 100%;
+  /* Quadrado fixo: a galeria é de fotos de pé em enquadramentos variados, e
+     altura irregular tornaria a comparação antes/depois mais difícil. */
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--superficie-2);
+}
+
+.galeria__arquivo {
+  display: flex;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  background: var(--superficie-2);
+}
+
+.galeria__legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1) 6px;
+  align-items: center;
+  padding: 0 10px 10px;
+  font-size: var(--texto-xs);
+  color: var(--texto-secundario);
+}
+
+.galeria__tamanho {
+  color: var(--texto-apagado);
+}
+
+/* Miniaturas dentro do cartão de evolução, menores que a galeria principal. */
+.evolucao .galeria {
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+}
+
 /* --- Conclusão ------------------------------------------------------------ */
 
 .conclusao {

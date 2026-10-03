@@ -20,6 +20,11 @@ import * as anexos from '../data/attachments.repo.js';
 import * as pacientes from '../data/patients.repo.js';
 import * as servicos from '../data/services.repo.js';
 import { esqueletoLista, blocoErro } from './partials.js';
+import {
+  SINAIS_VITAIS,
+  validarEvolucao,
+  sinaisVitaisParaBanco,
+} from '../domain/evolucao.rules.js';
 
 export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast }) {
   const pacienteId = params.id;
@@ -65,7 +70,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
 
   const rotuloServico = () => listaServicos.find((s) => s.id === form.servicoId)?.name || '';
 
-  function campo(rotulo, chave, tipo = 'text', extra = {}) {
+  function campo(rotulo, chave, tipo = 'text', { dica, ...extra } = {}) {
     const id = `ev-${chave}`;
     return h(
       'div',
@@ -80,7 +85,8 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
           form = { ...form, [chave]: e.target.value };
         },
         ...extra,
-      })
+      }),
+      dica ? h('span', { class: 'campo__dica' }, dica) : null
     );
   }
 
@@ -141,12 +147,18 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         h('span', { class: 'secao-campo__linha' })
       ),
 
-      campo('Freq. respiratória', 'fr', 'number', { placeholder: 'irpm', min: 4, max: 60 }),
-      campo('Oximetria', 'oxi', 'number', { placeholder: '%', min: 50, max: 100 }),
-      campo('Pulso', 'pulso', 'number', { placeholder: 'bpm', min: 25, max: 250 }),
-      campo('Temperatura', 'temp', 'number', { placeholder: '°C', step: '0.1', min: 30, max: 43 }),
-      campo('Pressão arterial', 'pressao', 'text', { placeholder: '120/80' }),
-      campo('Glicemia capilar', 'glicemia', 'number', { placeholder: 'mg/dL', min: 20, max: 800 })
+      // Rótulo, faixa e dica saem da mesma definição que a validação usa —
+      // assim o que o campo promete e o que o sistema aceita não divergem.
+      ...SINAIS_VITAIS.map((sinal) =>
+        campo(sinal.rotulo, sinal.chave, 'number', {
+          placeholder: sinal.unidade,
+          min: sinal.min,
+          max: sinal.max,
+          step: sinal.inteiro ? 1 : '0.1',
+          dica: `${sinal.min} a ${sinal.max} ${sinal.unidade}`,
+        })
+      ),
+      campo('Pressão arterial', 'pressao', 'text', { placeholder: '120/80', dica: 'Ex.: 120/80' })
     );
   }
 
@@ -241,36 +253,38 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
   // Gravação
   // ---------------------------------------------------------------------------
 
-  function mostrarErro(mensagem) {
-    montar(erroEl, h('div', { class: 'erro', role: 'alert' }, mensagem));
+  /**
+   * Exibe as pendências. Lista quando há mais de uma: corrigir de uma em uma,
+   * com ida ao servidor entre cada, é o que faz perder o que já foi digitado.
+   */
+  function mostrarErros(lista) {
+    montar(
+      erroEl,
+      h(
+        'div',
+        { class: 'erro', role: 'alert' },
+        lista.length === 1
+          ? lista[0]
+          : h(
+              'ul',
+              { style: { margin: 0, paddingLeft: '18px' } },
+              ...lista.map((e) => h('li', null, e))
+            )
+      )
+    );
     erroEl.hidden = false;
     erroEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
-
-  function validar() {
-    if (!form.servicoId && !form.procedimentoLivre.trim()) {
-      return 'Escolha o procedimento ou descreva qual foi.';
-    }
-    if (form.notas.trim().length < 10) {
-      return 'Descreva a evolução do atendimento (mínimo de 10 caracteres).';
-    }
-    if (!form.data || !form.hora) return 'Informe data e horário do atendimento.';
-
-    if (form.pressao && !/^\d{2,3}\/\d{2,3}$/.test(form.pressao.trim())) {
-      return 'Pressão arterial no formato 120/80.';
-    }
-    return null;
-  }
-
-  const numero = (v) => (v === '' || v === null ? null : Number(v));
 
   async function salvar() {
     if (salvando) return;
     erroEl.hidden = true;
 
-    const problema = validar();
-    if (problema) {
-      mostrarErro(problema);
+    // Mostra TODAS as pendências de uma vez: corrigir uma por vez, com ida ao
+    // servidor entre cada, é o que faz perder o que já foi digitado.
+    const pendencias = validarEvolucao(form);
+    if (pendencias.length > 0) {
+      mostrarErros(pendencias);
       return;
     }
 
@@ -283,14 +297,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       procedureLabel: form.procedimentoLivre.trim() || null,
       notes: form.notas.trim(),
       performedAt: new Date(`${form.data}T${form.hora}`),
-      sinaisVitais: {
-        fr: numero(form.fr),
-        oxi: numero(form.oxi),
-        pulso: numero(form.pulso),
-        temp: numero(form.temp),
-        pressao: form.pressao.trim() || null,
-        glicemia: numero(form.glicemia),
-      },
+      sinaisVitais: sinaisVitaisParaBanco(form),
     };
 
     try {
@@ -321,7 +328,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       desenharAnexos();
       await recarregarAnexos();
     } catch (erro) {
-      mostrarErro(erro.message);
+      mostrarErros([erro.message]);
     } finally {
       salvando = false;
       salvarEl.disabled = false;
@@ -348,7 +355,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       mostrarToast('Evolução assinada.');
       navegar(`/pacientes/${pacienteId}`, { substituir: true });
     } catch (erro) {
-      mostrarErro(erro.message);
+      mostrarErros([erro.message]);
       assinarEl.disabled = false;
       assinarEl.textContent = 'Assinar e encerrar';
     }

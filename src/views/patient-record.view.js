@@ -10,11 +10,13 @@ import { rastrearRisco, GRAUS } from '../domain/risco.rules.js';
 import * as pacientes from '../data/patients.repo.js';
 import * as anamneses from '../data/anamneses.repo.js';
 import * as evolucoes from '../data/evolutions.repo.js';
+import * as anexosRepo from '../data/attachments.repo.js';
+import { botaoDeEnvio, criarGaleria } from '../components/attachments.js';
 import { esqueletoLista, blocoVazio, blocoErro, marcador } from './partials.js';
 
-const ABAS = ['Resumo', 'Ficha', 'Evolução'];
+const ABAS = ['Resumo', 'Ficha', 'Evolução', 'Arquivos'];
 
-export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarToast }) {
+export function viewFichaPaciente({ params, navegar, podeVerProntuario, ehAdmin, mostrarToast }) {
   const pacienteId = params.id;
 
   let aba = 'Resumo';
@@ -118,7 +120,8 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarT
     try {
       if (aba === 'Resumo') await desenharResumo();
       else if (aba === 'Ficha') await desenharFicha();
-      else await desenharEvolucao();
+      else if (aba === 'Evolução') await desenharEvolucao();
+      else await desenharArquivos();
     } catch (erro) {
       montar(corpoEl, blocoErro(erro.message));
     }
@@ -274,7 +277,19 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarT
   // ---------------------------------------------------------------------------
 
   async function desenharEvolucao() {
-    const lista = await evolucoes.listarDoPaciente(pacienteId);
+    const [lista, todosAnexos] = await Promise.all([
+      evolucoes.listarDoPaciente(pacienteId),
+      anexosRepo.listarDoPaciente(pacienteId).catch(() => []),
+    ]);
+
+    // Agrupa por sessão numa passada só. Buscar os anexos de cada evolução
+    // separadamente seria N+1 — e o histórico costuma ter dezenas de sessões.
+    const porEvolucao = new Map();
+    for (const anexo of todosAnexos) {
+      if (!anexo.evolution_id) continue;
+      if (!porEvolucao.has(anexo.evolution_id)) porEvolucao.set(anexo.evolution_id, []);
+      porEvolucao.get(anexo.evolution_id).push(anexo);
+    }
 
     montar(
       corpoEl,
@@ -287,20 +302,100 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarT
             type: 'button',
             class: 'btn btn--primario btn--grande',
             style: { alignSelf: 'flex-start' },
-            onclick: () => mostrarToast('Registro de evolução: próxima etapa do projeto.'),
+            onclick: () => navegar(`/pacientes/${pacienteId}/evolucao/nova`),
           },
           '+ Nova evolução'
         ),
         ...(lista.length === 0
           ? [blocoVazio('Nenhuma evolução registrada', 'As sessões de atendimento aparecem aqui.')]
-          : lista.map(cartaoEvolucao))
+          : lista.map((e) => cartaoEvolucao(e, porEvolucao.get(e.id) ?? [])))
       )
     );
   }
 
-  function cartaoEvolucao(e) {
+  /**
+   * Aba Arquivos: tudo que foi anexado ao prontuário, não só o da sessão.
+   *
+   * Exames e documentos entram aqui porque nem sempre nascem de um
+   * atendimento — laudo que o paciente traz, encaminhamento, pedido médico.
+   * As fotos continuam vinculadas à sessão, mas aparecem aqui também, para
+   * dar a visão de evolução ao longo do tempo.
+   */
+  async function desenharArquivos() {
+    const lista = await anexosRepo.listarDoPaciente(pacienteId);
+    pacientes.registrarAcesso(pacienteId, 'anexo');
+
+    const autorizado = Boolean(paciente?.photo_consent);
+    const galeria = criarGaleria({ aoExcluir: ehAdmin ? excluirAnexo : null });
+
+    const envio = (kind, rotulo) =>
+      botaoDeEnvio({
+        patientId: pacienteId,
+        kind,
+        permitido: kind.startsWith('foto') ? autorizado : true,
+        rotulo,
+        aoEnviar: () => desenharArquivos(),
+        aoAvisar: mostrarToast,
+      });
+
+    montar(
+      corpoEl,
+      h(
+        'div',
+        { class: 'coluna' },
+
+        !autorizado
+          ? h(
+              'div',
+              { class: 'erro', role: 'status' },
+              'Sem autorização de imagem registrada. Exames e documentos podem ser anexados; as fotos ficam bloqueadas até o termo ser colhido na ficha de anamnese.'
+            )
+          : null,
+
+        h(
+          'div',
+          { class: 'anexos__acoes' },
+          envio('foto_antes', '+ Foto antes'),
+          envio('foto_depois', '+ Foto depois'),
+          envio('exame', '+ Exame / documento'),
+          envio('outro', '+ Outro arquivo')
+        ),
+
+        galeria.elemento
+      )
+    );
+
+    await galeria.recarregar(lista);
+  }
+
+  async function excluirAnexo(anexo) {
+    const confirmado = window.confirm(
+      'Excluir este arquivo permanentemente?\n\n' +
+        'Arquivo de prontuário não é recuperável depois de excluído.'
+    );
+    if (!confirmado) return;
+
+    try {
+      await anexosRepo.excluir(anexo);
+      mostrarToast('Arquivo excluído.');
+      await desenharArquivos();
+    } catch (erro) {
+      mostrarToast(erro.message, 'erro');
+    }
+  }
+
+  function cartaoEvolucao(e, anexosDaSessao = []) {
     const profissional = e.profiles?.full_name || 'Profissional';
     const procedimento = e.services?.name || e.procedure_label || 'Atendimento';
+
+    // A galeria carrega sozinha: cada uma assina as próprias URLs, que valem
+    // 5 minutos. Gerar tudo de uma vez ao abrir a aba desperdiçaria assinatura
+    // para sessões que a profissional nem vai rolar até ver.
+    let galeriaDaSessao = null;
+    if (anexosDaSessao.length > 0) {
+      galeriaDaSessao = criarGaleria();
+      galeriaDaSessao.recarregar(anexosDaSessao);
+    }
 
     return h(
       'div',
@@ -315,6 +410,8 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, mostrarT
         ? h('span', { class: 'campo__dica' }, 'Retificação de registro anterior')
         : null,
       h('span', { class: 'evolucao__texto' }, e.notes),
+      galeriaDaSessao ? galeriaDaSessao.elemento : null,
+
       h(
         'span',
         { class: 'evolucao__assinatura' },

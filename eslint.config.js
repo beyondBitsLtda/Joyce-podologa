@@ -18,6 +18,10 @@ export default [
         HTMLElement: 'readonly',
         fetch: 'readonly',
         AbortSignal: 'readonly',
+        File: 'readonly',
+        Blob: 'readonly',
+        Image: 'readonly',
+        createImageBitmap: 'readonly',
       },
     },
     rules: {

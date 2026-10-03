@@ -134,6 +134,24 @@ export async function concluir(id, form, patientId) {
   );
 }
 
+/**
+ * Grava o caminho da assinatura no Storage.
+ *
+ * Separado de `concluir` porque a assinatura é colhida na etapa 5, com o
+ * paciente presente — e a ficha só é fechada na etapa 10. Esperar o fim
+ * perderia a assinatura se o atendimento fosse interrompido.
+ */
+export async function salvarAssinatura(id, storagePath) {
+  return desembrulhar(
+    await supabase
+      .from('anamneses')
+      .update({ signature_path: storagePath, signed_at: new Date().toISOString() })
+      .eq('id', id)
+      .select('id, signature_path, signed_at')
+      .single()
+  );
+}
+
 /** Reabre uma ficha concluída para correção. Fica registrado no audit_log. */
 export async function reabrir(id) {
   return desembrulhar(

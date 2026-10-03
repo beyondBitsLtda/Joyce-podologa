@@ -18,6 +18,7 @@ import { viewWizard } from './views/wizard.view.js';
 import { viewConcluida } from './views/done.view.js';
 import { viewFormPaciente } from './views/patient-form.view.js';
 import { viewFormAgendamento } from './views/appointment-form.view.js';
+import { viewFormEvolucao } from './views/evolution-form.view.js';
 
 /** Rotas acessíveis sem sessão. */
 const PUBLICAS = ['/login'];
@@ -44,6 +45,7 @@ export async function iniciarApp(raiz) {
     '/pacientes': viewPacientes,
     '/pacientes/novo': viewFormPaciente,
     '/pacientes/:id/editar': viewFormPaciente,
+    '/pacientes/:id/evolucao/nova': viewFormEvolucao,
     '/pacientes/:id': viewFichaPaciente,
     '/ficha/nova': viewWizard,
     '/ficha/:id': viewWizard,
@@ -226,6 +228,7 @@ function tituloDaRota(padrao) {
       '/pacientes': 'Pacientes',
       '/pacientes/novo': 'Novo paciente',
       '/pacientes/:id/editar': 'Editar cadastro',
+      '/pacientes/:id/evolucao/nova': 'Nova evolução',
       '/pacientes/:id': 'Ficha do paciente',
       '/ficha/nova': 'Nova ficha',
       '/ficha/:id': 'Ficha de anamnese',

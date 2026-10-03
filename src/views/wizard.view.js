@@ -30,6 +30,8 @@ import { opcoesDe } from '../domain/localidades.js';
 import { rastrearRisco, camposCalculados, GRAUS } from '../domain/risco.rules.js';
 import { renderCampo } from '../components/fields.js';
 import { criarSeletor } from '../components/picker.js';
+import { criarAssinatura } from '../components/signature.js';
+import * as anexosRepo from '../data/attachments.repo.js';
 import { marcador } from './partials.js';
 import * as rascunhoLocal from '../data/drafts.local.js';
 import * as pacientesRepo from '../data/patients.repo.js';
@@ -66,6 +68,7 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
     onclick: anterior,
   }, '←');
   const seletorHost = h('div');
+  const assinaturaHost = h('div');
   const toggleEtapasEl = h('button', {
     type: 'button',
     class: 'btn btn--link so-mobile',
@@ -119,7 +122,8 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
       )
     ),
 
-    seletorHost
+    seletorHost,
+    assinaturaHost
   );
 
   // ---------------------------------------------------------------------------
@@ -338,7 +342,7 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
 
   function desenharCampos() {
     const atual = ETAPAS[etapa];
-    const ctx = { form, aoMudar, aoDigitar, aoAbrirSeletor };
+    const ctx = { form, aoMudar, aoDigitar, aoAbrirSeletor, aoAssinar };
 
     subEl.textContent = atual.sub || '';
     subEl.hidden = !atual.sub;
@@ -471,6 +475,60 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
     avancarEl.textContent = ultima ? 'Concluir ficha' : 'Continuar';
     avancarEl.onclick = proxima;
     voltarEl.hidden = etapa === 0;
+  }
+
+  /**
+   * Captura da assinatura do termo (etapa 5).
+   *
+   * Precisa da ficha já criada no servidor para ter onde vincular o arquivo,
+   * então força a sincronização antes de abrir o pad. O traço vira PNG no
+   * bucket privado e o caminho fica em anamneses.signature_path.
+   */
+  function aoAssinar(campo) {
+    assinaturaHost.append(
+      criarAssinatura({
+        titulo: 'Assinatura do paciente',
+        subtitulo: 'Termo de responsabilidade e autorização',
+        aoFechar: fecharAssinatura,
+        aoConfirmar: async (blob) => {
+          try {
+            sincronizarRemoto.cancelar();
+            await sincronizar();
+
+            if (!anamneseId || !pacienteId) {
+              mostrarToast(
+                'Preencha o nome do paciente na etapa 1 antes de colher a assinatura.',
+                'erro'
+              );
+              return;
+            }
+
+            const arquivo = new File([blob], 'assinatura.png', { type: 'image/png' });
+            const anexo = await anexosRepo.enviar({
+              patientId: pacienteId,
+              arquivo,
+              kind: 'assinatura',
+              anamnesisId: anamneseId,
+            });
+
+            await anamnesesRepo.salvarAssinatura(anamneseId, anexo.storage_path);
+
+            form = { ...form, [campo.id]: 'assinado' };
+            salvar();
+            fecharAssinatura();
+            desenharCampos();
+            mostrarToast('Assinatura registrada.');
+          } catch (erro) {
+            mostrarToast(erro.message, 'erro');
+          }
+        },
+      })
+    );
+  }
+
+  function fecharAssinatura() {
+    for (const filho of [...assinaturaHost.children]) filho.desmontar?.();
+    limpar(assinaturaHost);
   }
 
   function desenharSeletor() {

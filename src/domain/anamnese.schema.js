@@ -23,6 +23,8 @@
  *   clears       ids a limpar quando este mudar (cascata de endereço)
  */
 
+import { TERMO_COMPLETO } from './termos.js';
+
 /** Versão do schema gravada em `anamneses.form_version`. */
 export const FORM_VERSION = 'v1';
 
@@ -221,11 +223,7 @@ export const ETAPAS = [
     title: 'Termo e autorização',
     sub: 'Leia o termo com o paciente e colha a assinatura.',
     fields: [
-      nota([
-        '1. Declaro que as informações acima são verdadeiras, que nada omiti em relação à minha saúde ou reações alérgicas e que informei todos os medicamentos que eventualmente estou utilizando, não cabendo ao profissional quaisquer responsabilidades por informações omitidas nesta entrevista.',
-        '2. Declaro que estou ciente sobre os procedimentos a serem realizados e me comprometo em seguir todos os cuidados passados a fim de obter o melhor resultado no tratamento.',
-        '3. Autorizo o registro fotográfico do trabalho realizado (“antes” e “depois”) para efeitos de documentação, divulgação em redes sociais, books ou qualquer material publicitário. A presente autorização é concedida gratuitamente, sem que nada a ser reclamado a título de direitos ou quaisquer outro.',
-      ]),
+      nota(TERMO_COMPLETO),
       simNao('foto', 'Autoriza registro fotográfico de antes e depois?'),
       simNao('menor', 'Paciente menor de idade?', 'Nome do responsável'),
       assinatura('assinatura', 'Assinatura'),

@@ -14,12 +14,18 @@
 import { h, montar, limpar } from '../lib/dom.js';
 import { dataCompleta, hora } from '../lib/format.js';
 import { botaoDeEnvio, criarGaleria } from '../components/attachments.js';
+import { abrirTermoDeImagem, avisoSemAutorizacao } from '../components/consent.js';
 import { criarSeletor } from '../components/picker.js';
 import * as evolucoes from '../data/evolutions.repo.js';
 import * as anexos from '../data/attachments.repo.js';
 import * as pacientes from '../data/patients.repo.js';
 import * as servicos from '../data/services.repo.js';
 import { esqueletoLista, blocoErro } from './partials.js';
+import {
+  SINAIS_VITAIS,
+  validarEvolucao,
+  sinaisVitaisParaBanco,
+} from '../domain/evolucao.rules.js';
 
 export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast }) {
   const pacienteId = params.id;
@@ -27,6 +33,8 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
   let paciente = null;
   let listaServicos = [];
   let evolucao = null; // existe a partir do primeiro "Salvar"
+  /** Quando preenchido, esta evolução retifica outra já assinada. */
+  let retificaId = query.get('retifica') || null;
   let listaAnexos = [];
   let seletorAberto = false;
   let salvando = false;
@@ -65,7 +73,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
 
   const rotuloServico = () => listaServicos.find((s) => s.id === form.servicoId)?.name || '';
 
-  function campo(rotulo, chave, tipo = 'text', extra = {}) {
+  function campo(rotulo, chave, tipo = 'text', { dica, ...extra } = {}) {
     const id = `ev-${chave}`;
     return h(
       'div',
@@ -80,7 +88,8 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
           form = { ...form, [chave]: e.target.value };
         },
         ...extra,
-      })
+      }),
+      dica ? h('span', { class: 'campo__dica' }, dica) : null
     );
   }
 
@@ -141,12 +150,18 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         h('span', { class: 'secao-campo__linha' })
       ),
 
-      campo('Freq. respiratória', 'fr', 'number', { placeholder: 'irpm', min: 4, max: 60 }),
-      campo('Oximetria', 'oxi', 'number', { placeholder: '%', min: 50, max: 100 }),
-      campo('Pulso', 'pulso', 'number', { placeholder: 'bpm', min: 25, max: 250 }),
-      campo('Temperatura', 'temp', 'number', { placeholder: '°C', step: '0.1', min: 30, max: 43 }),
-      campo('Pressão arterial', 'pressao', 'text', { placeholder: '120/80' }),
-      campo('Glicemia capilar', 'glicemia', 'number', { placeholder: 'mg/dL', min: 20, max: 800 })
+      // Rótulo, faixa e dica saem da mesma definição que a validação usa —
+      // assim o que o campo promete e o que o sistema aceita não divergem.
+      ...SINAIS_VITAIS.map((sinal) =>
+        campo(sinal.rotulo, sinal.chave, 'number', {
+          placeholder: sinal.unidade,
+          min: sinal.min,
+          max: sinal.max,
+          step: sinal.inteiro ? 1 : '0.1',
+          dica: `${sinal.min} a ${sinal.max} ${sinal.unidade}`,
+        })
+      ),
+      campo('Pressão arterial', 'pressao', 'text', { placeholder: '120/80', dica: 'Ex.: 120/80' })
     );
   }
 
@@ -177,6 +192,20 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
   // ---------------------------------------------------------------------------
   // Anexos
   // ---------------------------------------------------------------------------
+
+  function colherAutorizacao() {
+    abrirTermoDeImagem({
+      host: seletorHost,
+      patientId: pacienteId,
+      nomeDoPaciente: paciente?.full_name ?? '',
+      aoAvisar: mostrarToast,
+      aoAutorizar: async () => {
+        paciente = await pacientes.buscarPorId(pacienteId);
+        desenharAnexos();
+        await recarregarAnexos();
+      },
+    });
+  }
 
   async function recarregarAnexos() {
     try {
@@ -217,13 +246,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         h('span', { class: 'secao-campo__linha' })
       ),
 
-      !autorizado
-        ? h(
-            'div',
-            { class: 'erro', role: 'status' },
-            'Este paciente não autorizou registro fotográfico. Exames e documentos podem ser anexados normalmente; as fotos ficam bloqueadas até a autorização ser colhida no termo.'
-          )
-        : null,
+      !autorizado ? avisoSemAutorizacao({ aoColher: colherAutorizacao }) : null,
 
       h(
         'div',
@@ -241,36 +264,38 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
   // Gravação
   // ---------------------------------------------------------------------------
 
-  function mostrarErro(mensagem) {
-    montar(erroEl, h('div', { class: 'erro', role: 'alert' }, mensagem));
+  /**
+   * Exibe as pendências. Lista quando há mais de uma: corrigir de uma em uma,
+   * com ida ao servidor entre cada, é o que faz perder o que já foi digitado.
+   */
+  function mostrarErros(lista) {
+    montar(
+      erroEl,
+      h(
+        'div',
+        { class: 'erro', role: 'alert' },
+        lista.length === 1
+          ? lista[0]
+          : h(
+              'ul',
+              { style: { margin: 0, paddingLeft: '18px' } },
+              ...lista.map((e) => h('li', null, e))
+            )
+      )
+    );
     erroEl.hidden = false;
     erroEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
-
-  function validar() {
-    if (!form.servicoId && !form.procedimentoLivre.trim()) {
-      return 'Escolha o procedimento ou descreva qual foi.';
-    }
-    if (form.notas.trim().length < 10) {
-      return 'Descreva a evolução do atendimento (mínimo de 10 caracteres).';
-    }
-    if (!form.data || !form.hora) return 'Informe data e horário do atendimento.';
-
-    if (form.pressao && !/^\d{2,3}\/\d{2,3}$/.test(form.pressao.trim())) {
-      return 'Pressão arterial no formato 120/80.';
-    }
-    return null;
-  }
-
-  const numero = (v) => (v === '' || v === null ? null : Number(v));
 
   async function salvar() {
     if (salvando) return;
     erroEl.hidden = true;
 
-    const problema = validar();
-    if (problema) {
-      mostrarErro(problema);
+    // Mostra TODAS as pendências de uma vez: corrigir uma por vez, com ida ao
+    // servidor entre cada, é o que faz perder o que já foi digitado.
+    const pendencias = validarEvolucao(form);
+    if (pendencias.length > 0) {
+      mostrarErros(pendencias);
       return;
     }
 
@@ -283,14 +308,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       procedureLabel: form.procedimentoLivre.trim() || null,
       notes: form.notas.trim(),
       performedAt: new Date(`${form.data}T${form.hora}`),
-      sinaisVitais: {
-        fr: numero(form.fr),
-        oxi: numero(form.oxi),
-        pulso: numero(form.pulso),
-        temp: numero(form.temp),
-        pressao: form.pressao.trim() || null,
-        glicemia: numero(form.glicemia),
-      },
+      sinaisVitais: sinaisVitaisParaBanco(form),
     };
 
     try {
@@ -312,8 +330,12 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         evolucao = await evolucoes.criar({
           patientId: pacienteId,
           professionalId: perfil.id,
+          amendsId: retificaId,
           ...dados,
         });
+        // Uma vez criada, deixa de ser "nova retificação" e vira o registro
+        // corrente — salvar de novo não deve criar outra.
+        retificaId = null;
         mostrarToast('Evolução salva. Agora você pode anexar fotos e exames.');
       }
 
@@ -321,7 +343,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       desenharAnexos();
       await recarregarAnexos();
     } catch (erro) {
-      mostrarErro(erro.message);
+      mostrarErros([erro.message]);
     } finally {
       salvando = false;
       salvarEl.disabled = false;
@@ -348,10 +370,30 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       mostrarToast('Evolução assinada.');
       navegar(`/pacientes/${pacienteId}`, { substituir: true });
     } catch (erro) {
-      mostrarErro(erro.message);
+      mostrarErros([erro.message]);
       assinarEl.disabled = false;
       assinarEl.textContent = 'Assinar e encerrar';
     }
+  }
+
+  /** Linha do banco → estado do formulário. */
+  function paraFormulario(linha) {
+    const quando = new Date(linha.performed_at);
+    const doisDigitos = (n) => String(n).padStart(2, '0');
+
+    return {
+      servicoId: linha.service_id || '',
+      procedimentoLivre: linha.procedure_label || '',
+      data: `${quando.getFullYear()}-${doisDigitos(quando.getMonth() + 1)}-${doisDigitos(quando.getDate())}`,
+      hora: `${doisDigitos(quando.getHours())}:${doisDigitos(quando.getMinutes())}`,
+      notas: linha.notes || '',
+      fr: linha.respiratory_rate ?? '',
+      oxi: linha.oxygen_saturation ?? '',
+      pulso: linha.heart_rate ?? '',
+      temp: linha.temperature_c ?? '',
+      pressao: linha.blood_pressure || '',
+      glicemia: linha.glycemia_mgdl ?? '',
+    };
   }
 
   // ---------------------------------------------------------------------------
@@ -368,7 +410,31 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
       ]);
 
       pacientes.registrarAcesso(pacienteId, 'evolucao');
+
+      // Retomar um rascunho salvo sem assinar. Sem isto, ele ficava órfão:
+      // nenhum caminho levava de volta a ele.
+      const editarId = query.get('editar');
+      if (editarId) {
+        evolucao = await evolucoes.buscarPorId(editarId);
+        form = { ...form, ...paraFormulario(evolucao) };
+        assinarEl.hidden = false;
+        salvarEl.textContent = 'Salvar alterações';
+      }
+
+      // Retificação: copia o procedimento do original e começa com o texto em
+      // branco, porque o que se escreve é a correção, não uma cópia do erro.
+      if (retificaId) {
+        const original = await evolucoes.buscarPorId(retificaId);
+        form = {
+          ...form,
+          servicoId: original.service_id || '',
+          procedimentoLivre: original.procedure_label || '',
+        };
+      }
+
       desenharCampos();
+      desenharAnexos();
+      if (evolucao) await recarregarAnexos();
     } catch (erro) {
       montar(camposEl, blocoErro(erro.message, carregar));
     }
@@ -394,7 +460,7 @@ export function viewFormEvolucao({ params, query, navegar, perfil, mostrarToast 
         '← Voltar'
       ),
 
-      h('h1', null, 'Nova evolução'),
+      h('h1', null, query.get('retifica') ? 'Retificação de evolução' : 'Nova evolução'),
       h(
         'p',
         { class: 'formulario__sub' },

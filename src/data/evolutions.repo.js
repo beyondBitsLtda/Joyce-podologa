@@ -18,6 +18,10 @@ const CAMPOS = `
   services:service_id ( name, color )
 `;
 
+export async function buscarPorId(id) {
+  return desembrulhar(await supabase.from('evolutions').select(CAMPOS).eq('id', id).single());
+}
+
 export async function listarDoPaciente(patientId, limite = 50) {
   return desembrulhar(
     await supabase

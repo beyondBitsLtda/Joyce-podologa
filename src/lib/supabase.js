@@ -60,6 +60,33 @@ export function mensagemDeErro(erro) {
     return 'O paciente não autorizou registro fotográfico. Colha a autorização no termo antes de anexar imagens.';
   }
 
+  // Sinais vitais fora da faixa. A validação do cliente pega antes, mas se
+  // algo escapar a mensagem precisa dizer QUAL campo — "numeric field
+  // overflow" sozinho não dá nenhuma pista do que corrigir.
+  const FAIXAS = {
+    respiratory_rate: 'Frequência respiratória deve ficar entre 4 e 60 irpm.',
+    oxygen_saturation: 'Oximetria deve ficar entre 50 e 100%.',
+    heart_rate: 'Pulso deve ficar entre 25 e 250 bpm.',
+    temperature_c: 'Temperatura deve ficar entre 30 e 43 °C — use vírgula ou ponto, como 36,5.',
+    glycemia_mgdl: 'Glicemia deve ficar entre 20 e 800 mg/dL.',
+    blood_pressure: 'Pressão arterial no formato 120/80.',
+  };
+  for (const [coluna, texto] of Object.entries(FAIXAS)) {
+    if (msg.includes(coluna)) return texto;
+  }
+
+  // `numeric field overflow` vem da coluna numeric(3,1) da temperatura, que
+  // comporta no máximo 99,9 — acontece ao digitar 365 em vez de 36,5. A
+  // mensagem do Postgres não nomeia a coluna, então o chute é seguro: é a
+  // única coluna numeric do schema.
+  if (msg.includes('numeric field overflow')) {
+    return 'Temperatura fora da faixa. Use o formato 36,5 — o valor digitado tem casas demais.';
+  }
+
+  if (msg.includes('out of range') && msg.includes('smallint')) {
+    return 'Um dos sinais vitais está com valor alto demais. Confira os números digitados.';
+  }
+
   // Códigos do Postgres / PostgREST ------------------------------------------
   switch (erro.code) {
     case '23505':
@@ -85,6 +112,35 @@ export function mensagemDeErro(erro) {
 
   return msg || 'Não foi possível concluir a operação.';
 }
+
+/**
+ * Limita quanto tempo uma operação pode demorar.
+ *
+ * Existe por causa de uma falha real: com o projeto Supabase pausado, o host
+ * some do DNS e o SDK fica retentando o refresh do token indefinidamente. O
+ * app travava no boot e mostrava tela branca, sem dizer nada — o pior tipo de
+ * falha, porque parece defeito do sistema quando é indisponibilidade do
+ * servidor.
+ *
+ * @template T
+ * @param {Promise<T>} promessa
+ * @param {number} ms
+ * @param {string} mensagem
+ * @returns {Promise<T>}
+ */
+export function comTimeout(promessa, ms, mensagem) {
+  return Promise.race([
+    promessa,
+    new Promise((_, rejeitar) =>
+      setTimeout(() => rejeitar(new Error(mensagem)), ms)
+    ),
+  ]);
+}
+
+/** Mensagem única para servidor fora do ar, usada no boot e no login. */
+export const SEM_SERVIDOR =
+  'Não foi possível conectar ao servidor de dados. ' +
+  'Verifique sua internet — se o problema persistir, o projeto Supabase pode estar pausado por inatividade.';
 
 /**
  * Desembrulha `{ data, error }` levantando erro já traduzido.

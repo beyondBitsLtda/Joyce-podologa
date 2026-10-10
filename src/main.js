@@ -11,7 +11,17 @@ import { iniciarApp } from './app.js';
 
 const raiz = document.getElementById('app');
 
-iniciarApp(raiz).catch((erro) => {
+iniciarApp(raiz).catch(mostrarFalhaDeBoot);
+
+/**
+ * Tela de falha no boot.
+ *
+ * Sem isto o app ficava em branco com `aria-busy="true"` para sempre quando o
+ * servidor de dados não respondia — e tela branca parece defeito do sistema
+ * quando na verdade é indisponibilidade do back-end. Dizer o que houve e
+ * oferecer recarregar poupa um chamado.
+ */
+function mostrarFalhaDeBoot(erro) {
   console.error('[joyce-podologa] falha ao iniciar:', erro);
 
   raiz.removeAttribute('aria-busy');
@@ -26,8 +36,15 @@ iniciarApp(raiz).catch((erro) => {
   titulo.textContent = 'Não foi possível iniciar o sistema';
 
   const detalhe = document.createElement('span');
+  detalhe.style.maxWidth = '460px';
   detalhe.textContent = erro.message;
 
-  aviso.append(titulo, detalhe);
+  const recarregar = document.createElement('button');
+  recarregar.className = 'btn btn--primario';
+  recarregar.style.marginTop = '16px';
+  recarregar.textContent = 'Tentar de novo';
+  recarregar.addEventListener('click', () => window.location.reload());
+
+  aviso.append(titulo, detalhe, recarregar);
   raiz.append(aviso);
-});
+}

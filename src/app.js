@@ -19,6 +19,7 @@ import { viewConcluida } from './views/done.view.js';
 import { viewFormPaciente } from './views/patient-form.view.js';
 import { viewFormAgendamento } from './views/appointment-form.view.js';
 import { viewFormEvolucao } from './views/evolution-form.view.js';
+import { viewDetalheEvolucao } from './views/evolution-detail.view.js';
 
 /** Rotas acessíveis sem sessão. */
 const PUBLICAS = ['/login'];
@@ -46,6 +47,7 @@ export async function iniciarApp(raiz) {
     '/pacientes/novo': viewFormPaciente,
     '/pacientes/:id/editar': viewFormPaciente,
     '/pacientes/:id/evolucao/nova': viewFormEvolucao,
+    '/pacientes/:id/evolucao/:evolucaoId': viewDetalheEvolucao,
     '/pacientes/:id': viewFichaPaciente,
     '/ficha/nova': viewWizard,
     '/ficha/:id': viewWizard,
@@ -131,7 +133,17 @@ export async function iniciarApp(raiz) {
     // Guarda de rota. A proteção real está no RLS do Postgres — isto aqui é
     // só para a pessoa não ver uma tela quebrada.
     if (!publica && !perfil) {
-      perfil = await auth.perfilAtual();
+      try {
+        perfil = await auth.perfilAtual();
+      } catch (erro) {
+        // Servidor fora do ar durante a navegação: avisa e manda para o login,
+        // onde a mensagem de erro tem onde aparecer. Sem o catch, a troca de
+        // rota rejeitava em silêncio e a tela ficava no estado anterior.
+        mostrarToast(erro.message, 'erro');
+        navegar('/login', { substituir: true });
+        return;
+      }
+
       if (!perfil) {
         navegar('/login', { substituir: true });
         return;
@@ -229,6 +241,7 @@ function tituloDaRota(padrao) {
       '/pacientes/novo': 'Novo paciente',
       '/pacientes/:id/editar': 'Editar cadastro',
       '/pacientes/:id/evolucao/nova': 'Nova evolução',
+      '/pacientes/:id/evolucao/:evolucaoId': 'Evolução',
       '/pacientes/:id': 'Ficha do paciente',
       '/ficha/nova': 'Nova ficha',
       '/ficha/:id': 'Ficha de anamnese',

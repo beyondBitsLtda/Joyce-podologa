@@ -25,16 +25,45 @@ file_size_limit = "20MiB"
 
 [auth]
 enabled = true
-site_url = "http://localhost:5173"
-additional_redirect_urls = ["http://localhost:5173"]
+
+# ATENÇÃO: este arquivo é enviado ao projeto na nuvem por `supabase config push`.
+# Não é mais só configuração local — o que estiver aqui vira a configuração de
+# produção. site_url com localhost quebraria o link de redefinição de senha.
+site_url = "https://joyce-podologa.beyondbits2.workers.dev"
+
+additional_redirect_urls = [
+  "https://joyce-podologa.beyondbits2.workers.dev",
+  "http://localhost:5173",
+]
+
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
-# Cadastro é feito pela administradora da clínica, não por auto-registro:
-# ninguém deve conseguir criar conta e entrar no prontuário sozinho.
+
+# Cadastro é feito pela administradora da clínica, não por auto-registro.
+#
+# Sem isto, qualquer pessoa cria conta pelo endpoint público de Auth — e o
+# trigger tg_handle_new_user dá `admin` ao primeiro perfil criado. A chave anon
+# vai embutida no bundle, como tem que ser, então "ninguém sabe o endereço" não
+# é proteção.
 enable_signup = false
 
 [auth.email]
-enable_signup = false
+# DEVE ficar true. Apesar do nome, no Management API este campo é o
+# external_email_enabled: ele liga e desliga o PROVEDOR de e-mail inteiro,
+# login incluído. Com false, ninguém entra — a API responde "Email logins are
+# disabled" a qualquer tentativa.
+#
+# Quem bloqueia cadastro novo é o `enable_signup = false` da seção [auth]
+# acima, que vira disable_signup no GoTrue e vale para todos os provedores.
+enable_signup = true
+
 enable_confirmations = true
 double_confirm_changes = true
+
+# Fixados explicitamente porque `config push` envia o default do CLI para
+# qualquer campo omitido — e os defaults são mais fracos do que o projeto já
+# tem. Sem estas duas linhas, o push reduziria o código de 8 para 6 dígitos e
+# afrouxaria o limite de reenvio de 1 minuto para 1 segundo.
+otp_length = 8
+max_frequency = "1m0s"

@@ -177,3 +177,4 @@ configuração (usuários e serviços) e relatórios.
 - [Modelo de dados](docs/MODELO-DE-DADOS.md) — tabelas, relações e RLS
 - [Deploy](docs/DEPLOY-CLOUDFLARE.md) — Cloudflare Workers + Supabase
 - [LGPD e segurança](docs/LGPD-SEGURANCA.md) — dado de saúde é dado sensível
+- [Laudo de verificação](docs/VERIFICACAO.md) — o que foi provado funcionando, e como repetir

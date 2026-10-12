@@ -1,0 +1,224 @@
+===============================================================================
+  JOYCE FREITAS PODOLOGIA - SISTEMA DE PRONTUARIO
+  O que e, para que serve e como usar
+===============================================================================
+
+  Documento escrito para quem vai usar o sistema, nao para quem programa.
+  Atualizado em 12 de outubro de 2026.
+
+
+-------------------------------------------------------------------------------
+  EM UMA FRASE
+-------------------------------------------------------------------------------
+
+  E a ficha de papel da clinica, transformada em um site que funciona no
+  celular, no tablet e no computador - com a vantagem de nunca se perder,
+  nunca ficar ilegivel e avisar quando um paciente precisa de mais atencao.
+
+
+-------------------------------------------------------------------------------
+  O PROBLEMA QUE ELE RESOLVE
+-------------------------------------------------------------------------------
+
+  Hoje a anamnese e feita numa ficha de 8 paginas. Ela funciona, mas:
+
+    - ocupa espaco fisico e precisa ser guardada por 20 anos (exigencia legal)
+    - some, molha, rasga, e a letra as vezes nao se entende depois
+    - para saber se um paciente e diabetico, alguem precisa achar a ficha
+      e ler pagina por pagina
+    - comparar "como estava o pe ha 3 meses" depende de memoria
+    - nao da para procurar "quais pacientes tem pe de risco?"
+
+  O sistema resolve isso guardando tudo em um lugar so, organizado e
+  pesquisavel.
+
+
+-------------------------------------------------------------------------------
+  COMO E O DIA A DIA
+-------------------------------------------------------------------------------
+
+  1. CADASTRAR O PACIENTE
+
+     Nome e o unico campo obrigatorio. O resto pode ser completado depois.
+
+     Ao digitar o CEP, o endereco se preenche sozinho - rua, bairro e cidade
+     vem corretos, sem risco de escrever uma rua que nao existe naquele
+     bairro.
+
+  2. MARCAR O ATENDIMENTO
+
+     Escolhe o paciente, o procedimento, o dia e a hora.
+
+     Se alguem tentar marcar dois pacientes no mesmo horario, o sistema
+     recusa. Nao e um aviso que da para ignorar: ele simplesmente nao deixa.
+
+  3. PREENCHER A FICHA DE ANAMNESE
+
+     Sao as mesmas 10 etapas da ficha de papel: identificacao, queixa,
+     historico de saude, calcados, termo de autorizacao, patologias,
+     inspecao dos pes, exame fisico, avaliacao dos membros inferiores e,
+     por fim, diagnostico e conduta.
+
+     Tres coisas que o papel nao faz:
+
+       - O que voce digita fica salvo automaticamente, a cada toque. Se o
+         celular desligar ou a internet cair no meio do atendimento, nada
+         se perde.
+
+       - Perguntas que nao fazem sentido somem. Se o paciente respondeu que
+         nao tem diabetes, o sistema nao pergunta o tipo de diabetes.
+
+       - A autorizacao de foto e colhida com o termo na tela e a assinatura
+         do paciente no dedo, direto no aparelho.
+
+  4. REGISTRAR CADA SESSAO
+
+     A cada atendimento voce escreve o que foi feito, anexa as fotos de
+     antes e depois, e assina.
+
+     Depois de assinar, o texto nao muda mais - nem por voce. Isso e
+     proposital: e o que torna o registro confiavel. Se precisar corrigir
+     algo, voce escreve uma retificacao, que fica ligada ao registro
+     original. Os dois ficam visiveis, como manda a boa pratica de
+     prontuario.
+
+
+-------------------------------------------------------------------------------
+  O QUE O SISTEMA FAZ SOZINHO
+-------------------------------------------------------------------------------
+
+  RASTREIO DE PE DE RISCO
+
+  Essa e a parte que o papel nao tem como fazer.
+
+  Conforme voce preenche o exame - estesiometro, diapasao, pulsos,
+  enchimento capilar, calosidades -, o sistema vai calculando o grau de
+  risco de cada pe, separadamente, e mostra na tela enquanto voce examina.
+
+  Ele segue a classificacao internacional usada para pe diabetico:
+
+     Grau 0 - risco muito baixo     reavaliar em 12 meses
+     Grau 1 - risco baixo           reavaliar em 6 a 12 meses
+     Grau 2 - risco moderado        reavaliar em 3 a 6 meses
+     Grau 3 - risco alto            reavaliar em 1 a 3 meses
+
+  E mostra POR QUE chegou naquele grau: "2 pontos sem sensibilidade ao
+  estesiometro", "pulso pedioso ausente", "calosidade no antepe".
+
+  IMPORTANTE: isso e apoio, nao diagnostico. O sistema sugere, voce decide.
+  Ele nunca muda sozinho o que voce marcou. Se a sua avaliacao for diferente
+  da sugestao, ele apenas avisa que ha divergencia - sem tratar como erro,
+  porque o exame presencial enxerga coisas que nenhum formulario captura.
+
+  ALERTAS NA FICHA DO PACIENTE
+
+  Ao abrir um paciente, aparecem em destaque as condicoes que mudam a
+  conduta: diabetes, problemas circulatorios, cardiopatia, uso de
+  marca-passo, alergia, pe de risco. Voce ve antes de encostar no pe.
+
+  BLOQUEIO DE FOTO SEM AUTORIZACAO
+
+  Se o paciente nao assinou a autorizacao de imagem, o sistema nao deixa
+  anexar foto dele. Exames e documentos sim, foto nao. E o botao para
+  colher a autorizacao fica ali do lado.
+
+
+-------------------------------------------------------------------------------
+  SEGURANCA E PRIVACIDADE
+-------------------------------------------------------------------------------
+
+  Prontuario e informacao sobre a saude de uma pessoa. Pela lei brasileira
+  (LGPD), isso e "dado pessoal sensivel" - a categoria mais protegida, junto
+  com dados de religiao e biometria. O sistema foi construido com isso em
+  mente:
+
+    - Ninguem entra sem usuario e senha. Nao existe cadastro aberto: contas
+      sao criadas pela administradora da clinica.
+
+    - Cada pessoa ve apenas o que precisa. Uma secretaria pode marcar
+      consulta e cadastrar paciente, mas NAO consegue abrir o prontuario
+      clinico. Isso nao e so a tela escondendo - o proprio banco de dados
+      recusa.
+
+    - As fotos ficam em area privada. Nao existe link publico de foto de
+      paciente. Quando voce abre uma imagem, o sistema gera um endereco
+      temporario que expira em 5 minutos.
+
+    - Tudo que e escrito fica registrado: quem alterou, o que, e quando.
+      E tambem quem abriu o prontuario de quem.
+
+    - O site so funciona em conexao segura (cadeado no navegador) e nao
+      aparece em buscas do Google.
+
+
+-------------------------------------------------------------------------------
+  O QUE AINDA NAO EXISTE
+-------------------------------------------------------------------------------
+
+  Para evitar surpresa, o que o sistema NAO faz hoje:
+
+    - Relatorios e graficos. Os dados estao la e sao pesquisaveis, mas nao
+      ha uma tela de relatorios pronta.
+
+    - Cadastro de usuarios e de servicos pela tela. Hoje isso e feito por
+      quem cuida da parte tecnica.
+
+    - A assinatura do paciente tem o mesmo valor do rabisco na ficha de
+      papel: comprova que o termo foi lido e assinado na sua presenca. NAO
+      e assinatura digital com certificado (tipo gov.br). Para a maior
+      parte dos casos isso basta; se um dia precisar de valor juridico
+      pleno, da para evoluir.
+
+    - Nao envia lembrete de consulta por WhatsApp nem e-mail.
+
+
+-------------------------------------------------------------------------------
+  UMA DECISAO QUE PRECISA SER TOMADA
+-------------------------------------------------------------------------------
+
+  O sistema hoje roda no plano gratuito do servico que guarda os dados.
+
+  Esse plano tem uma regra: se o sistema ficar cerca de 7 dias sem ninguem
+  usar, ele e "adormecido" automaticamente e para de funcionar ate alguem
+  reativar manualmente. Isso ja aconteceu duas vezes em um mes.
+
+  Na pratica: numa segunda-feira de manha, com paciente na cadeira, o
+  sistema pode estar fora do ar.
+
+  Alem disso, o plano gratuito nao faz copia de seguranca dos dados - e
+  prontuario precisa ser guardado por 20 anos por lei.
+
+  O plano pago custa cerca de US$ 25 por mes (algo em torno de R$ 140) e
+  resolve os dois problemas: nunca adormece e faz backup diario.
+
+  Essa e a unica coisa que ainda impede usar o sistema com paciente de
+  verdade no dia a dia.
+
+
+-------------------------------------------------------------------------------
+  COMO ACESSAR
+-------------------------------------------------------------------------------
+
+  Endereco:  https://joyce-podologa.beyondbits2.workers.dev
+
+  Abre em qualquer navegador - celular, tablet ou computador. Nao precisa
+  instalar nada, nao ocupa espaco no aparelho e atualiza sozinho.
+
+  No celular, da para adicionar um atalho na tela inicial pelo menu do
+  navegador ("Adicionar a tela de inicio"), e ele passa a abrir como se
+  fosse um aplicativo.
+
+
+-------------------------------------------------------------------------------
+  EM RESUMO
+-------------------------------------------------------------------------------
+
+  O sistema esta pronto e testado. Foram verificadas 28 situacoes diferentes
+  direto no banco de dados - incluindo se ele recusa corretamente o que deve
+  recusar (CPF invalido, horario duplo, foto sem autorizacao, alteracao de
+  registro ja assinado). Todas passaram.
+
+  Falta so a decisao sobre o plano pago para ele poder ser usado com
+  tranquilidade no atendimento do dia a dia.
+
+===============================================================================

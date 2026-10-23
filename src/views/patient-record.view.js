@@ -61,13 +61,13 @@ export function viewFichaPaciente({ params, navegar, podeVerProntuario, ehAdmin,
       h('span', { class: 'avatar avatar--g' }, paciente.initials || iniciais(paciente.full_name)),
       h(
         'div',
-        { style: { display: 'flex', flexDirection: 'column', gap: '3px', flex: '1', minWidth: '0' } },
+        { class: 'ficha__identidade' },
         h('h1', null, paciente.full_name),
         h('span', { class: 'lista__meta' }, meta)
       ),
       h(
         'div',
-        { style: { display: 'flex', gap: 'var(--esp-2)', flexWrap: 'wrap' } },
+        { class: 'ficha__acoes' },
         h(
           'button',
           {

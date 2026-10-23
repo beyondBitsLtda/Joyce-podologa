@@ -229,6 +229,34 @@
   align-items: center;
 }
 
+.ficha__identidade {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  /* 180px impede que o bloco do nome seja espremido até virar uma coluna de
+     uma palavra quando os botões disputam a mesma linha. */
+  min-width: 180px;
+}
+
+.ficha__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+/* No celular não cabem nome e botões lado a lado: as ações ocupam a linha
+   inteira, abaixo da identidade. */
+@media (width < 700px) {
+  .ficha__acoes {
+    flex-basis: 100%;
+  }
+
+  .ficha__acoes .btn {
+    flex: 1;
+  }
+}
+
 .abas {
   display: flex;
   gap: var(--esp-2);

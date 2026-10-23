@@ -104,10 +104,17 @@ function avaliarCirculacao(answers, lado) {
     achados++;
   }
 
-  // Relato de problema circulatório aparece no texto como contexto, mas não
-  // conta como achado: é o que o paciente diz, não o que o exame mediu. Quem
-  // fecha DAP são os pulsos, o enchimento capilar e a claudicação.
-  if (answers.circ === 'S') motivos.push('histórico de problemas circulatórios');
+  // Relato de problema circulatório é contexto, não achado: é o que o paciente
+  // diz, não o que o exame mediu. Quem fecha DAP são os pulsos, o enchimento
+  // capilar e a claudicação.
+  //
+  // Só entra na lista quando já há algum achado NESTE pé. Sozinho, num pé sem
+  // alteração nenhuma, ele aparecia como único motivo embaixo de "grau 0" — e
+  // motivo listado sob grau zero se lê como se tivesse causado o grau. O
+  // histórico é bilateral; atribuí-lo a um pé específico seria impreciso.
+  if (answers.circ === 'S' && achados > 0) {
+    motivos.push('histórico de problemas circulatórios');
+  }
 
   return { motivos, achados };
 }

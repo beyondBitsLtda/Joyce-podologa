@@ -195,3 +195,20 @@ test('não quebra com answers nulo', () => {
   assert.doesNotThrow(() => rastrearRisco(undefined));
   assert.doesNotThrow(() => resumoDoRisco(undefined));
 });
+
+test('histórico circulatório não aparece como motivo em pé sem achado', () => {
+  // Motivo listado embaixo de "grau 0" se lê como se tivesse causado o grau.
+  // O histórico é bilateral e só faz sentido ao lado de um achado real.
+  const r = rastrearRisco({ circ: 'S', tibial_e: 'Presente', pedioso_e: 'Presente' });
+
+  assert.equal(r.esquerdo.grau, 0);
+  assert.deepEqual(r.esquerdo.motivos, [], 'grau 0 não deve listar motivo');
+});
+
+test('histórico circulatório acompanha um achado real', () => {
+  const r = rastrearRisco({ circ: 'S', tibial_d: 'Ausente' });
+
+  assert.equal(r.direito.grau, 1);
+  assert.ok(r.direito.motivos.some((m) => m.includes('pulso tibial')));
+  assert.ok(r.direito.motivos.some((m) => m.includes('histórico')));
+});

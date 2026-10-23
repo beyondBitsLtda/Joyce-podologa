@@ -166,6 +166,14 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
         if (!pacienteId) {
           const novo = await pacientesRepo.criar(paciente);
           pacienteId = novo.id;
+
+          // Grava o id NA HORA, antes de qualquer outra chamada de rede.
+          //
+          // Sem isto, uma falha no passo seguinte (rede instável, servidor
+          // fora) deixava o paciente criado no banco mas o id só na memória:
+          // ao recarregar, o rascunho local ainda dizia "sem paciente" e um
+          // segundo cadastro idêntico era criado.
+          rascunhoLocal.salvar({ anamneseId, pacienteId, form, etapa });
         }
 
         const ficha = await anamnesesRepo.iniciar({
@@ -173,6 +181,7 @@ export function viewWizard({ params, query, navegar, perfil, mostrarToast }) {
           professionalId: perfil.id,
         });
         anamneseId = ficha.id;
+        rascunhoLocal.salvar({ anamneseId, pacienteId, form, etapa });
 
         // Troca a URL /ficha/nova por /ficha/<id> sem recarregar, para que um
         // F5 no meio do atendimento volte para a mesma ficha.

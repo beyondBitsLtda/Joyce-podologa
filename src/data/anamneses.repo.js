@@ -116,7 +116,19 @@ export async function concluir(id, form, patientId) {
     await pacientes.atualizar(patientId, paciente);
   }
 
-  const assinada = Boolean(form.assinatura);
+  // `signed_at` NÃO entra aqui.
+  //
+  // Quem o grava é salvarAssinatura(), na etapa 5, no instante em que o
+  // paciente assina. Regravar na conclusão sobrescrevia aquele horário pelo
+  // da etapa 10 — o registro passava a dizer que a assinatura foi colhida
+  // minutos depois do que de fato foi. E, pior, uma ficha reaberta sem o
+  // campo `assinatura` nas respostas zerava `signed_at`, deixando um
+  // `signature_path` apontando para uma assinatura real num registro que se
+  // declarava não assinado.
+  //
+  // Menor de idade segue a mesma derivação de separarFormulario: a data de
+  // nascimento manda, e o campo manual só decide quando não há data.
+  const menor = paciente.is_minor ?? form.menor === 'S';
 
   return desembrulhar(
     await supabase
@@ -125,8 +137,7 @@ export async function concluir(id, form, patientId) {
         answers,
         status: 'concluida',
         photo_consent: form.foto === 'S' ? true : form.foto === 'N' ? false : null,
-        guardian_name: form.menor === 'S' ? form.menor_spec || null : null,
-        signed_at: assinada ? new Date().toISOString() : null,
+        guardian_name: menor ? form.menor_spec?.trim() || null : null,
       })
       .eq('id', id)
       .select(CAMPOS)

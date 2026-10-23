@@ -1,9 +1,9 @@
 /**
  * Ponto de entrada.
  *
- * Só carrega estilos, encontra o container e delega para app.js. Manter este
- * arquivo mínimo facilita diagnosticar falha de configuração — se o app não
- * sobe, o erro aparece aqui com a mensagem certa.
+ * Carrega estilos, encontra o container, delega para app.js e retira a tela de
+ * carregamento. Manter este arquivo mínimo facilita diagnosticar falha de
+ * configuração — se o app não sobe, o erro aparece aqui com a mensagem certa.
  */
 
 import './styles/index.css';
@@ -11,7 +11,35 @@ import { iniciarApp } from './app.js';
 
 const raiz = document.getElementById('app');
 
-iniciarApp(raiz).catch(mostrarFalhaDeBoot);
+iniciarApp(raiz).then(fecharSplash).catch(mostrarFalhaDeBoot);
+
+/**
+ * Retira a tela de carregamento.
+ *
+ * Em dois tempos: primeiro o fade (classe `hidden` com opacity 0, mantendo o
+ * elemento no fluxo), depois a remoção do DOM. Remover de uma vez cortaria a
+ * transição e produziria um salto.
+ *
+ * Também há um piso de tempo: numa conexão rápida o app sobe em ~120 ms, e a
+ * marca apareceria como um flash. Meio segundo é o mínimo para a tela ser
+ * lida como intencional em vez de defeito.
+ */
+function fecharSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+
+  const MINIMO = 520;
+  const decorrido = performance.now();
+  const esperar = Math.max(0, MINIMO - decorrido);
+
+  setTimeout(() => {
+    splash.hidden = true;
+    splash.addEventListener('transitionend', () => splash.remove(), { once: true });
+    // Rede de segurança: se a transição não disparar (aba em segundo plano,
+    // movimento reduzido), o elemento sai mesmo assim.
+    setTimeout(() => splash.remove(), 800);
+  }, esperar);
+}
 
 /**
  * Tela de falha no boot.
@@ -22,8 +50,9 @@ iniciarApp(raiz).catch(mostrarFalhaDeBoot);
  * oferecer recarregar poupa um chamado.
  */
 function mostrarFalhaDeBoot(erro) {
-  console.error('[joyce-podologa] falha ao iniciar:', erro);
+  console.error('[podaris] falha ao iniciar:', erro);
 
+  document.getElementById('splash')?.remove();
   raiz.removeAttribute('aria-busy');
   raiz.textContent = '';
 

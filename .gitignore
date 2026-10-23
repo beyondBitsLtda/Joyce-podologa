@@ -29,5 +29,9 @@ desktop.ini
 *.log
 npm-debug.log*
 
+# Arte original da marca. O arquivo processado (public/podaris-marca.png) é
+# que o sistema usa; este fica fora do repositório por ser 1,2 MB.
+logo.png
+
 # Documentos que não pertencem a este projeto
 Proposta_Comercial_Amparar_v2.docx

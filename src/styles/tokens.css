@@ -11,8 +11,11 @@
 
 :root {
   /* --- Marca --------------------------------------------------------------- */
-  --verde: #3f6b52;
-  --verde-escuro: #2f5240;
+  /* Paleta oficial do manual (docs/Podaris brand manual.pdf):
+       #F6F7F3  off-white   #3F7A57  verde   #13291E  verde noite
+     As três passam em AA sobre as combinações que o sistema usa. */
+  --verde: #3f7a57;
+  --verde-escuro: #2f5c42;
   --verde-claro: #eaf1ec;
   --verde-borda: #c9d6cd;
   --verde-fundo-sutil: #f4f8f5;
@@ -20,26 +23,28 @@
   /* Verdes profundos, para superfícies escuras. A barra lateral usa este
      intervalo: escura o bastante para contrastar com o conteúdo claro, sem
      virar preto — a marca continua legível. */
-  --verde-profundo: #1b3326;
-  --verde-profundo-2: #16281e;
-  --verde-noite: #0e1a14;
+  --verde-profundo: #1d3b2a;
+  --verde-profundo-2: #182f22;
+  /* Cor oficial da marca para superfícies escuras e para o texto do logotipo. */
+  --verde-noite: #13291e;
 
   /* Verde claro do gradiente dos botões. O valor é o mais claro que ainda
      mantém texto branco em 4,5:1 (AA para texto normal): #4e8c66 ficava em
      3,99:1 e seria uma regressão frente ao botão sólido anterior, que tinha
      6,11:1. Botão é o elemento mais clicado — não é lugar de ceder contraste.
      Verificar com qualquer medidor de contraste ao alterar. */
-  --verde-vivo: #427d58;
+  --verde-vivo: #4a8a63;
   --verde-brilho: #6fae84;
 
   /* --- Superfícies --------------------------------------------------------- */
-  --fundo-app: #ededE8;
-  --fundo-painel: #f7f7f4;
+  /* Off-white da marca. Substitui o cinza-esverdeado anterior. */
+  --fundo-app: #ecede7;
+  --fundo-painel: #f6f7f3;
   --superficie: #ffffff;
   --superficie-2: #f2f3ef;
 
   /* --- Texto --------------------------------------------------------------- */
-  --texto: #16201a;
+  --texto: #13291e;
   --texto-forte: #2f3a34;
   --texto-medio: #4c574f;
   --texto-suave: #5c665e;

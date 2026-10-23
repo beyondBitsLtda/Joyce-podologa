@@ -101,6 +101,58 @@
   opacity: 0.55;
 }
 
+/* --- Marca ---------------------------------------------------------------- */
+
+.marca {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* O símbolo é uma máscara: o PNG fornece só o recorte (canal alpha) e a cor
+   vem de currentColor. Um arquivo serve aos dois temas, e a marca acompanha a
+   cor do contexto sem precisar de versão clara e escura. */
+.marca__simbolo {
+  flex: none;
+  background: currentColor;
+  mask: url('/podaris-marca.png') center / contain no-repeat;
+  -webkit-mask: url('/podaris-marca.png') center / contain no-repeat;
+}
+
+.marca--escuro {
+  color: var(--verde-noite);
+}
+
+.marca--claro {
+  color: #fff;
+}
+
+.marca__texto {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.marca__nome {
+  color: currentColor;
+  font-size: 19px;
+  font-weight: 600;
+  /* "espaçamento reduzido", conforme o manual. */
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.marca__assinatura {
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--texto-apagado);
+}
+
+.marca--claro .marca__assinatura {
+  color: rgb(255 255 255 / 55%);
+}
+
 /* --- Cartões -------------------------------------------------------------- */
 
 .cartao {

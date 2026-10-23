@@ -10,6 +10,7 @@
 import { h } from '../lib/dom.js';
 import { iconeInicio, iconeAgenda, iconePacientes } from './icons.js';
 import { iniciais } from '../lib/format.js';
+import { marca } from './logo.js';
 import { config } from '../config.js';
 import { NOME_DO_PAPEL } from '../data/auth.repo.js';
 
@@ -31,11 +32,17 @@ export function sidebar({ rotaAtual, perfil, navegar, novaFicha }) {
     'nav',
     { class: 'sidebar', 'aria-label': 'Navegação principal' },
 
+    // A marca do produto no topo; a clínica que usa o sistema vira linha de
+    // apoio. Antes era o contrário, de quando o sistema não tinha nome.
     h(
       'div',
       { class: 'sidebar__marca' },
-      h('span', { class: 'sidebar__logo', 'aria-hidden': 'true' }, 'P'),
-      h('span', { class: 'sidebar__nome' }, config.clinica.nome)
+      h(
+        'span',
+        { style: { display: 'flex', flexDirection: 'column' } },
+        marca({ tema: 'claro', tamanho: 30 }),
+        h('span', { class: 'sidebar__clinica' }, config.clinica.nome)
+      )
     ),
 
     h(

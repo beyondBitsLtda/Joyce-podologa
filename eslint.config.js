@@ -22,6 +22,7 @@ export default [
         Blob: 'readonly',
         Image: 'readonly',
         createImageBitmap: 'readonly',
+        performance: 'readonly',
       },
     },
     rules: {

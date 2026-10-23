@@ -23,6 +23,13 @@ export const config = {
     anonKey: obrigatoria('VITE_SUPABASE_ANON_KEY'),
   },
 
+  /** Nome do produto. Fixo: é a marca, não configuração de cliente. */
+  produto: {
+    nome: 'Podaris',
+    assinatura: 'sistema para podologia',
+  },
+
+  /** Nome da clínica que usa o sistema — este sim varia por instalação. */
   clinica: {
     nome: import.meta.env.VITE_CLINIC_NAME || 'Joyce Freitas Podologia',
   },

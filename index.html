@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#3F6B52" />
-    <meta name="description" content="Prontuário digital de podologia: anamnese, agenda e evolução clínica." />
+    <meta name="theme-color" content="#13291E" />
+    <meta name="description" content="Podaris — sistema para podologia: anamnese, agenda e evolução clínica." />
     <!-- Prontuário é dado sensível: não deve ser indexado nem pré-visualizado. -->
     <meta name="robots" content="noindex, nofollow" />
-    <title>Joyce Freitas Podologia — Prontuário</title>
+    <title>Podaris — sistema para podologia</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,10 +17,157 @@
       rel="stylesheet"
     />
 
+    <!--
+      Tela de carregamento embutida no HTML, e não no JavaScript.
+
+      Esta é a razão: o navegador pinta isto no primeiro frame, antes de baixar
+      o bundle e antes do Supabase responder. Se ela vivesse no app, o usuário
+      veria fundo branco justamente durante a espera que ela existe para cobrir
+      — que no celular da clínica, em 4G, é onde mais pesa.
+
+      Estilos inline pelo mesmo motivo: esperar o CSS externo recriaria o
+      flash. São poucas linhas e saem da tela em menos de um segundo.
+
+      O gradiente, a textura de listras e o brilho radial vêm do manual
+      (docs/Podaris brand manual.pdf).
+    -->
+    <style>
+      #splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        background: #13291e;
+        opacity: 1;
+        transition: opacity 420ms ease;
+      }
+
+      /* Listras verticais com brilho radial — a textura da marca. */
+      #splash::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        background:
+          radial-gradient(60% 50% at 50% 42%, rgb(126 190 150 / 28%) 0%, transparent 70%),
+          repeating-linear-gradient(
+            90deg,
+            rgb(255 255 255 / 5%) 0 2px,
+            transparent 2px 9px
+          );
+      }
+
+      #splash[hidden] {
+        display: flex !important;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .splash__marca {
+        position: relative;
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        /* Entrada curta: a tela some rápido, animação longa só atrasaria. */
+        animation: splash-entra 520ms cubic-bezier(0.2, 0, 0.2, 1) both;
+      }
+
+      .splash__simbolo {
+        width: 50px;
+        height: 50px;
+        background: #fff;
+        mask: url('/podaris-marca.png') center / contain no-repeat;
+        -webkit-mask: url('/podaris-marca.png') center / contain no-repeat;
+      }
+
+      .splash__nome {
+        font-family: 'Poppins', system-ui, sans-serif;
+        font-size: 38px;
+        font-weight: 600;
+        letter-spacing: -0.035em;
+        color: #fff;
+      }
+
+      .splash__assinatura {
+        position: relative;
+        font-family: 'Poppins', system-ui, sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.01em;
+        color: rgb(255 255 255 / 55%);
+        animation: splash-entra 520ms cubic-bezier(0.2, 0, 0.2, 1) 120ms both;
+      }
+
+      /* Barra indeterminada: não sabemos quanto falta, então ela não finge
+         saber — percorre de ponta a ponta em laço. */
+      .splash__barra {
+        position: relative;
+        width: 148px;
+        height: 3px;
+        overflow: hidden;
+        background: rgb(255 255 255 / 12%);
+        border-radius: 2px;
+      }
+
+      .splash__barra::after {
+        position: absolute;
+        inset: 0;
+        width: 40%;
+        content: '';
+        background: linear-gradient(90deg, transparent, #7ebe96, transparent);
+        border-radius: 2px;
+        animation: splash-corre 1250ms ease-in-out infinite;
+      }
+
+      @keyframes splash-entra {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @keyframes splash-corre {
+        from { transform: translateX(-100%); }
+        to   { transform: translateX(350%); }
+      }
+
+      /* Sem animação para quem pediu menos movimento no sistema. */
+      @media (prefers-reduced-motion: reduce) {
+        .splash__marca,
+        .splash__assinatura,
+        .splash__barra::after {
+          animation: none;
+        }
+        .splash__barra::after {
+          width: 100%;
+          background: #7ebe96;
+        }
+      }
+    </style>
+
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
+    <div id="splash" role="status" aria-live="polite">
+      <span class="splash__marca">
+        <!-- Marca original, recortada do logo.png para máscara alpha. -->
+        <span class="splash__simbolo" role="img" aria-label="Podaris"></span>
+        <span class="splash__nome">Podaris</span>
+      </span>
+
+      <span class="splash__assinatura">sistema para podologia</span>
+      <span class="splash__barra" aria-hidden="true"></span>
+      <span class="apenas-leitor">Carregando o sistema</span>
+    </div>
+
     <div id="app" aria-busy="true"></div>
+
     <noscript>
       Este sistema precisa de JavaScript habilitado para funcionar.
     </noscript>

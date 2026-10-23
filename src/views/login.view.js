@@ -8,6 +8,7 @@
 
 import { h, montar } from '../lib/dom.js';
 import { config } from '../config.js';
+import { marca } from '../components/logo.js';
 import * as auth from '../data/auth.repo.js';
 
 export function viewLogin({ navegar, mostrarToast }) {
@@ -102,7 +103,10 @@ export function viewLogin({ navegar, mostrarToast }) {
         h(
           'div',
           { class: 'login__marca' },
-          h('div', { class: 'login__logo', 'aria-hidden': 'true' }, 'P'),
+          // A marca entra como identidade do produto; o nome da clínica
+          // continua no título, porque é nele que a pessoa se reconhece ao
+          // entrar.
+          marca({ assinatura: true, tamanho: 44 }),
           h('h1', null, config.clinica.nome),
           h('p', { class: 'login__texto' }, 'Fichas de anamnese e evolução dos seus pacientes.')
         ),

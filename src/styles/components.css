@@ -13,30 +13,50 @@
   padding: 0 18px;
   font-size: var(--texto-base);
   font-weight: 500;
+  letter-spacing: -0.005em;
   border: none;
   border-radius: var(--raio-lg);
   transition:
     background var(--transicao),
-    border-color var(--transicao);
+    border-color var(--transicao),
+    box-shadow var(--transicao),
+    transform var(--transicao);
 }
 
 .btn--primario {
   color: var(--superficie);
-  background: var(--verde);
+  background: var(--grad-primario);
+  box-shadow: var(--sombra-verde);
 }
 
+/* Subir 1px no hover é o que faz o botão parecer um objeto, e não uma mancha
+   de cor. Com a sombra verde embaixo, é o que dá a sensação de "vivo". */
 .btn--primario:hover {
-  background: var(--verde-escuro);
+  box-shadow: var(--sombra-verde-forte);
+  transform: translateY(-1px);
+}
+
+.btn--primario:active {
+  box-shadow: var(--sombra-verde);
+  transform: translateY(0);
 }
 
 .btn--secundario {
   color: var(--texto-forte);
   background: var(--superficie);
   border: 1px solid var(--borda-campo);
+  box-shadow: var(--sombra-1);
 }
 
 .btn--secundario:hover {
+  color: var(--verde-escuro);
   border-color: var(--verde);
+  box-shadow: var(--sombra-2);
+  transform: translateY(-1px);
+}
+
+.btn--secundario:active {
+  transform: translateY(0);
 }
 
 .btn--texto {
@@ -84,9 +104,10 @@
 /* --- Cartões -------------------------------------------------------------- */
 
 .cartao {
-  background: var(--superficie);
+  background: var(--grad-superficie);
   border: 1px solid var(--borda);
   border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
 }
 
 .cartao--clicavel {
@@ -96,11 +117,16 @@
   width: 100%;
   padding: 15px var(--esp-4);
   text-align: left;
-  transition: border-color var(--transicao);
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao),
+    transform var(--transicao);
 }
 
 .cartao--clicavel:hover {
-  border-color: var(--verde);
+  border-color: var(--verde-borda);
+  box-shadow: var(--sombra-2);
+  transform: translateY(-2px);
 }
 
 .cartao-login {
@@ -122,8 +148,9 @@
   height: 40px;
   font-size: var(--texto-md);
   font-weight: 600;
-  color: var(--verde);
-  background: var(--verde-claro);
+  color: var(--verde-escuro);
+  background: linear-gradient(140deg, #e3efe7 0%, var(--verde-claro) 100%);
+  border: 1px solid rgb(63 107 82 / 10%);
   border-radius: 50%;
 }
 
@@ -143,10 +170,11 @@
 
 .etiqueta {
   flex: none;
-  padding: var(--esp-1) 9px;
+  padding: 5px 10px;
   font-size: var(--texto-xs);
-  font-weight: 500;
-  border-radius: var(--raio-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: var(--raio-pill);
 }
 
 .etiqueta--risco {
@@ -233,11 +261,16 @@
   border: 1px solid var(--borda-campo);
   border-radius: var(--raio-md);
   outline: none;
-  transition: border-color var(--transicao);
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao);
 }
 
+/* Anel de foco, em vez de só trocar a cor da borda: fica evidente onde o
+   cursor está numa tela cheia de campos. */
 .entrada:focus {
   border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgb(63 107 82 / 12%);
 }
 
 .entrada--area {
@@ -322,7 +355,8 @@
 }
 
 .simnao__btn--sim[aria-pressed='true'] {
-  background: var(--verde);
+  background: var(--grad-primario);
+  box-shadow: var(--sombra-verde);
 }
 
 .simnao__btn--nao[aria-pressed='true'] {
@@ -352,10 +386,16 @@
     border-color var(--transicao);
 }
 
+.chip:hover {
+  border-color: var(--verde-borda);
+  box-shadow: var(--sombra-1);
+}
+
 .chip[aria-pressed='true'] {
   color: var(--superficie);
-  background: var(--verde);
-  border-color: var(--verde);
+  background: var(--grad-primario);
+  border-color: transparent;
+  box-shadow: var(--sombra-verde);
 }
 
 /* --- Seletor (botão que abre a bottom-sheet) ------------------------------ */
@@ -577,9 +617,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--superficie);
+  background: var(--grad-superficie);
   border: 1px solid var(--borda);
-  border-radius: 18px;
+  border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
 }
 
 .lista__item {
@@ -605,10 +646,11 @@
 
 .lista__hora {
   flex: none;
-  width: 46px;
+  width: 50px;
   font-size: 14px;
   font-weight: 600;
   color: var(--verde);
+  font-variant-numeric: tabular-nums;
 }
 
 .lista__corpo {
@@ -641,20 +683,63 @@
 /* --- Cartão de número ----------------------------------------------------- */
 
 .metrica {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: var(--esp-4) 18px;
-  background: var(--superficie);
+  padding: 18px 20px;
+  overflow: hidden;
+  background: var(--grad-superficie);
   border: 1px solid var(--borda);
   border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
+  transition:
+    box-shadow var(--transicao),
+    transform var(--transicao);
+}
+
+.metrica:hover {
+  box-shadow: var(--sombra-2);
+  transform: translateY(-2px);
+}
+
+/* Fio de luz no topo: dá identidade ao cartão de número sem gastar área útil,
+   e é o que o distingue de uma caixa branca qualquer. */
+.metrica::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: var(--grad-primario);
+  opacity: 0.85;
+}
+
+/* O primeiro cartão é o número do dia. Ganha o tratamento escuro da
+   referência para a vista cair nele primeiro. */
+.grade-cartoes .metrica:first-child {
+  color: #fff;
+  background: var(--grad-escuro);
+  border-color: transparent;
+  box-shadow: var(--sombra-3);
+}
+
+.grade-cartoes .metrica:first-child .metrica__valor {
+  color: #fff;
+}
+
+.grade-cartoes .metrica:first-child .metrica__rotulo {
+  color: rgb(255 255 255 / 65%);
 }
 
 .metrica__valor {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
   color: var(--verde);
+  font-variant-numeric: tabular-nums;
 }
 
 .metrica__rotulo {

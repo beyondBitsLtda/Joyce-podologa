@@ -14,13 +14,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  font-size: 22px;
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--superficie);
-  background: var(--verde);
+  background: var(--grad-primario);
   border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-verde-forte);
 }
 
 .login__texto {
@@ -53,13 +54,17 @@
   width: 100%;
   padding: 18px;
   text-align: left;
-  background: var(--verde);
+  background: var(--grad-primario);
   border: none;
-  border-radius: 18px;
+  border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-verde-forte);
+  transition:
+    box-shadow var(--transicao),
+    transform var(--transicao);
 }
 
-.acao-destaque:hover {
-  background: var(--verde-escuro);
+.acao-destaque:active {
+  transform: scale(0.99);
 }
 
 .acao-destaque__icone {
@@ -133,9 +138,10 @@
   flex-direction: column;
   gap: var(--esp-3);
   padding: var(--esp-4) var(--esp-3);
-  background: var(--superficie);
+  background: var(--grad-superficie);
   border: 1px solid var(--borda);
-  border-radius: 18px;
+  border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
 }
 
 .calendario__mes {
@@ -174,9 +180,24 @@
   border-radius: var(--raio-md);
 }
 
+.calendario__dia {
+  transition:
+    background var(--transicao),
+    color var(--transicao);
+}
+
+.calendario__dia:hover {
+  background: var(--superficie-2);
+}
+
 .calendario__dia[aria-pressed='true'] {
-  color: var(--verde);
-  background: var(--verde-claro);
+  color: #fff;
+  background: var(--grad-primario);
+  box-shadow: var(--sombra-verde);
+}
+
+.calendario__dia[aria-pressed='true'] .calendario__dow {
+  color: rgb(255 255 255 / 70%);
 }
 
 .calendario__dow {
@@ -225,19 +246,28 @@
   border-radius: var(--raio-md);
 }
 
+.aba {
+  transition:
+    background var(--transicao),
+    color var(--transicao),
+    box-shadow var(--transicao);
+}
+
 .aba[aria-selected='true'] {
   color: var(--superficie);
-  background: var(--verde);
-  border-color: var(--verde);
+  background: var(--grad-primario);
+  border-color: transparent;
+  box-shadow: var(--sombra-verde);
 }
 
 .dados {
   display: flex;
   flex-direction: column;
   padding: 6px 18px;
-  background: var(--superficie);
+  background: var(--grad-superficie);
   border: 1px solid var(--borda);
   border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
 }
 
 .dados__linha {
@@ -269,9 +299,10 @@
   flex-direction: column;
   gap: var(--esp-2);
   padding: var(--esp-4) 18px;
-  background: var(--superficie);
+  background: var(--grad-superficie);
   border: 1px solid var(--borda);
   border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
 }
 
 .evolucao__cabecalho {
@@ -364,7 +395,7 @@
 }
 
 .wizard__segmento--feito {
-  background: var(--verde);
+  background: var(--grad-primario);
 }
 
 .wizard__titulo-etapa {
@@ -467,7 +498,8 @@
 
 .marcador--feito {
   color: var(--superficie);
-  background: var(--verde);
+  background: var(--grad-primario);
+  box-shadow: var(--sombra-verde);
 }
 
 /* Área do formulário */
@@ -889,10 +921,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 58px;
-  height: 58px;
-  background: var(--verde);
+  width: 62px;
+  height: 62px;
+  background: var(--grad-primario);
   border-radius: 50%;
+  box-shadow: var(--sombra-verde-forte);
 }
 
 .conclusao__texto {

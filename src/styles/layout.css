@@ -23,6 +23,17 @@
   background: var(--fundo-painel);
 }
 
+/* Botão "+ Nova ficha" dentro da barra lateral escura. */
+.sidebar .btn--primario {
+  background: var(--grad-primario);
+  box-shadow: var(--sombra-verde);
+}
+
+.sidebar .btn--primario:hover {
+  box-shadow: var(--sombra-verde-forte);
+  transform: translateY(-1px);
+}
+
 .conteudo {
   display: flex;
   flex-direction: column;
@@ -47,6 +58,9 @@
 
 /* --- Sidebar (desktop) ---------------------------------------------------- */
 
+/* Barra lateral escura contra conteúdo claro.
+   O contraste entre as duas superfícies é o que estrutura a tela — e mantém o
+   prontuário em fundo claro, que é onde a leitura acontece. */
 .sidebar {
   display: none; /* ativada na media query de desktop */
   flex: none;
@@ -54,8 +68,8 @@
   gap: 26px;
   width: var(--largura-sidebar);
   padding: 26px 18px;
-  background: var(--superficie);
-  border-right: 1px solid var(--borda);
+  background: var(--grad-sidebar);
+  border-right: none;
 }
 
 .sidebar__marca {
@@ -74,14 +88,16 @@
   font-size: 17px;
   font-weight: 600;
   color: var(--superficie);
-  background: var(--verde);
+  background: var(--grad-primario);
   border-radius: var(--raio-md);
+  box-shadow: var(--sombra-verde);
 }
 
 .sidebar__nome {
   font-size: var(--texto-base);
   font-weight: 600;
   line-height: 1.25;
+  color: #fff;
 }
 
 .sidebar__nav {
@@ -96,11 +112,29 @@
   align-items: center;
   padding: 10px;
   margin-top: auto;
-  background: var(--fundo-painel);
+  /* Branco translúcido em vez de cor fixa: funciona sobre qualquer ponto do
+     gradiente sem precisar de um token por posição. */
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 8%);
   border-radius: var(--raio-md);
 }
 
+.sidebar__rodape span {
+  color: #fff;
+}
+
+.sidebar__rodape span span:last-child {
+  color: rgb(255 255 255 / 55%);
+}
+
+/* O avatar precisa de fundo próprio para não sumir no escuro. */
+.sidebar .avatar {
+  color: var(--verde-brilho);
+  background: rgb(255 255 255 / 10%);
+}
+
 .nav-item {
+  position: relative;
   display: flex;
   gap: 11px;
   align-items: center;
@@ -109,21 +143,36 @@
   padding: 0 var(--esp-3);
   font-size: 14px;
   font-weight: 500;
-  color: var(--texto-suave);
+  color: rgb(255 255 255 / 62%);
   text-align: left;
   background: transparent;
   border: none;
   border-radius: var(--raio-md);
-  transition: background var(--transicao);
+  transition:
+    background var(--transicao),
+    color var(--transicao);
 }
 
 .nav-item:hover {
-  background: var(--superficie-2);
+  color: #fff;
+  background: rgb(255 255 255 / 8%);
 }
 
 .nav-item[aria-current='page'] {
-  color: var(--verde);
-  background: var(--verde-claro);
+  color: #fff;
+  background: rgb(255 255 255 / 12%);
+}
+
+/* Marcador na borda esquerda: diz onde você está mesmo de relance, sem
+   depender só da diferença de fundo. */
+.nav-item[aria-current='page']::before {
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 18px;
+  content: '';
+  background: var(--verde-brilho);
+  border-radius: 0 2px 2px 0;
 }
 
 /* --- Barra inferior (mobile) ---------------------------------------------- */
@@ -132,8 +181,12 @@
   display: flex;
   flex: none;
   padding: var(--esp-2) var(--esp-3) calc(var(--esp-2) + env(safe-area-inset-bottom));
-  background: var(--superficie);
+  background: rgb(255 255 255 / 88%);
+  /* Vidro fosco: a lista continua insinuada por trás da barra, o que ajuda a
+     perceber que há mais conteúdo abaixo. */
+  backdrop-filter: blur(12px);
   border-top: 1px solid var(--borda);
+  box-shadow: 0 -2px 16px rgb(17 28 21 / 5%);
 }
 
 .tabbar__item {
@@ -151,8 +204,16 @@
   border: none;
 }
 
+.tabbar__item {
+  border-radius: var(--raio-md);
+  transition:
+    color var(--transicao),
+    background var(--transicao);
+}
+
 .tabbar__item[aria-current='page'] {
   color: var(--verde);
+  background: var(--verde-claro);
 }
 
 /* --- Cabeçalho de página -------------------------------------------------- */
@@ -173,7 +234,8 @@
 
 .saudacao__linha {
   font-size: var(--texto-md);
-  color: var(--texto-secundario);
+  font-weight: 500;
+  color: var(--verde);
 }
 
 /* --- Grades reaproveitadas ------------------------------------------------ */

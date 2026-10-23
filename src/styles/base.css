@@ -23,6 +23,22 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Número em tabela ou métrica não deve "dançar" ao atualizar: dígitos de
+   largura fixa mantêm a coluna estável. */
+.metrica__valor,
+.lista__hora,
+.dados__valor {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Número em tabela ou métrica não deve "dançar" ao atualizar: dígitos de
+   largura fixa mantêm a coluna estável. */
+.metrica__valor,
+.lista__hora,
+.dados__valor {
+  font-variant-numeric: tabular-nums;
+}
+
 #app {
   min-height: 100%;
 }
@@ -37,8 +53,10 @@ p {
 h1 {
   font-size: var(--texto-2xl);
   font-weight: 600;
-  line-height: 1.22;
-  letter-spacing: -0.01em;
+  line-height: 1.18;
+  /* Tracking mais fechado em título grande: o padrão da Poppins deixa as
+     letras soltas demais acima de 23px. */
+  letter-spacing: -0.025em;
   text-wrap: pretty;
 }
 

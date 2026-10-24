@@ -3,11 +3,23 @@
 -- =============================================================================
 -- Onde rodar: Supabase → SQL Editor.
 --
--- ANTES:  rode conferir-dados-de-teste.sql e confira a lista de nomes.
---         Se ele listar arquivos em "3 apagar no Storage", apague-os primeiro
---         pelo painel (Storage → prontuario → a pasta com o id → Delete).
+-- O FLUXO, E POR QUE ELE É ASSIM:
+--
+--   1. conferir-dados-de-teste.sql procura POR NOME e devolve os ids.
+--   2. Você olha a lista e reconhece cada paciente.
+--   3. Cola os ids aqui. Este script apaga POR ID, não por nome.
+--
+-- A troca de nome por id no meio do caminho é de propósito. Nome é bom para
+-- procurar e péssimo para apagar: no dia em que existir uma paciente de
+-- verdade chamada Mariana, um script que casa por nome a levaria junto, em
+-- silêncio. Id não tem como ser ambíguo, e passou pelos seus olhos.
+--
+-- ANTES:  se o conferir listou arquivos em "3 apagar no Storage", apague-os
+--         primeiro pelo painel: Storage → prontuario → a pasta com o id do
+--         paciente → Delete. É uma pasta por paciente.
 --         O Supabase não deixa apagar arquivo por SQL, e apagar só o registro
---         deixaria o binário órfão no bucket.
+--         deixaria o binário órfão no bucket — pago, invisível e contendo
+--         dado de saúde.
 --
 -- DEPOIS: rode conferir-dados-de-teste.sql de novo. Ele tem que dizer
 --         "(nenhum paciente com esses nomes)". É essa a confirmação — o editor
@@ -19,7 +31,7 @@
 -- -----------------------------------------------------------------------------
 -- POR QUE UM BLOCO DO, E NÃO UM SCRIPT COM VÁRIOS COMANDOS
 -- -----------------------------------------------------------------------------
--- A versão anterior guardava a lista de alvos em tabelas temporárias, entre um
+-- A primeira versão guardava a lista de alvos em tabelas temporárias, entre um
 -- comando e outro, e falhava com:
 --
 --     ERROR: 42P01: relation "alvo" does not exist
@@ -38,29 +50,37 @@
 
 do $$
 declare
-  -- Ajuste esta lista. Precisa ser IGUAL à de conferir-dados-de-teste.sql.
-  v_nomes text[] := array[
-    'joana',
-    'mariana',
-    'teste'
-  ];
+  -- Os ids saem da coluna `id_ou_pasta` do conferir-dados-de-teste.sql.
+  -- Troque por outros quando for limpar outra coisa.
+  v_ids uuid[] := array[
+    'bd134e00-2af5-48f2-9c6f-18b76e7ac081',  -- joana
+    '3719e4ee-5d27-4464-b833-3dc02340c776',  -- mariana
+    'ba1b5199-e60d-471f-9725-d74290f3208b'   -- teste
+  ]::uuid[];
 
-  v_ids     uuid[];   -- para comparar com as colunas patient_id
-  v_ids_txt text[];   -- para comparar com audit_log.record_id, que é texto
+  v_ids_txt text[];   -- audit_log.record_id é texto, não uuid
+  v_achados int;
   v_n       int;
   v_total   int := 0;
 begin
-  select array_agg(id), array_agg(id::text)
-    into v_ids, v_ids_txt
-  from public.patients
-  where lower(btrim(full_name)) = any (v_nomes);
+  -- Id que não existe mais é sinal de que o script já rodou, ou de que foi
+  -- colado errado. Nos dois casos é melhor parar e avisar do que apagar
+  -- metade em silêncio.
+  select count(*) into v_achados from public.patients where id = any (v_ids);
 
-  if v_ids is null then
-    raise notice 'Nenhum paciente com esses nomes. Nada foi alterado.';
+  if v_achados = 0 then
+    raise notice 'Nenhum destes ids existe. Nada foi alterado.';
     return;
   end if;
 
-  raise notice 'Apagando % paciente(s).', array_length(v_ids, 1);
+  if v_achados <> array_length(v_ids, 1) then
+    raise exception 'Esperava % paciente(s), encontrei %. Confira a lista de ids e rode de novo.',
+      array_length(v_ids, 1), v_achados;
+  end if;
+
+  select array_agg(x::text) into v_ids_txt from unnest(v_ids) as x;
+
+  raise notice 'Apagando % paciente(s).', v_achados;
 
   -- ---------------------------------------------------------------------------
   -- 1. A trilha de auditoria destes registros

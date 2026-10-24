@@ -1080,3 +1080,200 @@
   user-select: all;
   word-break: break-all;
 }
+
+/* --- Manual de uso -------------------------------------------------------- */
+
+.manual__grade {
+  display: grid;
+  gap: var(--esp-4);
+  align-items: start;
+}
+
+@media (width >= 900px) {
+  /* Índice fixo à esquerda: o manual é longo, e perder o lugar depois de rolar
+     três telas é o que faz ninguém voltar a abrir um manual. */
+  .manual__grade {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: var(--esp-5);
+  }
+
+  .manual__indice {
+    position: sticky;
+    top: var(--esp-4);
+  }
+}
+
+.manual__indice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--esp-2);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-1);
+}
+
+.manual__link {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 11px;
+  font-size: 13.5px;
+  line-height: 1.3;
+  color: var(--texto-medio);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--raio-md);
+  cursor: pointer;
+  transition: background var(--transicao), color var(--transicao);
+}
+
+.manual__link:hover {
+  background: var(--verde-fundo-sutil);
+}
+
+.manual__link--atual {
+  font-weight: 600;
+  color: var(--verde-escuro);
+  background: var(--verde-claro);
+}
+
+.manual__numero {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-secundario);
+  background: var(--superficie-2);
+  border-radius: 50%;
+}
+
+.manual__link--atual .manual__numero {
+  color: #fff;
+  background: var(--verde);
+}
+
+.manual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding: var(--esp-5) var(--esp-4);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-xl);
+  box-shadow: var(--sombra-1);
+  scroll-margin-top: var(--esp-3);
+}
+
+.manual__passo {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--verde);
+  text-transform: uppercase;
+}
+
+.manual__titulo {
+  margin: 0 0 var(--esp-2);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.manual__texto {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--texto-medio);
+}
+
+.manual__lista,
+.manual__passos {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--texto-medio);
+}
+
+.manual__lista li,
+.manual__passos li {
+  margin-bottom: 7px;
+}
+
+.manual__passos {
+  /* Números maiores: é uma sequência para seguir com o paciente na cadeira,
+     não um texto para ler em casa. */
+  padding-left: 26px;
+  font-weight: 500;
+}
+
+.manual__passos li::marker {
+  font-weight: 700;
+  color: var(--verde);
+}
+
+.manual__nota,
+.manual__atencao {
+  margin: var(--esp-1) 0;
+  padding: 13px 16px;
+  font-size: 15px;
+  line-height: 1.55;
+  border-radius: var(--raio-md);
+}
+
+.manual__nota {
+  color: var(--texto-medio);
+  background: var(--verde-fundo-sutil);
+  border-left: 4px solid var(--verde);
+}
+
+.manual__atencao {
+  color: var(--alerta-texto-forte);
+  background: var(--alerta-fundo);
+  border-left: 4px solid var(--alerta-borda);
+}
+
+.manual__figura {
+  margin: var(--esp-2) 0;
+}
+
+.manual__figura img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--superficie-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-md);
+}
+
+/* A captura do celular é alta e estreita: em largura total ficaria gigante. */
+.manual__figura--estreita img {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.manual__figura figcaption {
+  margin-top: 7px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--texto-secundario);
+  text-align: center;
+}
+
+.manual__navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  justify-content: space-between;
+  margin-top: var(--esp-3);
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--divisoria);
+}

@@ -122,6 +122,12 @@ export function viewLogin({ navegar, mostrarToast }) {
             { type: 'button', class: 'btn btn--link', onclick: recuperarSenha },
             'Esqueci minha senha'
           )
+        ),
+
+        h(
+          'p',
+          { class: 'assinatura-fabricante' },
+          `${config.produto.nome} · desenvolvido por ${config.produto.fabricante}`
         )
       )
     )

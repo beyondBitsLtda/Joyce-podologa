@@ -1,0 +1,398 @@
+============================================================================
+PODARIS — MANUAL DE USO
+Sistema de prontuário para clínicas de podologia
+============================================================================
+
+Este manual explica como usar o sistema no dia a dia. Não é preciso saber
+nada de informática para acompanhar: cada parte descreve uma tela e o que
+fazer nela.
+
+A versão ilustrada, com as imagens de cada tela, está dentro do próprio
+sistema, no item Manual do menu.
+
+Gerado em 24/10/2026. Desenvolvido por Beyond Bits.
+
+----------------------------------------------------------------------------
+O QUE TEM AQUI
+----------------------------------------------------------------------------
+
+   1. O que é o Podaris
+   2. Entrar no sistema
+   3. A tela inicial
+   4. Pacientes: achar e cadastrar
+   5. A agenda
+   6. A ficha do paciente
+   7. A anamnese, em 10 etapas
+   8. O rastreio de pé de risco
+   9. Termo e assinatura
+  10. A evolução de cada sessão
+  11. Fotos, exames e documentos
+  12. A equipe e os acessos
+  13. Instalar no celular
+  14. Quando alguma coisa dá errado
+
+
+============================================================================
+1. O QUE É O PODARIS
+============================================================================
+
+O Podaris guarda, num lugar só, tudo o que antes ficava espalhado entre a
+agenda de papel, a ficha na pasta e a memória de quem atendeu: o cadastro do
+paciente, os horários marcados, a avaliação completa dos pés, o registro de
+cada sessão e as fotos e exames.
+
+Funciona no navegador. Não precisa instalar nada para usar, e abre do
+computador da recepção ou do celular na sala de atendimento — o mesmo
+sistema, com os mesmos dados, nos dois.
+
+  . Tudo que você grava fica salvo na hora, no servidor. Não existe "salvar
+    o arquivo".
+  . Cada pessoa da equipe entra com o próprio e-mail e senha.
+  . O que cada uma pode ver depende do perfil dela: a secretária marca
+    horário, mas não abre prontuário.
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  Este manual mostra telas com pacientes INVENTADOS. Nenhum dado de paciente
+  de verdade aparece aqui.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+2. ENTRAR NO SISTEMA
+============================================================================
+
+  [ imagem: A tela de entrada. ]
+
+  1. Abra o endereço do sistema no navegador.
+  2. Digite seu e-mail e sua senha.
+  3. Toque em Entrar.
+
+Esqueceu a senha? Toque em "Esqueci minha senha", digite seu e-mail e
+confira a caixa de entrada. Chega um link para você escolher uma senha nova.
+Se não chegar em alguns minutos, veja também a caixa de spam.
+
+  --------------------------------------------------------------------------
+  ATENÇÃO
+  Não existe autocadastro: ninguém cria a própria conta. Quem dá acesso a
+  uma pessoa nova é a administradora da clínica, pela tela Equipe. Isso é de
+  propósito — o sistema guarda dado de saúde, e quem entra tem que ser
+  decidido por alguém.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+3. A TELA INICIAL
+============================================================================
+
+  [ imagem: O resumo do dia, logo ao entrar. ]
+
+É a primeira coisa que aparece. Em cima, quatro números do dia; embaixo, os
+próximos atendimentos e os pacientes vistos recentemente.
+
+  . Atendimentos hoje — quantos horários estão marcados para hoje.
+  . Fichas pendentes — anamneses começadas e ainda não concluídas.
+  . Pacientes ativos — quantos pacientes estão cadastrados.
+  . Pés de risco em acompanhamento — quantos pacientes o sistema classificou
+    como pé de risco.
+
+Nenhum desses números é digitado por ninguém: todos saem do que já foi
+registrado. Tocar em qualquer nome da lista leva direto ao prontuário da
+pessoa.
+
+À esquerda fica o menu: Início, Agenda, Pacientes e, para quem é
+administradora, Equipe e Manual. No celular esse menu vira a barra de baixo.
+
+  [ imagem: A mesma tela no celular. O menu passa para a barra de baixo. ]
+
+
+============================================================================
+4. PACIENTES: ACHAR E CADASTRAR
+============================================================================
+
+  [ imagem: A lista de pacientes, com a busca em cima. ]
+
+A caixa de busca procura por nome, telefone ou número do prontuário — tudo
+na mesma caixa. Não precisa acertar acento nem maiúscula, e o telefone pode
+ser digitado só com os números.
+
+  [ imagem: O cadastro de um paciente novo. ]
+
+  1. Toque em "+ Novo paciente".
+  2. Preencha o nome completo e a data de nascimento. O resto é opcional e
+     pode ser completado depois.
+  3. Digitando o CEP, o endereço vem preenchido sozinho — confira e ajuste o
+     número.
+  4. Toque em Salvar.
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  Se a data de nascimento indicar menor de 18 anos, o sistema pede o nome do
+  responsável. Sem isso ele não deixa salvar — é quem assina os termos pelo
+  paciente.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+5. A AGENDA
+============================================================================
+
+  [ imagem: O calendário e os atendimentos do dia escolhido. ]
+
+Toque num dia do calendário para ver os atendimentos dele. Tocar num
+atendimento leva ao prontuário do paciente.
+
+  [ imagem: Marcando um horário. ]
+
+  1. Toque em "+ Novo agendamento".
+  2. Escolha o paciente, o serviço, o dia e a hora.
+  3. Toque em Salvar.
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  Dois atendimentos no mesmo horário com a mesma profissional são recusados.
+  Não é um aviso que dá para ignorar: o sistema simplesmente não grava, e
+  explica o porquê.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+6. A FICHA DO PACIENTE
+============================================================================
+
+  [ imagem: Tudo sobre um paciente, em quatro abas. ]
+
+É o prontuário completo de uma pessoa. No alto ficam o nome, a idade, o
+telefone e — o mais importante — as etiquetas de alerta.
+
+Diabetes, problemas circulatórios, alergia e pé de risco aparecem ali em
+toda visita. Não é um campo que alguém marcou: é leitura do que foi
+respondido na anamnese. Enquanto a resposta valer, o alerta fica.
+
+  . Resumo — os dados do cadastro e os alertas.
+  . Ficha — a anamnese mais recente, do jeito que foi respondida.
+  . Evolução — o histórico de todas as sessões, da mais nova para a mais
+    antiga.
+  . Arquivos — fotos, exames e documentos.
+
+
+============================================================================
+7. A ANAMNESE, EM 10 ETAPAS
+============================================================================
+
+A avaliação completa do paciente. São cerca de 110 perguntas, divididas em
+10 etapas curtas, para não virar um formulário gigante numa tela só.
+
+  [ imagem: Etapa 1: identificação. ]
+
+  1. Toque em "+ Nova ficha", no menu da esquerda.
+  2. Escolha o paciente, ou cadastre um na hora.
+  3. Responda etapa por etapa, tocando em Continuar.
+  4. Na última etapa, escreva o diagnóstico e a conduta e conclua.
+
+  [ imagem: Etapa 3: histórico de saúde. ]
+
+Pergunta que não se aplica não aparece. Quem responde "não tenho diabetes"
+nunca vê o campo do tipo de diabetes — a ficha encurta sozinha conforme você
+responde.
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  O que você digita é salvo sozinho, o tempo todo, no aparelho e no
+  servidor. Se a internet cair no meio da avaliação, nada do que já foi
+  preenchido se perde. Pode fechar e continuar depois: a ficha em aberto
+  aparece na tela inicial, com um botão de Continuar.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+8. O RASTREIO DE PÉ DE RISCO
+============================================================================
+
+  [ imagem: O sistema classifica cada pé e mostra por quê. ]
+
+Esta é a etapa que um caderno não substitui. Conforme você registra a
+sensibilidade, os pulsos, as deformidades e as lesões anteriores, o sistema
+vai somando os achados e classificando CADA PÉ separadamente, de grau 0 a
+grau 3.
+
+  . Grau 0 — risco muito baixo: sem perda de sensibilidade nem problema de
+    circulação.
+  . Grau 1 — risco baixo: perda de sensibilidade OU problema de circulação.
+  . Grau 2 — risco moderado: perda de sensibilidade com problema de
+    circulação, ou com deformidade.
+  . Grau 3 — risco alto: úlcera ou amputação anterior.
+
+Junto com o grau, o painel lista os motivos — quais achados levaram àquela
+classificação — e a frequência de reavaliação sugerida. É a escala
+internacional (IWGDF), a mesma usada nos consensos de pé diabético.
+
+  --------------------------------------------------------------------------
+  ATENÇÃO
+  Isto é apoio ao rastreio, não diagnóstico. Quem decide a conduta é sempre
+  a profissional. O que muda é que ela decide com a soma dos achados na
+  frente, em vez de precisar lembrar de tudo ao mesmo tempo.
+  --------------------------------------------------------------------------
+
+  [ imagem: A última etapa: diagnóstico podológico e conduta. ]
+
+
+============================================================================
+9. TERMO E ASSINATURA
+============================================================================
+
+  [ imagem: O termo, assinado com o dedo na tela. ]
+
+Uma das etapas da anamnese é o termo: veracidade das informações,
+autorização dos procedimentos e autorização de uso de imagem. O paciente lê
+e assina com o dedo, ali mesmo.
+
+A assinatura fica guardada junto do prontuário, com data e hora. Não é um
+papel que alguém precisa arquivar depois.
+
+  --------------------------------------------------------------------------
+  ATENÇÃO
+  Sem a autorização de imagem assinada, o sistema NÃO deixa anexar foto
+  daquele paciente. Os botões de foto ficam bloqueados, e explicam o motivo.
+  Se o paciente mudar de ideia, basta refazer o termo.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+10. A EVOLUÇÃO DE CADA SESSÃO
+============================================================================
+
+  [ imagem: Registrando o que foi feito na sessão. ]
+
+A anamnese é feita uma vez e revista de tempos em tempos. A evolução é o
+registro de CADA atendimento: o que você encontrou, o que fez e o que
+orientou.
+
+  1. Na ficha do paciente, vá na aba Evolução.
+  2. Toque em "+ Nova evolução".
+  3. Escolha a data e o serviço.
+  4. Descreva o atendimento. Se tiver medido, registre os sinais vitais.
+  5. Salve. Depois, quando estiver certo, toque em Assinar.
+
+  [ imagem: Uma evolução já assinada. ]
+
+  --------------------------------------------------------------------------
+  ATENÇÃO
+  Depois de assinada, a evolução NÃO pode mais ser alterada nem apagada —
+  nem por você, nem pela administradora. Se houver erro, registre uma
+  retificação: entra um registro novo apontando para o original, e os dois
+  ficam. É isso que separa um prontuário de um caderno de anotações.
+  --------------------------------------------------------------------------
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  Antes de assinar, dá para corrigir à vontade. Assine quando tiver certeza.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+11. FOTOS, EXAMES E DOCUMENTOS
+============================================================================
+
+  [ imagem: A galeria do paciente. ]
+
+Na aba Arquivos você anexa foto do antes e do depois, resultado de exame,
+encaminhamento — o que precisar. Cada arquivo fica preso ao paciente e,
+quando for o caso, à sessão em que foi feito.
+
+  1. Abra a ficha do paciente e vá na aba Arquivos.
+  2. Escolha o tipo: Foto antes, Foto depois, Exame/documento ou Outro
+     arquivo.
+  3. Tire a foto na hora com o celular, ou escolha um arquivo do aparelho.
+  4. Escreva uma legenda curta dizendo o que é.
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  Os arquivos não ficam num endereço público. Cada imagem abre por um
+  endereço temporário, gerado na hora para quem tem permissão — ninguém de
+  fora consegue ver, mesmo tendo o link antigo.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+12. A EQUIPE E OS ACESSOS
+============================================================================
+
+Esta tela aparece só para quem é administradora.
+
+  [ imagem: Quem tem acesso, e com qual perfil. ]
+
+  . Secretaria — cadastra pacientes e marca horários. Não abre prontuário
+    clínico.
+  . Podóloga — acesso clínico completo: anamnese, evolução e arquivos.
+  . Administradora — tudo, mais a gestão da equipe.
+
+  1. Toque em "+ Novo usuário".
+  2. Preencha nome, e-mail e escolha o perfil.
+  3. O sistema sugere uma senha provisória. Anote ANTES de fechar a tela.
+  4. Entregue e-mail e senha à pessoa, e peça que troque a senha no primeiro
+     acesso.
+
+  --------------------------------------------------------------------------
+  ATENÇÃO
+  A senha provisória aparece uma vez só. Ela não pode ser consultada depois,
+  nem por você — se perder, é preciso usar o "Esqueci minha senha".
+  --------------------------------------------------------------------------
+
+Quem sai da equipe deve ter o acesso DESLIGADO, não excluído. Assim a pessoa
+não entra mais, e as evoluções que ela assinou continuam com a assinatura
+dela — que é o que dá valor ao registro. Dá para religar depois.
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  O sistema não deixa rebaixar nem desligar a última administradora ativa.
+  Promova outra pessoa antes, senão a clínica ficaria sem ninguém capaz de
+  gerir acessos.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+13. INSTALAR NO CELULAR
+============================================================================
+
+Dá para colocar o Podaris na tela inicial do celular, como um aplicativo.
+Ele abre em tela cheia, sem a barra de endereço do navegador.
+
+  1. Android (Chrome): abra o sistema, toque nos três pontinhos e escolha
+     "Instalar aplicativo".
+  2. iPhone (Safari): abra o sistema, toque no botão de compartilhar e
+     escolha "Adicionar à Tela de Início".
+
+  --------------------------------------------------------------------------
+  OBSERVAÇÃO
+  Instalado, ele continua precisando de internet para funcionar — os dados
+  ficam no servidor, não no aparelho. Sem conexão, o sistema abre e avisa
+  que está sem internet.
+  --------------------------------------------------------------------------
+
+
+============================================================================
+14. QUANDO ALGUMA COISA DÁ ERRADO
+============================================================================
+
+  . "E-mail ou senha incorretos" — confira o e-mail e tente de novo.
+    Persistindo, use "Esqueci minha senha".
+  . "Sem conexão com o servidor" — é internet. O que você digitou na ficha
+    continua salvo no aparelho; tente de novo quando voltar.
+  . A tela não atualiza depois de uma mudança — puxe a página para baixo
+    para recarregar, ou feche e abra de novo.
+  . Um botão de foto está bloqueado — falta a autorização de imagem assinada
+    no termo daquele paciente.
+  . "Já existe atendimento marcado nesse horário" — escolha outro horário; o
+    sistema não permite dois no mesmo.
+  . Preciso corrigir uma evolução já assinada — não dá para alterar.
+    Registre uma retificação.
+
+Se aparecer uma mensagem que você não entende, anote o que estava fazendo e
+o que apareceu na tela. Com essas duas informações o problema costuma ser
+resolvido rápido.
+
+============================================================================
+Podaris — desenvolvido por Beyond Bits.
+A versão ilustrada deste manual está no sistema, em Manual.
+============================================================================

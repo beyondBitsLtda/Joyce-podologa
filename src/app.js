@@ -21,6 +21,7 @@ import { viewFormAgendamento } from './views/appointment-form.view.js';
 import { viewFormEvolucao } from './views/evolution-form.view.js';
 import { viewDetalheEvolucao } from './views/evolution-detail.view.js';
 import { viewEquipe } from './views/users.view.js';
+import { viewManual } from './views/manual.view.js';
 
 /** Rotas acessíveis sem sessão. */
 const PUBLICAS = ['/login'];
@@ -54,6 +55,7 @@ export async function iniciarApp(raiz) {
     '/ficha/:id': viewWizard,
     '/ficha/:id/concluida': viewConcluida,
     '/equipe': viewEquipe,
+    '/manual': viewManual,
   });
 
   /** Rotas de administração. O banco também recusa — isto evita a tela quebrada. */
@@ -258,6 +260,7 @@ function tituloDaRota(padrao) {
       '/ficha/:id': 'Ficha de anamnese',
       '/ficha/:id/concluida': 'Ficha concluída',
       '/equipe': 'Equipe',
+      '/manual': 'Manual de uso',
     }[padrao] ?? 'Prontuário'
   );
 }

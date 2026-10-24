@@ -8,7 +8,7 @@
  */
 
 import { h } from '../lib/dom.js';
-import { iconeInicio, iconeAgenda, iconePacientes, iconeEquipe } from './icons.js';
+import { iconeInicio, iconeAgenda, iconePacientes, iconeEquipe, iconeManual } from './icons.js';
 import { iniciais } from '../lib/format.js';
 import { marca } from './logo.js';
 import { config } from '../config.js';
@@ -19,6 +19,7 @@ const DESTINOS = [
   { rota: '/agenda', rotulo: 'Agenda', icone: iconeAgenda },
   { rota: '/pacientes', rotulo: 'Pacientes', icone: iconePacientes },
   { rota: '/equipe', rotulo: 'Equipe', icone: iconeEquipe, soAdmin: true },
+  { rota: '/manual', rotulo: 'Manual', icone: iconeManual },
 ];
 
 /** Esconder o que a pessoa não pode abrir evita o clique que só daria erro. */
@@ -102,6 +103,13 @@ export function sidebar({ rotaAtual, perfil, navegar, novaFicha }) {
           NOME_DO_PAPEL[perfil?.role] ?? ''
         )
       )
+    ),
+
+    // Crédito em letra miúda, abaixo de tudo. A clínica é a dona da tela.
+    h(
+      'span',
+      { class: 'sidebar__fabricante' },
+      `por ${config.produto.fabricante}`
     )
   );
 }

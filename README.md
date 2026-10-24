@@ -66,6 +66,39 @@ npx supabase functions deploy criar-usuario --use-api
 
 ---
 
+## Manual de uso
+
+O manual mora **dentro do sistema**, em `/manual` — item Manual do menu,
+visível para todos os perfis. Manual que fica em PDF numa pasta compartilhada
+ninguém abre no meio de um atendimento.
+
+Uma fonte só, duas saídas:
+
+| Saída | Onde | Como |
+|---|---|---|
+| Conteúdo | [src/data/manual.content.js](src/data/manual.content.js) | é aqui que se escreve |
+| Tela ilustrada | [src/views/manual.view.js](src/views/manual.view.js) | lê o conteúdo direto |
+| Texto para imprimir | `MANUAL-DE-USO.txt` | `npm run manual` |
+| Capturas de tela | `public/manual/*.jpg` | `node scripts/capturar-telas.cjs` |
+
+Escrever a tela e o texto à mão garantiria que um dia divergissem, e o papel
+que a clínica imprimiu passaria a dizer uma coisa enquanto a tela diz outra.
+
+As capturas são geradas do próprio sistema, com **dados fictícios** — as
+mesmas fixtures da apresentação guiada. Prontuário real num manual publicado é
+incidente de LGPD. Para refazê-las:
+
+```bash
+npm run build && npm run preview -- --port 4173
+node scripts/capturar-telas.cjs http://localhost:4173
+npm run manual
+```
+
+O script das capturas precisa do Playwright, que não é dependência do projeto
+— roda à mão, quando as telas mudarem.
+
+---
+
 ## Instalar no celular
 
 O sistema é um **PWA**: no Chrome do Android aparece "Instalar aplicativo" no

@@ -29,6 +29,9 @@ export const config = {
   produto: {
     nome: 'Podaris',
     assinatura: 'sistema para podologia',
+    // Quem fez. Aparece em letra miúda no rodapé do login, da barra lateral e
+    // do manual — crédito, não propaganda: a clínica é a dona da tela.
+    fabricante: 'Beyond Bits',
   },
 
   /** Nome da clínica que usa o sistema — este sim varia por instalação. */

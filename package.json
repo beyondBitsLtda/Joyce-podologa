@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "test": "node --test \"src/**/*.test.js\"",
     "lint": "eslint src",
+    "manual": "node scripts/gerar-manual-txt.cjs",
     "format": "prettier --write \"src/**/*.{js,css}\"",
     "db:start": "supabase start",
     "db:stop": "supabase stop",

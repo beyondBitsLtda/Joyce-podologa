@@ -62,6 +62,7 @@
    O contraste entre as duas superfícies é o que estrutura a tela — e mantém o
    prontuário em fundo claro, que é onde a leitura acontece. */
 .sidebar {
+  position: relative;
   display: none; /* ativada na media query de desktop */
   flex: none;
   flex-direction: column;
@@ -70,6 +71,30 @@
   padding: 26px 18px;
   background: var(--grad-sidebar);
   border-right: none;
+}
+
+/*
+  A mesma textura da abertura, bem mais discreta.
+
+  Aqui ela é pano de fundo de uma área de trabalho, não de uma tela de marca:
+  a 30% o brilho dá vida à superfície sem disputar com os itens de navegação.
+  O ::before fica atrás de tudo via z-index, e o conteúdo sobe para z-index 1.
+*/
+.sidebar::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: '';
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 4%) 0 2px, transparent 2px 9px),
+    url('/podaris-brilho.jpg') center / cover no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.sidebar > * {
+  position: relative;
+  z-index: 1;
 }
 
 .sidebar__marca {

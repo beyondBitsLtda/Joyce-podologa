@@ -46,18 +46,27 @@
         transition: opacity 420ms ease;
       }
 
-      /* Listras verticais com brilho radial — a textura da marca. */
+      /*
+        A textura da marca em duas camadas.
+
+        O brilho (podaris-brilho.jpg) é a imagem original do manual: luz
+        orgânica, assimétrica, do tipo que gradiente CSS não reproduz bem.
+
+        As listras ficam em CSS e não na imagem: assim saem nítidas em
+        qualquer densidade de tela e em qualquer largura, sem o serrilhado
+        que um bitmap de listras finas produz ao ser redimensionado.
+      */
       #splash::before {
         position: absolute;
         inset: 0;
         content: '';
         background:
-          radial-gradient(60% 50% at 50% 42%, rgb(126 190 150 / 28%) 0%, transparent 70%),
           repeating-linear-gradient(
             90deg,
             rgb(255 255 255 / 5%) 0 2px,
             transparent 2px 9px
-          );
+          ),
+          url('/podaris-brilho.jpg') center / cover no-repeat;
       }
 
       #splash[hidden] {

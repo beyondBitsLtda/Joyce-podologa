@@ -1,0 +1,54 @@
+{
+  "id": "/",
+  "name": "Podaris — prontuário de podologia",
+  "short_name": "Podaris",
+  "description": "Prontuário de podologia: agenda, anamnese, evolução de cada sessão e arquivos do paciente.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+
+  "background_color": "#13291E",
+  "theme_color": "#13291E",
+
+  "icons": [
+    {
+      "src": "/icone-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icone-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icone-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Agenda do dia",
+      "short_name": "Agenda",
+      "url": "/agenda"
+    },
+    {
+      "name": "Pacientes",
+      "short_name": "Pacientes",
+      "url": "/pacientes"
+    },
+    {
+      "name": "Nova ficha de anamnese",
+      "short_name": "Nova ficha",
+      "url": "/ficha/nova"
+    }
+  ]
+}

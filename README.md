@@ -66,6 +66,41 @@ npx supabase functions deploy criar-usuario --use-api
 
 ---
 
+## Instalar no celular
+
+O sistema é um **PWA**: no Chrome do Android aparece "Instalar aplicativo" no
+menu (⋮), e ele vai para a tela inicial com ícone próprio, abrindo em janela
+cheia, sem barra de endereço. No iPhone é Safari → Compartilhar → Adicionar à
+Tela de Início (a Apple não oferece o botão automático).
+
+| Peça | Onde |
+|---|---|
+| Manifest | [public/manifest.webmanifest](public/manifest.webmanifest) |
+| Service worker | [public/sw.js](public/sw.js) |
+| Ícones | `public/icone-*.png`, gerados por `node scripts/gerar-icones.cjs` |
+
+Os ícones saem da mesma máscara que a interface usa no logotipo
+(`public/podaris-marca.png`), então o ícone na tela inicial e a marca dentro
+do sistema não podem divergir. O script precisa do Playwright, que não é
+dependência do projeto — é para rodar à mão, quando a marca mudar.
+
+**O service worker guarda SOMENTE arquivo estático da própria origem.**
+Nenhuma resposta do Supabase passa por cache, em nenhuma hipótese: guardar a
+ficha de uma paciente no aparelho criaria uma cópia do prontuário fora do
+banco, sem RLS, sem trilha de leitura e sobrevivendo ao logout. Offline o app
+abre e diz que está sem conexão — que é a verdade.
+
+Estratégia de cache, resumida:
+
+| Pedido | Como |
+|---|---|
+| Navegação (`/`, `/pacientes`, …) | Rede primeiro, cache como reserva |
+| `/assets/*` (nome com hash) | Cache primeiro — mudou o conteúdo, muda o nome |
+| Ícones, marca, manifest | Rede primeiro, cache como reserva |
+| Supabase, fontes, ViaCEP | Passa direto, nunca entra em cache |
+
+---
+
 ## Apresentação guiada
 
 `?apresentacao=1` em qualquer endereço do sistema — ou o botão **Apresentar o

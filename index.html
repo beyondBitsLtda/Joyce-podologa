@@ -10,6 +10,22 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Podaris — sistema para podologia</title>
 
+    <!--
+      App instalável. O manifest e o service worker (public/sw.js) são o que o
+      Chrome exige para oferecer "Instalar" no celular: fora do navegador, o
+      sistema abre em janela própria, sem barra de endereço, com ícone na tela
+      inicial.
+
+      O apple-touch-icon fica aqui porque o iOS não lê o manifest para isto —
+      ele procura o arquivo por este nome.
+    -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icone-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Podaris" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

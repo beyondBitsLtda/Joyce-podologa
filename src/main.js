@@ -17,6 +17,31 @@ const raiz = document.getElementById('app');
 
 iniciarApp(raiz).then(fecharSplash).then(abrirApresentacao).catch(mostrarFalhaDeBoot);
 
+registrarServiceWorker();
+
+/**
+ * Registra o service worker, que é o que torna o app instalável.
+ *
+ * Depois do boot e com `load`: o registro dispara downloads, e disputá-los com
+ * o primeiro carregamento atrasaria justamente a tela que a pessoa está
+ * esperando.
+ *
+ * Só em produção. Em `npm run dev` um worker controlando a página serviria
+ * arquivo velho no meio de uma alteração — e o tempo perdido procurando por
+ * que a mudança "não aparece" é grande.
+ */
+function registrarServiceWorker() {
+  if (!import.meta.env.PROD || !('serviceWorker' in window.navigator)) return;
+
+  window.addEventListener('load', () => {
+    window.navigator.serviceWorker.register('/sw.js').catch((erro) => {
+      // Falhar aqui não impede o sistema de funcionar: só não ficará
+      // instalável nem abrirá sem rede. Não vale uma tela de erro.
+      console.warn('[podaris] service worker não registrou:', erro);
+    });
+  });
+}
+
 /**
  * Sobe a apresentação guiada, se esta aba for a dela.
  *

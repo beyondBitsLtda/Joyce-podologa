@@ -7,6 +7,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { config } from '../config.js';
+import { apresentando } from '../apresentacao/preparar.js';
 
 export const supabase = createClient(config.supabase.url, config.supabase.anonKey, {
   auth: {
@@ -15,7 +16,14 @@ export const supabase = createClient(config.supabase.url, config.supabase.anonKe
     // Este app não usa magic link nem OAuth com retorno pela URL; desligar
     // evita que o SDK fique inspecionando a barra de endereços.
     detectSessionInUrl: false,
-    storageKey: 'joyce-podologa.auth',
+
+    // A apresentação guarda a sessão dela em sessionStorage, que é por ABA.
+    // Com localStorage, a sessão falsa da demonstração sobrescrevia a sessão
+    // real — e abrir a apresentação derrubava quem estava trabalhando na
+    // outra aba, que compartilha a mesma origem.
+    ...(apresentando
+      ? { storage: window.sessionStorage, storageKey: 'joyce-podologa.apresentacao' }
+      : { storageKey: 'joyce-podologa.auth' }),
   },
   db: { schema: 'public' },
   global: {

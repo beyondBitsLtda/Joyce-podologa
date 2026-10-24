@@ -1,0 +1,692 @@
+/* =============================================================================
+   Apresentação guiada
+   =============================================================================
+   Só é carregado na aba da apresentação (import dinâmico), então não pesa no
+   app de todo dia.
+
+   As cores saem dos tokens do produto: a apresentação precisa parecer o
+   Podaris, não um tema de slide colado por cima dele. O que está fixo aqui é
+   só o que não existe no app — a largura do painel e a cor de alerta das
+   dores, que é a única nota quente da paleta.
+   ========================================================================== */
+
+body.apr-ligada {
+  --apr-largura: 360px;
+  --apr-altura: 0px;
+  --apr-dor: #a8402f;
+}
+
+/* A aplicação encolhe, o painel ocupa a faixa. Padding no body em vez de
+   position fixed no painel sobre a tela: assim nada da aplicação fica
+   escondido atrás do texto — e é justamente a aplicação que se quer mostrar. */
+body.apr-ligada {
+  padding-right: var(--apr-largura);
+  padding-bottom: var(--apr-altura);
+}
+
+body.apr-ligada .app {
+  height: calc(100dvh - var(--apr-altura));
+  min-height: 0;
+}
+
+/* --- O destaque ----------------------------------------------------------- */
+
+body.apr-ligada .apr-alvo {
+  position: relative;
+  z-index: 1;
+  border-radius: 10px;
+  outline: 3px solid var(--verde);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 9999px rgb(19 41 30 / 7%);
+  transition: outline-color 0.2s ease;
+}
+
+/* --- O painel ------------------------------------------------------------- */
+
+.apr-painel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 9700;
+  display: flex;
+  flex-direction: column;
+  width: var(--apr-largura);
+  font-family: var(--fonte);
+  color: var(--texto);
+  text-align: left;
+  background: var(--superficie);
+  border-left: 1px solid var(--borda);
+  box-shadow: -8px 0 28px rgb(19 41 30 / 10%);
+}
+
+.apr-painel__faixa {
+  padding: 9px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-transform: uppercase;
+  background: var(--grad-sidebar, var(--verde-noite));
+}
+
+.apr-trilha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 13px 20px 11px;
+  list-style: none;
+  border-bottom: 1px solid var(--divisoria);
+}
+
+.apr-trilha li {
+  padding: 3px 9px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--texto-secundario);
+  background: var(--superficie);
+  border: 1px solid var(--borda-campo);
+  border-radius: 999px;
+}
+
+.apr-trilha li.is-feito {
+  color: var(--verde-escuro);
+  background: var(--verde-claro);
+  border-color: var(--verde-borda);
+}
+
+.apr-trilha li.is-atual {
+  font-weight: 600;
+  color: #fff;
+  background: var(--verde);
+  border-color: var(--verde);
+}
+
+.apr-painel__corpo {
+  flex: 1;
+  padding: 20px 22px 12px;
+  overflow: auto;
+}
+
+.apr-painel__secao {
+  margin-bottom: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--verde);
+  text-transform: uppercase;
+}
+
+.apr-painel__titulo {
+  margin: 0 0 13px;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--texto);
+}
+
+.apr-painel__texto {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--texto-medio);
+}
+
+.apr-painel__texto p {
+  margin: 0 0 12px;
+}
+
+.apr-painel__texto b {
+  font-weight: 700;
+  color: var(--texto-forte);
+}
+
+.apr-painel.is-carregando .apr-painel__texto {
+  opacity: 0.5;
+}
+
+.apr-painel__nav,
+.apr-capa__nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 20px;
+  border-top: 1px solid var(--divisoria);
+}
+
+.apr-painel__pos {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-secundario);
+}
+
+.apr-sair {
+  align-self: center;
+  margin: 0 20px 14px;
+  padding: 6px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--texto-secundario);
+  text-decoration: underline;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/* --- Botões --------------------------------------------------------------- */
+
+.apr-btn {
+  padding: 10px 17px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.apr-btn--primario {
+  color: #fff;
+  background: var(--grad-primario, var(--verde));
+  border-color: var(--verde);
+  box-shadow: var(--sombra-verde);
+}
+
+.apr-btn--primario:hover {
+  filter: brightness(0.94);
+}
+
+.apr-btn--ghost {
+  color: var(--texto-forte);
+  background: var(--superficie);
+  border-color: var(--borda-campo);
+}
+
+.apr-btn--ghost:hover {
+  background: var(--superficie-2);
+}
+
+.apr-btn--grande {
+  padding: 14px 28px;
+  font-size: 17px;
+}
+
+.apr-btn:disabled {
+  opacity: 0.4;
+  filter: none;
+  cursor: default;
+}
+
+.apr-btn:focus-visible,
+.apr-sair:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 2px;
+}
+
+/* --- As capas ------------------------------------------------------------- */
+
+.apr-capa {
+  position: fixed;
+  inset: 0;
+  z-index: 9800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 96px;
+  overflow: auto;
+  font-family: var(--fonte);
+  color: var(--texto);
+  text-align: left;
+  background: var(--fundo-app);
+}
+
+.apr-capa[hidden] {
+  display: none !important;
+}
+
+.apr-capa:focus {
+  outline: none;
+}
+
+.apr-capa__miolo {
+  width: 100%;
+  max-width: 980px;
+  margin: auto 0;
+}
+
+.apr-capa__secao {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--verde);
+  text-transform: uppercase;
+}
+
+.apr-capa__titulo {
+  margin: 0 0 26px;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+.apr-capa__texto {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--texto-medio);
+}
+
+.apr-capa__texto p {
+  margin: 0 0 14px;
+}
+
+.apr-capa__nav {
+  position: fixed;
+  inset: auto 0 0;
+  background: rgb(255 255 255 / 92%);
+  border-top: 1px solid var(--borda);
+}
+
+.apr-sair--capa {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  margin: 0;
+}
+
+/* --- Blocos de conteúdo --------------------------------------------------- */
+
+.apr-dores,
+.apr-ganhos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.apr-dores li,
+.apr-ganhos li {
+  padding: 18px 20px;
+  font-size: 16px;
+  line-height: 1.45;
+  background: var(--superficie);
+  border-radius: var(--raio-lg, 14px);
+  box-shadow: var(--sombra-1);
+}
+
+.apr-dores li {
+  border-top: 4px solid var(--apr-dor);
+}
+
+.apr-dores b {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 18px;
+  color: var(--apr-dor);
+}
+
+.apr-ganhos li {
+  border-top: 4px solid var(--verde);
+}
+
+.apr-ganhos b {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  color: var(--verde);
+  text-transform: uppercase;
+}
+
+.apr-pares {
+  display: grid;
+  gap: 12px;
+}
+
+.apr-par {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1.6fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.apr-par__antes,
+.apr-par__depois {
+  padding: 14px 16px;
+  font-size: 15.5px;
+  line-height: 1.45;
+  background: var(--superficie);
+  border-radius: var(--raio-md, 10px);
+}
+
+.apr-par__antes {
+  color: var(--apr-dor);
+  border-left: 4px solid var(--apr-dor);
+}
+
+.apr-par__depois {
+  font-weight: 600;
+  color: var(--verde-escuro);
+  border-left: 4px solid var(--verde);
+}
+
+.apr-par span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.apr-par__seta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--texto-apagado);
+}
+
+.apr-numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.apr-numero {
+  padding: 18px 20px;
+  background: var(--superficie);
+  border-left: 4px solid var(--verde);
+  border-radius: var(--raio-md, 10px);
+}
+
+.apr-numero b {
+  display: block;
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--verde-escuro);
+}
+
+.apr-numero span {
+  display: block;
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+.apr-etapas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.apr-etapas li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.apr-etapas li span {
+  padding: 8px 15px;
+  background: var(--superficie);
+  border: 1px solid var(--verde-borda);
+  border-radius: 999px;
+}
+
+.apr-etapas li + li::before {
+  content: '→';
+  font-weight: 500;
+  color: var(--texto-apagado);
+}
+
+.apr-nota {
+  margin: 22px 0 0;
+  padding-left: 14px;
+  font-size: 17px;
+  line-height: 1.5;
+  border-left: 3px solid var(--verde);
+}
+
+.apr-nota--ganho {
+  color: var(--verde-escuro);
+}
+
+.apr-painel__texto .apr-nota {
+  margin-top: 12px;
+  font-size: 14.5px;
+}
+
+.apr-obs {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--texto-secundario);
+}
+
+.apr-lista {
+  margin: 0 0 12px;
+  padding-left: 18px;
+}
+
+.apr-lista li {
+  margin-bottom: 4px;
+}
+
+/* --- A abertura ----------------------------------------------------------- */
+
+.apr-capa[data-tipo='abertura'] {
+  pointer-events: none;
+  background: transparent;
+}
+
+/* Na abertura o painel ainda não tem texto nenhum, e uma faixa branca vazia
+   ao lado da marca estragava justamente a primeira impressão. Some, e a
+   aplicação recua usando a largura inteira da tela. */
+body.apr-abertura-ligada {
+  --apr-largura: 0px;
+}
+
+body.apr-abertura-ligada .apr-painel {
+  display: none;
+}
+
+.apr-capa[data-tipo='abertura'] button {
+  pointer-events: auto;
+}
+
+body.apr-abertura-ligada::before {
+  position: fixed;
+  inset: 0;
+  z-index: 8999;
+  content: '';
+  background: var(--fundo-painel) radial-gradient(62% 58% at 50% 46%, var(--verde-claro) 0%, transparent 74%);
+}
+
+/* A aplicação já montada, afastando-se. Fica por cima do véu e por baixo da
+   marca: é ela que se quer ver recuando. */
+body.apr-abertura-ligada .apr-voo {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9000 !important;
+  overflow: hidden !important;
+  pointer-events: none;
+  background: var(--fundo-painel);
+  border-radius: 16px;
+  box-shadow:
+    0 24px 50px -22px rgb(19 41 30 / 22%),
+    0 70px 140px -60px rgb(19 41 30 / 34%);
+  transition:
+    filter 1.5s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: filter, opacity;
+}
+
+body.apr-abertura-ligada .apr-voo.apr-voo--saindo {
+  opacity: 0.12;
+  filter: blur(20px) saturate(0.6);
+}
+
+.apr-abertura {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  margin: auto 0;
+  text-align: center;
+  opacity: 0;
+  transform: scale(1.08);
+  filter: blur(8px);
+  transition:
+    opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 1.1s cubic-bezier(0.19, 1, 0.22, 1),
+    filter 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.apr-abertura.assentada {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.apr-abertura__prefixo {
+  font-size: clamp(16px, 2vw, 22px);
+  line-height: 1;
+  color: var(--texto-secundario);
+}
+
+.apr-abertura__marca {
+  font-size: clamp(44px, 9vw, 120px);
+  font-weight: 300;
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  color: var(--verde-noite);
+}
+
+.apr-abertura__marca b {
+  font-weight: 600;
+  color: var(--verde);
+}
+
+.apr-abertura__regua {
+  width: clamp(80px, 12vw, 170px);
+  height: 4px;
+  background: var(--verde);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1) 0.25s;
+}
+
+.apr-abertura.assentada .apr-abertura__regua {
+  transform: scaleX(1);
+}
+
+.apr-abertura__sub {
+  max-width: 640px;
+  margin: 6px 0 0;
+  font-size: clamp(16px, 1.6vw, 20px);
+  color: var(--texto-medio);
+}
+
+.apr-abertura__acoes {
+  margin-top: 28px;
+  opacity: 0;
+  transition: opacity 0.6s ease 0.7s;
+}
+
+.apr-abertura.assentada .apr-abertura__acoes {
+  opacity: 1;
+}
+
+.apr-abertura:not(.assentada) button {
+  pointer-events: none;
+}
+
+/* --- Telas menores -------------------------------------------------------- */
+
+@media (width < 1500px) {
+  body.apr-ligada {
+    --apr-largura: 320px;
+  }
+
+  .apr-painel__titulo {
+    font-size: 21px;
+  }
+
+  .apr-painel__texto {
+    font-size: 15px;
+  }
+}
+
+@media (width < 1100px) {
+  .apr-dores,
+  .apr-ganhos,
+  .apr-par {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .apr-par__seta {
+    display: none;
+  }
+}
+
+/* No celular o painel vai para baixo: 360px de faixa lateral não cabem, e a
+   aplicação é a parte que precisa de largura. */
+@media (width < 760px) {
+  body.apr-ligada {
+    --apr-largura: 0px;
+    --apr-altura: 46dvh;
+  }
+
+  .apr-painel {
+    inset: auto 0 0;
+    width: auto;
+    height: var(--apr-altura);
+    border-top: 1px solid var(--borda);
+    border-left: 0;
+    box-shadow: 0 -8px 24px rgb(19 41 30 / 10%);
+  }
+
+  .apr-trilha {
+    display: none;
+  }
+
+  .apr-painel__corpo {
+    padding: 14px 16px 8px;
+  }
+
+  .apr-capa {
+    padding: 40px 16px 96px;
+  }
+
+  .apr-capa__texto {
+    font-size: 16.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.apr-ligada .apr-alvo,
+  .apr-abertura__acoes,
+  .apr-abertura__regua {
+    transition: none;
+  }
+
+  .apr-abertura {
+    filter: none;
+    transform: none;
+    transition: opacity 0.2s linear;
+  }
+
+  .apr-abertura__regua {
+    transform: scaleX(1);
+  }
+}

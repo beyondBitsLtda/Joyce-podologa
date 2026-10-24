@@ -6,6 +6,8 @@
  * bundle, então não existe segredo aqui.
  */
 
+import { apresentando } from './apresentacao/preparar.js';
+
 const obrigatoria = (nome) => {
   const valor = import.meta.env[nome];
   if (!valor) {
@@ -34,8 +36,14 @@ export const config = {
     nome: import.meta.env.VITE_CLINIC_NAME || 'Joyce Freitas Podologia',
   },
 
-  /** Chave do rascunho no localStorage. Versionada para poder invalidar. */
-  rascunhoKey: 'anamnese.draft.v1',
+  /**
+   * Chave do rascunho no localStorage. Versionada para poder invalidar.
+   *
+   * Na apresentação a chave é outra: abrir o wizard numa demonstração grava
+   * rascunho, e com a mesma chave esse rascunho fictício apareceria depois
+   * para quem está atendendo de verdade — as duas abas dividem a origem.
+   */
+  rascunhoKey: apresentando ? 'anamnese.draft.apresentacao' : 'anamnese.draft.v1',
 
   /** Largura a partir da qual a interface usa o layout de desktop. */
   breakpointDesktop: 900,

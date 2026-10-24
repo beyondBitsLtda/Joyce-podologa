@@ -23,6 +23,12 @@ export default [
         Image: 'readonly',
         createImageBitmap: 'readonly',
         performance: 'readonly',
+        URL: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
+        Headers: 'readonly',
+        PopStateEvent: 'readonly',
+        Event: 'readonly',
       },
     },
     rules: {

@@ -6,12 +6,33 @@
  * configuração — se o app não sobe, o erro aparece aqui com a mensagem certa.
  */
 
+// PRIMEIRA LINHA, de propósito: com ?apresentacao na URL, este módulo precisa
+// semear a sessão e trocar o fetch ANTES de lib/supabase.js ser avaliado.
+// Importado depois, a primeira tela da apresentação abriria com dados reais.
+import { apresentando } from './apresentacao/preparar.js';
 import './styles/index.css';
 import { iniciarApp } from './app.js';
 
 const raiz = document.getElementById('app');
 
-iniciarApp(raiz).then(fecharSplash).catch(mostrarFalhaDeBoot);
+iniciarApp(raiz).then(fecharSplash).then(abrirApresentacao).catch(mostrarFalhaDeBoot);
+
+/**
+ * Sobe a apresentação guiada, se esta aba for a dela.
+ *
+ * Import dinâmico: o motor, o roteiro e os dados fictícios ficam num pedaço
+ * separado do pacote, que ninguém baixa no uso normal do sistema.
+ */
+async function abrirApresentacao() {
+  if (!apresentando) return;
+
+  try {
+    const { iniciarApresentacao } = await import('./apresentacao/roteiro.js');
+    iniciarApresentacao();
+  } catch (erro) {
+    console.error('[podaris] apresentação não subiu:', erro);
+  }
+}
 
 /**
  * Retira a tela de carregamento.

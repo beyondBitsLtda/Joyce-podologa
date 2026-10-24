@@ -73,6 +73,21 @@ export function sidebar({ rotaAtual, perfil, navegar, novaFicha }) {
       )
     ),
 
+    // Apresentação guiada, só para admin. Abre em outra aba de propósito: a
+    // aba de trabalho continua com os dados reais da clínica, e a da
+    // apresentação roda inteira com dados fictícios.
+    ehAdmin(perfil)
+      ? h(
+          'button',
+          {
+            type: 'button',
+            class: 'sidebar__apresentar',
+            onclick: () => window.open('/inicio?apresentacao=1', '_blank', 'noopener'),
+          },
+          'Apresentar o sistema'
+        )
+      : null,
+
     h(
       'div',
       { class: 'sidebar__rodape' },

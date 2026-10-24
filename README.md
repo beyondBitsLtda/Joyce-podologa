@@ -66,6 +66,41 @@ npx supabase functions deploy criar-usuario --use-api
 
 ---
 
+## Apresentação guiada
+
+`?apresentacao=1` em qualquer endereço do sistema — ou o botão **Apresentar o
+sistema**, no pé da barra lateral, visível só para quem é admin.
+
+Não é um slide com a foto do sistema: é o **sistema**, na tela de sempre, com
+um painel à direita conduzindo o roteiro. Setas do teclado ou os botões; `Esc`
+sai.
+
+Com ela ligada, **nada sai do navegador**. Toda chamada ao Supabase — leitura,
+escrita, Storage e Auth — é respondida de um estado em memória que morre com a
+aba. Dá para cadastrar, editar e excluir na frente do cliente sem tocar no
+banco de produção e sem nenhum prontuário real na tela.
+
+A aba da apresentação também não encosta na aba de trabalho: a sessão dela vai
+para `sessionStorage`, com chave própria, e o rascunho da anamnese idem. Sem
+isso, abrir a demonstração derrubaria a sessão real de quem estivesse
+atendendo — as duas abas dividem a mesma origem.
+
+```
+src/apresentacao/
+├── preparar.js    gatilho; único arquivo que entra no pacote principal
+├── simulador.js   corta a rede e responde da memória
+├── dados.js       os dados fictícios (mesmas fixtures das capturas de tela)
+├── roteiro.js     os passos — é aqui que se mexe no conteúdo
+├── motor.js       painel, capas, destaque e navegação
+└── apresentacao.css
+```
+
+Para mudar o que a apresentação diz, mexa só em `roteiro.js`. Cada passo é
+`{ id, secao, titulo, antes, alvo, texto }`: `antes` leva a aplicação ao
+estado que o texto descreve, `alvo` é o seletor que ganha o contorno.
+
+---
+
 ## Estrutura
 
 ```

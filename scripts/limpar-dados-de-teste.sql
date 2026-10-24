@@ -3,14 +3,18 @@
 -- =============================================================================
 -- Onde rodar: Supabase → SQL Editor, com o script inteiro colado de uma vez.
 --
--- COMO USAR, EM DOIS PASSOS:
+-- COMO USAR, EM TRÊS PASSOS:
 --
 --   1. Rode como está. A última linha é ROLLBACK, então NADA é gravado — o
 --      resultado mostra exatamente quem seria apagado e quantas linhas sairiam
 --      de cada tabela. Confira a lista de nomes antes de seguir.
 --
---   2. Confirmado, troque a última linha de `rollback;` para `commit;` e rode
---      de novo.
+--   2. Se o resultado trouxer linhas "3 APAGAR NO STORAGE", apague esses
+--      arquivos primeiro, no painel: Storage → prontuario → a pasta com o id
+--      do paciente → Delete. O Supabase não deixa apagar arquivo por SQL, e
+--      apagar só o registro deixaria o binário órfão no bucket.
+--
+--   3. Troque a última linha de `rollback;` para `commit;` e rode de novo.
 --
 -- Isto apaga de verdade: não é o `deleted_at` do sistema, é DELETE. Use só com
 -- dado de teste. Prontuário de paciente real tem retenção legal de 20 anos
@@ -97,18 +101,20 @@ with d as (
   delete from public.record_access_log where patient_id in (select id from alvo) returning 1
 ) insert into resumo select 5, 'record_access_log', count(*) from d;
 
--- Os binários no bucket. Apagar só a linha de `attachments` deixaria o arquivo
--- órfão no Storage — e foto de pé é dado de saúde, não pode ficar sobrando.
-with d as (
-  delete from storage.objects
-   where bucket_id = 'prontuario'
-     and split_part(name, '/', 1) in (select id::text from alvo)
-  returning 1
-) insert into resumo select 6, 'storage.objects', count(*) from d;
+-- OS ARQUIVOS DO BUCKET NÃO SAEM POR AQUI.
+--
+-- O Postgres do Supabase recusa DELETE direto em storage.objects:
+--   "Direct deletion from storage tables is not allowed. Use the Storage API."
+--
+-- E está certo. A linha em storage.objects é só o registro; o arquivo mesmo
+-- mora no armazenamento de objetos. Apagar a linha deixaria o binário lá,
+-- pago e invisível — e foto de pé é dado de saúde, não pode ficar sobrando.
+--
+-- Os caminhos a remover saem no resultado final, com o passo a passo.
 
 with d as (
   delete from public.patients where id in (select id from alvo) returning 1
-) insert into resumo select 7, 'patients', count(*) from d;
+) insert into resumo select 6, 'patients', count(*) from d;
 
 -- A trilha de auditoria destes registros, inclusive as linhas que os DELETEs
 -- acima acabaram de gravar. Por isso vem por último.
@@ -117,7 +123,7 @@ with d as (
    using filhos f
    where a.table_name = f.tabela and a.record_id = f.id
   returning 1
-) insert into resumo select 8, 'audit_log', count(*) from d;
+) insert into resumo select 7, 'audit_log', count(*) from d;
 
 -- -----------------------------------------------------------------------------
 -- 5. Religa a trava
@@ -128,26 +134,35 @@ alter table public.evolutions enable trigger evolutions_block_signed_delete;
 -- 6. O que aconteceu
 -- -----------------------------------------------------------------------------
 -- O SQL Editor mostra só o último resultado, então tudo sai numa tabela só.
-select 'paciente' as tipo,
-       full_name  as item,
+select '1 paciente'  as tipo,
+       full_name     as item,
        coalesce(cpf, 'sem CPF') as detalhe,
-       to_char(created_at, 'DD/MM/YYYY') as quando
+       id::text      as pasta_no_storage
 from alvo
 
 union all
 
-select 'arquivo', name, 'removido do bucket prontuario', ''
-from arquivos
-
-union all
-
-select 'tabela', tabela, linhas || ' linha(s)', ''
+select '2 tabela', tabela, linhas || ' linha(s)', ''
 from resumo
 where linhas > 0
 
 union all
 
-select 'TOTAL', 'linhas apagadas', sum(linhas)::text, ''
+-- Cada caminho aqui precisa ser removido À MÃO, pelo painel: Storage →
+-- prontuario → a pasta com o id do paciente → Delete. É uma pasta por
+-- paciente, então são poucos cliques.
+select '3 APAGAR NO STORAGE', name, 'bucket prontuario', ''
+from arquivos
+
+union all
+
+select '3 APAGAR NO STORAGE',
+       '(nenhum arquivo — nada a fazer no Storage)', '', ''
+where not exists (select 1 from arquivos)
+
+union all
+
+select '4 TOTAL', 'linhas apagadas no banco', coalesce(sum(linhas), 0)::text, ''
 from resumo
 
 order by tipo, item;

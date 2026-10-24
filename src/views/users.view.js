@@ -8,6 +8,7 @@
 import { h, montar, limpar } from '../lib/dom.js';
 import { dataCompleta, iniciais } from '../lib/format.js';
 import { NOME_DO_PAPEL } from '../data/auth.repo.js';
+import { config } from '../config.js';
 import * as usuarios from '../data/users.repo.js';
 import { esqueletoLista, blocoErro, blocoVazio } from './partials.js';
 
@@ -261,9 +262,11 @@ export function viewEquipe({ navegar, perfil, mostrarToast }) {
 
       try {
         await usuarios.criar(dados);
-        fechar();
+        // A senha provisória só existe aqui: ninguém consegue lê-la depois, nem
+        // no banco. Fechar o painel na hora apagaria da tela a única coisa que
+        // a administradora precisa levar desta operação.
+        mostrarCredenciais(dados);
         await carregar();
-        mostrarToast(`${dados.nome} criada. Anote a senha provisória antes de fechar.`);
       } catch (erro) {
         montar(erroEl, h('div', { class: 'erro', role: 'alert' }, erro.message));
         erroEl.hidden = false;
@@ -276,45 +279,129 @@ export function viewEquipe({ navegar, perfil, mostrarToast }) {
       h('div', { class: 'campo' }, h('span', { class: 'campo__rotulo' }, rotulo), elemento,
         dica ? h('span', { class: 'campo__dica' }, dica) : null);
 
+    const painelEl = h(
+      'div',
+      { class: 'sheet__painel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Novo usuário' },
+      h('div', { class: 'sheet__puxador' }),
+      h(
+        'div',
+        { class: 'sheet__cabecalho' },
+        h('span', { class: 'sheet__titulo' }, h('strong', null, 'Novo usuário')),
+        h('button', { type: 'button', class: 'sheet__fechar', 'aria-label': 'Fechar', onclick: fechar }, '✕')
+      ),
+
+      erroEl,
+
+      h(
+        'div',
+        { class: 'coluna', style: { overflowY: 'auto' } },
+        campo('Nome completo', nomeEl),
+        campo('E-mail', emailEl, 'É com ele que a pessoa entra no sistema.'),
+        campo('Perfil de acesso', h('div', null, papelHost, descricaoEl)),
+        campo('Registro no conselho', registroEl, 'Aparece na assinatura das evoluções.'),
+        campo(
+          'Senha provisória',
+          senhaEl,
+          'Anote e entregue à pessoa. Oriente a trocar no primeiro acesso, em "Esqueci minha senha".'
+        )
+      ),
+
+      h(
+        'div',
+        { class: 'assinatura-pad__acoes', style: { marginTop: 'var(--esp-3)' } },
+        h('button', { type: 'button', class: 'btn btn--secundario', onclick: fechar }, 'Cancelar'),
+        salvarEl
+      )
+    );
+
+    /** Troca o formulário pela entrega das credenciais, no mesmo painel. */
+    function mostrarCredenciais({ nome, email, senha, papel }) {
+      const copiar = h(
+        'button',
+        {
+          type: 'button',
+          class: 'btn btn--secundario',
+          onclick: async () => {
+            const texto =
+              `${config.clinica.nome}\n` +
+              `Endereço: ${window.location.origin}\n` +
+              `E-mail: ${email}\nSenha provisória: ${senha}`;
+            try {
+              await window.navigator.clipboard.writeText(texto);
+              copiar.textContent = 'Copiado ✓';
+            } catch {
+              // Sem permissão de área de transferência (acontece em http e em
+              // alguns navegadores de celular). O texto segue visível na tela.
+              copiar.textContent = 'Copie da tela';
+            }
+          },
+        },
+        'Copiar dados de acesso'
+      );
+
+      const linha = (rotulo, valor) =>
+        h(
+          'div',
+          { class: 'credencial' },
+          h('span', { class: 'credencial__rotulo' }, rotulo),
+          h('span', { class: 'credencial__valor' }, valor)
+        );
+
+      montar(
+        painelEl,
+        h('div', { class: 'sheet__puxador' }),
+        h(
+          'div',
+          { class: 'sheet__cabecalho' },
+          h('span', { class: 'sheet__titulo' }, h('strong', null, 'Conta criada')),
+          h('button', { type: 'button', class: 'sheet__fechar', 'aria-label': 'Fechar', onclick: concluir }, '✕')
+        ),
+
+        h(
+          'div',
+          { class: 'faixa faixa--aviso' },
+          h('span', { class: 'faixa__texto' },
+            'Esta senha não pode ser consultada depois — nem aqui, nem no banco. ' +
+            'Entregue agora a ' + nome + '.')
+        ),
+
+        h(
+          'div',
+          { class: 'coluna' },
+          linha('Nome', nome),
+          linha('Perfil', PAPEIS.find((p) => p.valor === papel).rotulo),
+          linha('E-mail', email),
+          linha('Senha provisória', senha),
+          h(
+            'span',
+            { class: 'campo__dica' },
+            'Oriente a trocar no primeiro acesso, pelo "Esqueci minha senha" da tela de entrada.'
+          )
+        ),
+
+        h(
+          'div',
+          { class: 'assinatura-pad__acoes', style: { marginTop: 'var(--esp-3)' } },
+          copiar,
+          h('button', { type: 'button', class: 'btn btn--primario btn--grande', onclick: concluir }, 'Concluir')
+        )
+      );
+
+      painelEl.setAttribute('aria-label', 'Conta criada');
+      copiar.focus();
+    }
+
+    function concluir() {
+      fechar();
+      mostrarToast('Usuário criado.');
+    }
+
     formHost.append(
       h(
         'div',
         { class: 'sheet' },
         h('button', { type: 'button', class: 'sheet__fundo', 'aria-label': 'Fechar', onclick: fechar }),
-        h(
-          'div',
-          { class: 'sheet__painel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Novo usuário' },
-          h('div', { class: 'sheet__puxador' }),
-          h(
-            'div',
-            { class: 'sheet__cabecalho' },
-            h('span', { class: 'sheet__titulo' }, h('strong', null, 'Novo usuário')),
-            h('button', { type: 'button', class: 'sheet__fechar', 'aria-label': 'Fechar', onclick: fechar }, '✕')
-          ),
-
-          erroEl,
-
-          h(
-            'div',
-            { class: 'coluna', style: { overflowY: 'auto' } },
-            campo('Nome completo', nomeEl),
-            campo('E-mail', emailEl, 'É com ele que a pessoa entra no sistema.'),
-            campo('Perfil de acesso', h('div', null, papelHost, descricaoEl)),
-            campo('Registro no conselho', registroEl, 'Aparece na assinatura das evoluções.'),
-            campo(
-              'Senha provisória',
-              senhaEl,
-              'Anote e entregue à pessoa. Oriente a trocar no primeiro acesso, em "Esqueci minha senha".'
-            )
-          ),
-
-          h(
-            'div',
-            { class: 'assinatura-pad__acoes', style: { marginTop: 'var(--esp-3)' } },
-            h('button', { type: 'button', class: 'btn btn--secundario', onclick: fechar }, 'Cancelar'),
-            salvarEl
-          )
-        )
+        painelEl
       )
     );
 

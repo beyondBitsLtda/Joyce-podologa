@@ -1048,3 +1048,35 @@
     flex: 1;
   }
 }
+
+/* Entrega da senha provisória, no lugar do formulário depois de criar. */
+.credencial {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--esp-3);
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 11px var(--esp-3);
+  background: var(--superficie-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-md);
+}
+
+.credencial__rotulo {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+}
+
+/* Monoespaçada e selecionável: a senha é ditada ou copiada à mão, e em fonte
+   proporcional um l e um 1 viram a mesma coisa. */
+.credencial__valor {
+  font-family: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--texto-forte);
+  user-select: all;
+  word-break: break-all;
+}

@@ -25,19 +25,37 @@ import { createClient } from 'jsr:@supabase/supabase-js@2';
 const PAPEIS = ['admin', 'podologa', 'secretaria'] as const;
 type Papel = (typeof PAPEIS)[number];
 
-const cors = {
+/**
+ * Devolve exatamente os cabeçalhos que o navegador pediu no preflight.
+ *
+ * Lista fixa já custou um bug: o cliente manda `x-application-name` (definido
+ * em src/lib/supabase.js) e o preflight era recusado. O erro que chegava na
+ * tela era "Failed to send a request to the Edge Function" — sem dizer qual
+ * cabeçalho faltava, e sem nem sair da máquina do usuário.
+ *
+ * Refletir não afrouxa a segurança: CORS decide o que o NAVEGADOR aceita
+ * entregar à página, não quem pode chamar a função. Quem pode continua sendo
+ * decidido pelo JWT e pela checagem de admin mais abaixo.
+ */
+const corsDe = (req: Request) => ({
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    req.headers.get('Access-Control-Request-Headers') ??
+    'authorization, x-client-info, apikey, content-type, x-application-name',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
-const responder = (corpo: unknown, status = 200) =>
-  new Response(JSON.stringify(corpo), {
-    status,
-    headers: { ...cors, 'Content-Type': 'application/json' },
-  });
+  // Evita um preflight por chamada enquanto a admin cadastra várias pessoas.
+  'Access-Control-Max-Age': '3600',
+});
 
 Deno.serve(async (req) => {
+  const cors = corsDe(req);
+
+  const responder = (corpo: unknown, status = 200) =>
+    new Response(JSON.stringify(corpo), {
+      status,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    });
+
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return responder({ erro: 'Método não permitido.' }, 405);
 

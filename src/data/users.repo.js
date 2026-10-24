@@ -32,8 +32,18 @@ export async function criar({ nome, email, senha, papel, registro }) {
   });
 
   if (error) {
-    // A function devolve o motivo no corpo; o SDK entrega só "non-2xx status".
-    // Sem ler o corpo, a tela mostraria um erro que não diz nada.
+    // A requisição nem saiu do navegador: rede fora, ou o preflight de CORS
+    // recusado. A mensagem crua do SDK ("Failed to send a request to the Edge
+    // Function") não ajuda ninguém a decidir o que fazer.
+    if (error.name === 'FunctionsFetchError') {
+      throw new Error(
+        'Não foi possível falar com o servidor para criar a conta. ' +
+          'Verifique a internet e tente de novo — nada foi criado.'
+      );
+    }
+
+    // Resposta com erro: a function explica o motivo no corpo, mas o SDK
+    // entrega só "non-2xx status". Sem ler o corpo, a tela não diria nada.
     let detalhe = '';
     try {
       detalhe = (await error.context?.json())?.erro ?? '';

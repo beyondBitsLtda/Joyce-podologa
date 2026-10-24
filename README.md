@@ -35,9 +35,20 @@ O CLI imprime a `anon key` local ao subir — use-a no `.env`.
 
 ### Primeiro acesso
 
-Não há auto-cadastro (`enable_signup = false`): contas são criadas pela
-administradora no painel do Supabase. O primeiro usuário criado vira `admin`
-automaticamente; os seguintes entram como `secretaria` e precisam ser promovidos.
+Não há auto-cadastro (`enable_signup = false`). O **primeiro** usuário é criado
+no painel do Supabase (Authentication → Users → Add user) e vira `admin`
+automaticamente.
+
+Dali em diante é tudo por dentro do sistema, em **Equipe** — tela visível só
+para quem é `admin`. Ela cria a conta, define o perfil de acesso e liga ou
+desliga o acesso de quem já existe.
+
+A criação passa pela Edge Function `criar-usuario`, porque exige a chave
+`service_role` — que não pode existir no navegador:
+
+```bash
+npx supabase functions deploy criar-usuario --use-api
+```
 
 ---
 

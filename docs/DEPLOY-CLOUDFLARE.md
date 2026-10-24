@@ -44,11 +44,21 @@ automaticamente. Confirme em `profiles`:
 select id, full_name, role, active from public.profiles;
 ```
 
-Para promover alguém depois:
+Só este primeiro precisa do painel. Os demais saem da tela **Equipe**, dentro
+do sistema — ver abaixo.
 
-```sql
-update public.profiles set role = 'podologa' where id = '<uuid>';
+### Publicar a função de criar usuários
+
+A tela Equipe cria contas por uma Edge Function, porque a operação exige a
+chave `service_role` e ela não pode sair do servidor:
+
+```bash
+npx supabase functions deploy criar-usuario --use-api
 ```
+
+`--use-api` publica pela API do Supabase, sem precisar de Docker na máquina.
+As variáveis `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`
+já existem no ambiente da função — não é preciso configurar segredo nenhum.
 
 ### Pegar as chaves
 

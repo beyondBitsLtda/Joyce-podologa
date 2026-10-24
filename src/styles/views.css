@@ -978,3 +978,73 @@
   flex: 1;
   min-width: 180px;
 }
+
+/* --- Equipe --------------------------------------------------------------- */
+
+.equipe__item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+  align-items: center;
+  padding: 15px var(--esp-4);
+}
+
+/* Quem perdeu o acesso continua na lista, mas sem disputar atenção com quem
+   trabalha hoje. */
+.equipe__item--inativo {
+  background: var(--superficie-2);
+}
+
+.equipe__item--inativo .avatar,
+.equipe__item--inativo .equipe__dados {
+  opacity: 0.62;
+}
+
+.equipe__dados {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+}
+
+.equipe__nome {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.equipe__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  align-items: center;
+}
+
+/* Os chips mantêm o alvo de toque padrão: a lista tem poucas linhas, então a
+   altura extra não custa nada e o controle continua acessível no celular. */
+.equipe__papel {
+  flex-wrap: nowrap;
+}
+
+@media (width < 560px) {
+  /* Sem a quebra, os controles espremem o nome a ponto de cortá-lo. */
+  .equipe__acoes {
+    flex-basis: 100%;
+  }
+
+  .equipe__acoes > * {
+    flex: 1;
+  }
+
+  .equipe__papel {
+    flex-wrap: wrap;
+  }
+
+  .equipe__papel .chip {
+    flex: 1;
+  }
+}

@@ -1,8 +1,8 @@
 /**
  * Ícones em SVG inline.
  *
- * Inline em vez de biblioteca ou sprite: são seis ícones, herdam currentColor e
- * não custam uma requisição nem uma dependência.
+ * Inline em vez de biblioteca ou sprite: são poucos, herdam currentColor e não
+ * custam uma requisição nem uma dependência.
  */
 
 import { s } from '../lib/dom.js';
@@ -57,4 +57,12 @@ export const iconeAlerta = (props = {}) =>
     { tamanho: 18, espessura: 1.9, ...props },
     s('path', { d: 'M12 3.5L21 19H3z' }),
     s('path', { d: 'M12 10v4M12 16.5v.5' })
+  );
+
+export const iconeEquipe = (props = {}) =>
+  base(
+    props,
+    s('circle', { cx: 9.5, cy: 8.5, r: 3 }),
+    s('path', { d: 'M3.5 19.5c0-3.1 2.7-5.2 6-5.2s6 2.1 6 5.2' }),
+    s('path', { d: 'M16.5 6.2a3 3 0 010 5.6M18 14.9c1.6.8 2.5 2.4 2.5 4.6' })
   );

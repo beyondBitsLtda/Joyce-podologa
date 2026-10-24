@@ -8,17 +8,21 @@
  */
 
 import { h } from '../lib/dom.js';
-import { iconeInicio, iconeAgenda, iconePacientes } from './icons.js';
+import { iconeInicio, iconeAgenda, iconePacientes, iconeEquipe } from './icons.js';
 import { iniciais } from '../lib/format.js';
 import { marca } from './logo.js';
 import { config } from '../config.js';
-import { NOME_DO_PAPEL } from '../data/auth.repo.js';
+import { NOME_DO_PAPEL, ehAdmin } from '../data/auth.repo.js';
 
 const DESTINOS = [
   { rota: '/inicio', rotulo: 'Início', icone: iconeInicio },
   { rota: '/agenda', rotulo: 'Agenda', icone: iconeAgenda },
   { rota: '/pacientes', rotulo: 'Pacientes', icone: iconePacientes },
+  { rota: '/equipe', rotulo: 'Equipe', icone: iconeEquipe, soAdmin: true },
 ];
+
+/** Esconder o que a pessoa não pode abrir evita o clique que só daria erro. */
+const destinosDe = (perfil) => DESTINOS.filter((d) => !d.soAdmin || ehAdmin(perfil));
 
 /**
  * @param {object} ctx
@@ -54,7 +58,7 @@ export function sidebar({ rotaAtual, perfil, navegar, novaFicha }) {
     h(
       'div',
       { class: 'sidebar__nav' },
-      ...DESTINOS.map((d) =>
+      ...destinosDe(perfil).map((d) =>
         h(
           'button',
           {
@@ -87,11 +91,11 @@ export function sidebar({ rotaAtual, perfil, navegar, novaFicha }) {
   );
 }
 
-export function tabbar({ rotaAtual, navegar }) {
+export function tabbar({ rotaAtual, perfil, navegar }) {
   return h(
     'nav',
     { class: 'tabbar', 'aria-label': 'Navegação principal' },
-    ...DESTINOS.map((d) =>
+    ...destinosDe(perfil).map((d) =>
       h(
         'button',
         {

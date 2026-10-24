@@ -67,3 +67,10 @@ double_confirm_changes = true
 # afrouxaria o limite de reenvio de 1 minuto para 1 segundo.
 otp_length = 8
 max_frequency = "1m0s"
+
+[functions.criar-usuario]
+# Declarado explicitamente, mesmo sendo o padrão: esta função guarda a chave
+# service_role. Se um dia alguém rodar um deploy com --no-verify-jwt, o
+# endpoint de criar contas ficaria aberto à internet. Com a linha aqui, a
+# intenção fica registrada no repositório.
+verify_jwt = true

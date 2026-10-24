@@ -20,6 +20,7 @@ import { viewFormPaciente } from './views/patient-form.view.js';
 import { viewFormAgendamento } from './views/appointment-form.view.js';
 import { viewFormEvolucao } from './views/evolution-form.view.js';
 import { viewDetalheEvolucao } from './views/evolution-detail.view.js';
+import { viewEquipe } from './views/users.view.js';
 
 /** Rotas acessíveis sem sessão. */
 const PUBLICAS = ['/login'];
@@ -52,7 +53,11 @@ export async function iniciarApp(raiz) {
     '/ficha/nova': viewWizard,
     '/ficha/:id': viewWizard,
     '/ficha/:id/concluida': viewConcluida,
+    '/equipe': viewEquipe,
   });
+
+  /** Rotas de administração. O banco também recusa — isto evita a tela quebrada. */
+  const ADMIN = ['/equipe'];
 
   // ---------------------------------------------------------------------------
   // Ações compartilhadas pelas telas
@@ -165,6 +170,12 @@ export async function iniciarApp(raiz) {
       return;
     }
 
+    if (ADMIN.includes(casada.padrao) && !ctx.ehAdmin) {
+      mostrarToast('Só uma administradora pode gerir a equipe.', 'erro');
+      navegar('/inicio', { substituir: true });
+      return;
+    }
+
     const tela = casada.handler(ctx);
     if (!tela) return;
 
@@ -177,7 +188,7 @@ export async function iniciarApp(raiz) {
       // ela precisa ficar no rodapé, fora da área rolável.
       montar(conteudoEl, tela);
       if (mostraTabbar(caminho)) {
-        conteudoEl.append(tabbar({ rotaAtual: caminho, navegar }));
+        conteudoEl.append(tabbar({ rotaAtual: caminho, perfil, navegar }));
       }
 
       montar(cascaEl, sidebar({ rotaAtual: caminho, perfil, navegar, novaFicha }), conteudoEl);
@@ -246,6 +257,7 @@ function tituloDaRota(padrao) {
       '/ficha/nova': 'Nova ficha',
       '/ficha/:id': 'Ficha de anamnese',
       '/ficha/:id/concluida': 'Ficha concluída',
+      '/equipe': 'Equipe',
     }[padrao] ?? 'Prontuário'
   );
 }
